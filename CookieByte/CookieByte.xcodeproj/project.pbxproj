@@ -13,6 +13,10 @@
 		DED62BF82BF3E0CC005AE51B /* Base in Resources */ = {isa = PBXBuildFile; fileRef = DED62BF72BF3E0CC005AE51B /* Base */; };
 		DED62BFA2BF3E0CD005AE51B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DED62BF92BF3E0CD005AE51B /* Assets.xcassets */; };
 		DED62BFD2BF3E0CD005AE51B /* Base in Resources */ = {isa = PBXBuildFile; fileRef = DED62BFC2BF3E0CD005AE51B /* Base */; };
+		DED62C072BF40156005AE51B /* UserModel .swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62C062BF40156005AE51B /* UserModel .swift */; };
+		DED62C0D2BF40226005AE51B /* OrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62C0C2BF40226005AE51B /* OrderModel.swift */; };
+		DED62C0F2BF40541005AE51B /* CookieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62C0E2BF40541005AE51B /* CookieModel.swift */; };
+		DED62C112BF405AD005AE51B /* ForeachExemple.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62C102BF405AD005AE51B /* ForeachExemple.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,10 @@
 		DED62BF92BF3E0CD005AE51B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DED62BFC2BF3E0CD005AE51B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DED62BFE2BF3E0CD005AE51B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DED62C062BF40156005AE51B /* UserModel .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserModel .swift"; sourceTree = "<group>"; };
+		DED62C0C2BF40226005AE51B /* OrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderModel.swift; sourceTree = "<group>"; };
+		DED62C0E2BF40541005AE51B /* CookieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieModel.swift; sourceTree = "<group>"; };
+		DED62C102BF405AD005AE51B /* ForeachExemple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeachExemple.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +64,27 @@
 		DED62BEF2BF3E0CC005AE51B /* CookieByte */ = {
 			isa = PBXGroup;
 			children = (
+				DED62C0A2BF40175005AE51B /* Model */,
 				DED62BF02BF3E0CC005AE51B /* AppDelegate.swift */,
 				DED62BF22BF3E0CC005AE51B /* SceneDelegate.swift */,
 				DED62BF42BF3E0CC005AE51B /* HomeViewController.swift */,
+				DED62C102BF405AD005AE51B /* ForeachExemple.swift */,
 				DED62BF92BF3E0CD005AE51B /* Assets.xcassets */,
 				DED62BF62BF3E0CC005AE51B /* Main.storyboard */,
 				DED62BFB2BF3E0CD005AE51B /* LaunchScreen.storyboard */,
 				DED62BFE2BF3E0CD005AE51B /* Info.plist */,
 			);
 			path = CookieByte;
+			sourceTree = "<group>";
+		};
+		DED62C0A2BF40175005AE51B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DED62C062BF40156005AE51B /* UserModel .swift */,
+				DED62C0C2BF40226005AE51B /* OrderModel.swift */,
+				DED62C0E2BF40541005AE51B /* CookieModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,7 +160,11 @@
 			files = (
 				DED62BF52BF3E0CC005AE51B /* HomeViewController.swift in Sources */,
 				DED62BF12BF3E0CC005AE51B /* AppDelegate.swift in Sources */,
+				DED62C0D2BF40226005AE51B /* OrderModel.swift in Sources */,
+				DED62C112BF405AD005AE51B /* ForeachExemple.swift in Sources */,
 				DED62BF32BF3E0CC005AE51B /* SceneDelegate.swift in Sources */,
+				DED62C072BF40156005AE51B /* UserModel .swift in Sources */,
+				DED62C0F2BF40541005AE51B /* CookieModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
