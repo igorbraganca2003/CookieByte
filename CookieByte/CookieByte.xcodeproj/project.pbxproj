@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DE0F90872BF51FAA000F962A /* CookieCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0F90862BF51FAA000F962A /* CookieCard.swift */; };
 		DED62BF12BF3E0CC005AE51B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62BF02BF3E0CC005AE51B /* AppDelegate.swift */; };
 		DED62BF32BF3E0CC005AE51B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62BF22BF3E0CC005AE51B /* SceneDelegate.swift */; };
 		DED62BF52BF3E0CC005AE51B /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62BF42BF3E0CC005AE51B /* HomeViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DE0F90862BF51FAA000F962A /* CookieCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCard.swift; sourceTree = "<group>"; };
 		DED62BED2BF3E0CC005AE51B /* CookieByte.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookieByte.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DED62BF02BF3E0CC005AE51B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DED62BF22BF3E0CC005AE51B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +47,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DE0F90852BF51F81000F962A /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				DE0F90862BF51FAA000F962A /* CookieCard.swift */,
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
 		DED62BE42BF3E0CB005AE51B = {
 			isa = PBXGroup;
 			children = (
@@ -69,6 +79,7 @@
 				DED62BF22BF3E0CC005AE51B /* SceneDelegate.swift */,
 				DED62BF42BF3E0CC005AE51B /* HomeViewController.swift */,
 				DED62C102BF405AD005AE51B /* ForeachExemple.swift */,
+				DE0F90852BF51F81000F962A /* Components */,
 				DED62BF92BF3E0CD005AE51B /* Assets.xcassets */,
 				DED62BF62BF3E0CC005AE51B /* Main.storyboard */,
 				DED62BFB2BF3E0CD005AE51B /* LaunchScreen.storyboard */,
@@ -165,6 +176,7 @@
 				DED62BF32BF3E0CC005AE51B /* SceneDelegate.swift in Sources */,
 				DED62C072BF40156005AE51B /* UserModel .swift in Sources */,
 				DED62C0F2BF40541005AE51B /* CookieModel.swift in Sources */,
+				DE0F90872BF51FAA000F962A /* CookieCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

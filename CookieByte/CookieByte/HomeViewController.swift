@@ -4,22 +4,21 @@
 //
 //  Created by Igor Bragança Toledo on 14/05/24.
 //
-
 import UIKit
 
 class HomeViewController: UIViewController {
     
     let tittleLabel: UILabel = {
-       let tittleLabel = UILabel()
-         
-        tittleLabel.text = "Favoritos"
-        tittleLabel.font = UIFont.systemFont(ofSize: 23, weight: .bold)
+        let tittleLabel = UILabel()
+        
+        tittleLabel.text = "Cookies"
+        tittleLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         tittleLabel.textColor = .black
         tittleLabel.translatesAutoresizingMaskIntoConstraints = false
         
         return tittleLabel
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -33,8 +32,9 @@ class HomeViewController: UIViewController {
     
     func setElements(){
         setTitleLabel()
+        setCards()
     }
-
+    
     func setTitleLabel(){
         self.view.addSubview(tittleLabel)
         
@@ -44,7 +44,19 @@ class HomeViewController: UIViewController {
             tittleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20)
         ])
     }
-
+    
+    func setCards(){
+        let cookieCard = CookieCard()
+        cookieCard.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(cookieCard)
+        
+        NSLayoutConstraint.activate([
+            cookieCard.topAnchor.constraint(equalTo: tittleLabel.bottomAnchor, constant: 20),
+            cookieCard.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
+            cookieCard.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
+            cookieCard.heightAnchor.constraint(equalToConstant: 220)
+        ])
+    }
 }
 
 #Preview(){
