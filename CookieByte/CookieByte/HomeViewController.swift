@@ -4,19 +4,43 @@
 //
 //  Created by Igor Bragança Toledo on 14/05/24.
 //
+
 import UIKit
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, UIScrollViewDelegate {
+    
+    private var cookieCollection: CookieCollection?
+    
+    private let scrollView: UIScrollView = {
+        let scroll = UIScrollView()
+        scroll.backgroundColor = .white
+        scroll.showsVerticalScrollIndicator = false
+        scroll.alwaysBounceVertical = true
+        return scroll
+    }()
+    
+    private let contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
     
     let tittleLabel: UILabel = {
         let tittleLabel = UILabel()
-        
         tittleLabel.text = "Cookies"
         tittleLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
         tittleLabel.textColor = .black
         tittleLabel.translatesAutoresizingMaskIntoConstraints = false
-        
         return tittleLabel
+    }()
+    
+    let favoriteLabel: UILabel = {
+        let favoriteLabel = UILabel()
+        favoriteLabel.text = "Favoritos"
+        favoriteLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
+        favoriteLabel.textColor = .black
+        favoriteLabel.translatesAutoresizingMaskIntoConstraints = false
+        return favoriteLabel
     }()
     
     override func viewDidLoad() {
@@ -27,38 +51,122 @@ class HomeViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: nil, action: nil)
         
+        self.setUI()
+    }
+    
+    func setUI() {
+        self.view.addSubview(scrollView)
+        self.scrollView.addSubview(contentView)
+        self.scrollView.delegate = self
+        
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
+            contentView.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor),
+            contentView.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor),
+            contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+        
         setElements()
     }
     
-    func setElements(){
+    func setElements() {
+        contentView.addSubview(tittleLabel)
+        contentView.addSubview(favoriteLabel)
+        
         setTitleLabel()
-        setCards()
+        setCardsScroll()
+        setFavoriteLabel()
+        setFavorites()
     }
     
-    func setTitleLabel(){
-        self.view.addSubview(tittleLabel)
-        
+    func setTitleLabel() {
         NSLayoutConstraint.activate([
-            tittleLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            tittleLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20),
-            tittleLabel.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20)
+            tittleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            tittleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            tittleLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20)
         ])
     }
     
-    func setCards(){
-        let cookieCard = CookieCard()
-        cookieCard.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(cookieCard)
+    func setCardsScroll() {
+        let cardsScroll = UIScrollView()
+        cardsScroll.showsHorizontalScrollIndicator = false
+        cardsScroll.alwaysBounceHorizontal = false
+        
+        cardsScroll.translatesAutoresizingMaskIntoConstraints = false
+        
+        contentView.addSubview(cardsScroll)
         
         NSLayoutConstraint.activate([
-            cookieCard.topAnchor.constraint(equalTo: tittleLabel.bottomAnchor, constant: 20),
-            cookieCard.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20),
-            cookieCard.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            cookieCard.heightAnchor.constraint(equalToConstant: 220)
+            cardsScroll.topAnchor.constraint(equalTo: tittleLabel.bottomAnchor, constant: 10),
+            cardsScroll.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            cardsScroll.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 265),
+            cardsScroll.heightAnchor.constraint(equalToConstant: 300)
         ])
+        
+        setCards(in: cardsScroll)
+    }
+    
+    func setCards(in scrollView: UIScrollView) {
+        let cookieCollection = CookieCollection()
+        scrollView.addSubview(cookieCollection)
+        
+        cookieCollection.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            cookieCollection.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            cookieCollection.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            cookieCollection.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            cookieCollection.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            cookieCollection.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
+            cookieCollection.widthAnchor.constraint(equalToConstant: 1000)
+        ])
+        
+        self.cookieCollection = cookieCollection
+    }
+    
+    func setFavoriteLabel() {
+        guard let cookieCollection = self.cookieCollection else { return }
+        
+        NSLayoutConstraint.activate([
+            favoriteLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            favoriteLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            favoriteLabel.topAnchor.constraint(equalTo: cookieCollection.bottomAnchor, constant: 40)
+        ])
+    }
+    
+    func setFavorites() {
+        let favoriteCollection = FavoriteCollection()
+        contentView.addSubview(favoriteCollection)
+        
+        favoriteCollection.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            favoriteCollection.topAnchor.constraint(equalTo: favoriteLabel.bottomAnchor),
+            favoriteCollection.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            favoriteCollection.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            favoriteCollection.heightAnchor.constraint(equalToConstant: 300),
+            favoriteCollection.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        ])
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == self.scrollView {
+            scrollView.contentOffset.x = 0
+        }
     }
 }
 
-#Preview(){
+#Preview {
     return HomeViewController()
 }
