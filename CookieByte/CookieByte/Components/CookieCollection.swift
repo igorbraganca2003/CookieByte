@@ -7,6 +7,8 @@
 
 import UIKit
 
+import UIKit
+
 class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     
     // Objetos
@@ -108,6 +110,25 @@ class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         cell.addSubview(priceLabel)
         cell.contentView.addSubview(containerView)
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showCookiePopUp(_:)))
+        cell.addGestureRecognizer(tapGesture)
+        
         return cell
     }
+    
+    @objc func showCookiePopUp(_ sender: UITapGestureRecognizer) {
+        guard let cell = sender.view as? UICollectionViewCell else { return }
+        guard let indexPath = cookieCard.indexPath(for: cell) else { return }
+        
+        let cookie = Cookies().cookie[indexPath.row]
+        
+        let popup = CookiePopUp()
+        popup.configure(with: cookie)
+        
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            window.addSubview(popup)
+            popup.animateIn()
+        }
+    }
+    
 }
