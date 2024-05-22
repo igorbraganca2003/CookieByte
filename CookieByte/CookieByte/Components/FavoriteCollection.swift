@@ -1,8 +1,8 @@
 //
-//  FavoriteCollection.swift
+//  FavoriteCollection2.swift
 //  CookieByte
 //
-//  Created by Igor Bragança Toledo on 16/05/24.
+//  Created by Igor Bragança Toledo on 22/05/24.
 //
 
 import UIKit
@@ -16,7 +16,7 @@ class FavoriteCollection: UIView, UICollectionViewDelegate, UICollectionViewData
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(width: 200, height: 200)
-        layout.minimumLineSpacing = 30
+        layout.minimumLineSpacing = 40
         
         let card = UICollectionView(frame: .zero, collectionViewLayout: layout)
         card.backgroundColor = UIColor.white
@@ -68,8 +68,10 @@ class FavoriteCollection: UIView, UICollectionViewDelegate, UICollectionViewData
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         
+        // Limpa as subviews anteriores
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
-    
+        
+        // Container view para aplicar a sombra
         let containerView = UIView(frame: cell.contentView.bounds)
         containerView.backgroundColor = cookie.color
         
@@ -97,7 +99,7 @@ class FavoriteCollection: UIView, UICollectionViewDelegate, UICollectionViewData
         
         let nameLabel = UILabel(frame: CGRect(x: 0, y: containerView.frame.height + 10, width: containerView.frame.width, height: 40))
         nameLabel.text = "\(cookie.cookieName)"
-        nameLabel.font = UIFont.systemFont(ofSize: 22, weight: .black)
+        nameLabel.font = UIFont.systemFont(ofSize: 20, weight: .black)
         nameLabel.textColor = .black
         nameLabel.textAlignment = .left
         
@@ -112,6 +114,25 @@ class FavoriteCollection: UIView, UICollectionViewDelegate, UICollectionViewData
         cell.addSubview(priceLabel)
         cell.contentView.addSubview(containerView)
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(showCookiePopUp(_:)))
+        cell.addGestureRecognizer(tapGesture)
+        
         return cell
     }
+    
+    @objc func showCookiePopUp(_ sender: UITapGestureRecognizer) {
+        guard let cell = sender.view as? UICollectionViewCell else { return }
+        guard let indexPath = cookieCard.indexPath(for: cell) else { return }
+        
+        let cookie = Cookies().cookie[indexPath.row]
+        
+        let popup = CookiePopUp()
+        popup.configure(with: cookie)
+        
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            window.addSubview(popup)
+            popup.animateIn()
+        }
+    }
+    
 }
