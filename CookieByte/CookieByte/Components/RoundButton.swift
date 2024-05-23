@@ -49,7 +49,7 @@ class CloseButton: UIView {
         
         NSLayoutConstraint.activate([
             roundButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            roundButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+//            roundButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             roundButton.widthAnchor.constraint(equalToConstant: 40),
             roundButton.heightAnchor.constraint(equalToConstant: 40)
         ])

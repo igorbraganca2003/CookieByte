@@ -28,8 +28,6 @@ class CookiePopUp: UIView {
     
     private let imageCookie: UIImageView = {
         let imageView = UIImageView()
-        
-//        imageView.backgroundColor = UIColor(named: "Cookie2Back")
         imageView.layer.borderWidth = 6
         imageView.layer.borderColor = UIColor.black.cgColor
         imageView.contentMode = .center
@@ -101,6 +99,7 @@ class CookiePopUp: UIView {
     private let addCartButton: UIView = {
         let cartButton = MainButtons(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
         cartButton.setButton(type: .addCart)
+        cartButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(addToCart)))
         cartButton.translatesAutoresizingMaskIntoConstraints = false
         return cartButton
     }()
@@ -149,6 +148,15 @@ class CookiePopUp: UIView {
         })
     }
     
+    @objc func addToCart() {
+        let cookieName = label.text ?? "Cookie"
+        let priceText = priceLabel.text?.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: ".") ?? "0.0"
+        let price = Float(priceText) ?? 0.0
+        let newOrder = OrderModel(user: "defaultUser", cookie: cookieName, date: Date(), price: price, qnt: 1, status: false)
+        Order.shared.addOrder(newOrder)
+        print("Pedido adicionado: \(newOrder)")
+    }
+    
     func configure(with cookie: CookiesModel) {
         if let originalImage = UIImage(named: cookie.pic) {
             let newSize = CGSize(width: originalImage.size.width * 0.4, height: originalImage.size.height * 0.4)
@@ -175,14 +183,6 @@ class CookiePopUp: UIView {
     }
 
     
-//    func configure(with cookie: CookiesModel) {
-//        imageCookie.image = UIImage(named: cookie.pic)
-//        label.text = cookie.cookieName
-//        priceLabel.text = String(format: "R$ %.2f", cookie.price)
-//        descLabel.text = cookie.description
-//    }
-    
-    
     // Functions
     func addUI() {
         self.addSubview(container)
@@ -200,7 +200,7 @@ class CookiePopUp: UIView {
             VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
             VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
             
-            roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -40),
+            roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -60),
             roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
             
             imageCookie.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.4),
@@ -226,7 +226,6 @@ class CookiePopUp: UIView {
     }
 }
 
-// Preview function, if needed
 #Preview(){
     return CookiePopUp()
 }

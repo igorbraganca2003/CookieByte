@@ -43,15 +43,24 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         return favoriteLabel
     }()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "Bem-vindo"
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: nil, action: nil)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: self, action: #selector(didTapButton))
         
         self.setUI()
+    }
+    
+    @objc func didTapButton(){
+        let popup = CartPopUp()
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            window.addSubview(popup)
+            popup.animateIn()
+        }
     }
     
     func setUI() {

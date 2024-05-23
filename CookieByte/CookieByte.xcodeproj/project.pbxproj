@@ -8,7 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		DE0F90872BF51FAA000F962A /* CookieCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0F90862BF51FAA000F962A /* CookieCollection.swift */; };
-		DE93DF4F2BFE6C5A00F0E63C /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF4E2BFE6C5A00F0E63C /* CloseButton.swift */; };
+		DE517CEA2BFFD5A200F53AB0 /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE517CE92BFFD5A200F53AB0 /* CartViewController.swift */; };
+		DE91CE8F2BFEE6DD0045D369 /* PopUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */; };
+		DE91CE912BFEEE2E0045D369 /* CartCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE91CE902BFEEE2E0045D369 /* CartCard.swift */; };
+		DE93DF4F2BFE6C5A00F0E63C /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF4E2BFE6C5A00F0E63C /* RoundButton.swift */; };
 		DE93DF532BFE872500F0E63C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF522BFE872500F0E63C /* DetailViewController.swift */; };
 		DE93DF552BFEBAE000F0E63C /* FavoriteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF542BFEBAE000F0E63C /* FavoriteCollection.swift */; };
 		DE93DF572BFEBCA500F0E63C /* CartPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */; };
@@ -28,7 +31,10 @@
 
 /* Begin PBXFileReference section */
 		DE0F90862BF51FAA000F962A /* CookieCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCollection.swift; sourceTree = "<group>"; };
-		DE93DF4E2BFE6C5A00F0E63C /* CloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseButton.swift; sourceTree = "<group>"; };
+		DE517CE92BFFD5A200F53AB0 /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
+		DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpModel.swift; sourceTree = "<group>"; };
+		DE91CE902BFEEE2E0045D369 /* CartCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCard.swift; sourceTree = "<group>"; };
+		DE93DF4E2BFE6C5A00F0E63C /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
 		DE93DF522BFE872500F0E63C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		DE93DF542BFEBAE000F0E63C /* FavoriteCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCollection.swift; sourceTree = "<group>"; };
 		DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartPopUp.swift; sourceTree = "<group>"; };
@@ -63,9 +69,10 @@
 			isa = PBXGroup;
 			children = (
 				DE0F90862BF51FAA000F962A /* CookieCollection.swift */,
+				DE91CE902BFEEE2E0045D369 /* CartCard.swift */,
 				DE93DF542BFEBAE000F0E63C /* FavoriteCollection.swift */,
 				DEB721172BFBE995003E7150 /* MainButtons.swift */,
-				DE93DF4E2BFE6C5A00F0E63C /* CloseButton.swift */,
+				DE93DF4E2BFE6C5A00F0E63C /* RoundButton.swift */,
 				DECD81902BFD335F0039B81E /* teste.swift */,
 			);
 			path = Components;
@@ -95,9 +102,11 @@
 				DED62BF02BF3E0CC005AE51B /* AppDelegate.swift */,
 				DED62BF22BF3E0CC005AE51B /* SceneDelegate.swift */,
 				DED62BF42BF3E0CC005AE51B /* HomeViewController.swift */,
+				DE517CE92BFFD5A200F53AB0 /* CartViewController.swift */,
 				DED62C102BF405AD005AE51B /* ForeachExemple.swift */,
 				DEB721152BFBC5CE003E7150 /* CookiePopUp.swift */,
 				DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */,
+				DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */,
 				DE0F90852BF51F81000F962A /* Components */,
 				DED62BF92BF3E0CD005AE51B /* Assets.xcassets */,
 				DED62BFB2BF3E0CD005AE51B /* LaunchScreen.storyboard */,
@@ -186,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE91CE8F2BFEE6DD0045D369 /* PopUpModel.swift in Sources */,
 				DEB721162BFBC5CE003E7150 /* CookiePopUp.swift in Sources */,
 				DED62BF52BF3E0CC005AE51B /* HomeViewController.swift in Sources */,
 				DED62BF12BF3E0CC005AE51B /* AppDelegate.swift in Sources */,
@@ -194,12 +204,14 @@
 				DED62C112BF405AD005AE51B /* ForeachExemple.swift in Sources */,
 				DE93DF552BFEBAE000F0E63C /* FavoriteCollection.swift in Sources */,
 				DEB721182BFBE995003E7150 /* MainButtons.swift in Sources */,
-				DE93DF4F2BFE6C5A00F0E63C /* CloseButton.swift in Sources */,
+				DE93DF4F2BFE6C5A00F0E63C /* RoundButton.swift in Sources */,
 				DED62BF32BF3E0CC005AE51B /* SceneDelegate.swift in Sources */,
 				DED62C072BF40156005AE51B /* UserModel .swift in Sources */,
 				DED62C0F2BF40541005AE51B /* CookieModel.swift in Sources */,
 				DE93DF532BFE872500F0E63C /* DetailViewController.swift in Sources */,
 				DE0F90872BF51FAA000F962A /* CookieCollection.swift in Sources */,
+				DE91CE912BFEEE2E0045D369 /* CartCard.swift in Sources */,
+				DE517CEA2BFFD5A200F53AB0 /* CartViewController.swift in Sources */,
 				DECD81912BFD335F0039B81E /* teste.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
