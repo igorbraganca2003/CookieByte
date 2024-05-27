@@ -9,6 +9,14 @@ import UIKit
 
 class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    private lazy var VStack: UIStackView = {
+        let vStack = UIStackView(arrangedSubviews: [buttonStack])
+        vStack.axis = .vertical
+        vStack.spacing = 10
+        vStack.translatesAutoresizingMaskIntoConstraints = false
+        return vStack
+    }()
+    
     private lazy var cartCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -69,14 +77,11 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return buttonStack
     }()
     
-    private let emptyLabel: UILabel = {
+    private let emptyState: UILabel = {
         let empty = UILabel()
-        empty.text = "Carrinho Vazio"
-        empty.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        empty.translatesAutoresizingMaskIntoConstraints = false
+        empty.text = "Carrinho vazio"
         return empty
     }()
-    
     
     
     // Body
@@ -168,39 +173,42 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
             
             roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -60),
             roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
-            
         ])
         
         if Order.shared.orders.count >= 1 {
-            container.addSubview(buttonStack)
+            container.addSubview(VStack)
             container.addSubview(cartCollectionView)
             
             NSLayoutConstraint.activate([
-                
-                buttonStack.topAnchor.constraint(equalTo: container.centerYAnchor, constant: 130),
-                buttonStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-                
-                keepBuying.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 0),
-                keepBuying.centerYAnchor.constraint(equalTo: keepBuying.centerYAnchor),
-                
-                payButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 160),
-                payButton.centerYAnchor.constraint(equalTo: payButton.centerYAnchor),
-                
                 cartCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
                 cartCollectionView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
                 cartCollectionView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
                 cartCollectionView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -190),
+                
+                VStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+                VStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
+                VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
+                VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
+                
+                buttonStack.topAnchor.constraint(equalTo: container.centerYAnchor, constant: 150),
+                buttonStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+                
+                keepBuying.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 10),
+                keepBuying.centerYAnchor.constraint(equalTo: keepBuying.centerYAnchor),
+                
+                payButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 100),
+                payButton.centerYAnchor.constraint(equalTo: payButton.centerYAnchor)
             ])
         } else {
-            container.addSubview(emptyLabel)
+            container.addSubview(emptyState)
             
             NSLayoutConstraint.activate([
-                emptyLabel.centerYAnchor.constraint(equalTo: container.centerYAnchor),
-                emptyLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+//                emptyState.centerYAnchor.constraint(equalTo: self.centerYAnchor)
             ])
         }
     }
 }
+
 
 #Preview {
     CartPopUp()

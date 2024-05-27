@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  DonePopUp.swift
 //  CookieByte
 //
 //  Created by Igor Bragança Toledo on 27/05/24.
@@ -7,20 +7,19 @@
 
 import UIKit
 
-class PixPopUp: UIView {
-    
+class DonePopUp: UIView {
+
     private lazy var VStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [imageView, priceLabel, pixLabel, ConfirmButton])
+        let vStack = UIStackView(arrangedSubviews: [label, image, subtittle])
         vStack.axis = .vertical
         vStack.spacing = 10
-        vStack.alignment = .center
         vStack.translatesAutoresizingMaskIntoConstraints = false
         return vStack
     }()
     
     private let container: UIView = {
         let container = UIView()
-        container.backgroundColor = .white
+        container.backgroundColor = .greenCookie
         container.layer.borderColor = UIColor.black.cgColor
         container.layer.borderWidth = 6
         container.translatesAutoresizingMaskIntoConstraints = false
@@ -35,58 +34,42 @@ class PixPopUp: UIView {
         return round
     }()
     
-    private let backButton: UIView = {
-        let round = RoundButton()
-        round.setButtonType(type: .back)
-        round.translatesAutoresizingMaskIntoConstraints = false
-        round.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
-        return round
+    private let label: UILabel = {
+        let label = UILabel()
+        label.text = "Concluído"
+        label.font = UIFont.systemFont(ofSize: 48, weight: .heavy)
+        label.textAlignment = .center
+        label.textColor = .white
+        return label
     }()
     
-    private let imageView: UIImageView = {
-        let pix = UIImageView()
-        pix.image = UIImage(named: "pix")
-        pix.translatesAutoresizingMaskIntoConstraints = false
-        return pix
+    private let image: UIImageView = {
+        let image = UIImageView()
+        image.image = UIImage(named: "Lady.White")
+        return image
     }()
     
-    private let priceLabel: UILabel = {
-        let price = UILabel()
-        price.text = "R$ 5,00"
-        price.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
-        price.textColor = UIColor(named: "GreenCookie")
-        price.translatesAutoresizingMaskIntoConstraints = false
-        return price
+    private let subtittle: UILabel = {
+        let text = UILabel()
+        text.text = "Aproveite seu Cookie!"
+        text.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        text.textColor = .white
+        text.textAlignment = .center
+        return text
     }()
     
-    private let pixLabel: UILabel = {
-        let key = UILabel()
-        key.text = "(11) 98936-4585"
-        key.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
-        key.translatesAutoresizingMaskIntoConstraints = false
-        return key
-    }()
-    
-    private let ConfirmButton: MainButtons = {
-        let confirm = MainButtons()
-        confirm.setButton(type: .confirmPay)
-        confirm.translatesAutoresizingMaskIntoConstraints = false
-        return confirm
-    }()
     
     
     // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-//        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
         self.backgroundColor = .gray.withAlphaComponent(0.7)
         self.frame = UIScreen.main.bounds
         
         addUI()
         animateIn()
-        
-        ConfirmButton.addTarget(self, action: #selector(payConfirmed), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -112,23 +95,13 @@ class PixPopUp: UIView {
             self.alpha = 1
         })
     }
-    
-    @objc func payConfirmed(){
-        let popup = DonePopUp()
-        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-            window.addSubview(popup)
-            popup.animateIn()
-        }
-        
-        self.removeFromSuperview()
-    }
+
     
     // Functions
     func addUI() {
         self.addSubview(container)
         container.addSubview(VStack)
         container.addSubview(roundButton)
-        container.addSubview(backButton)
         
         NSLayoutConstraint.activate([
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -144,23 +117,16 @@ class PixPopUp: UIView {
             roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -60),
             roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
             
-            backButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            backButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
-            
-            imageView.topAnchor.constraint(equalTo: container.topAnchor, constant: 120),
-            imageView.heightAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.6),
-            imageView.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.6),
-            imageView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            
-            priceLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 350),
-            
-            pixLabel.topAnchor.constraint(equalTo: priceLabel.topAnchor, constant: 100),
-            
-            ConfirmButton.topAnchor.constraint(equalTo: pixLabel.topAnchor, constant: 140)
+            image.heightAnchor.constraint(equalTo: container.widthAnchor, constant: -80),
+            image.widthAnchor.constraint(equalTo: container.widthAnchor, constant: -80),
+            image.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            image.centerYAnchor.constraint(equalTo: container.centerYAnchor),
         ])
     }
+
 }
 
 #Preview(){
-    PixPopUp()
+    DonePopUp()
 }
+

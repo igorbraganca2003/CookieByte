@@ -89,7 +89,7 @@ class PopUpModel: UIView {
             VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
             VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
             
-            roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -40),
+            roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -60),
             roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
         ])
     }

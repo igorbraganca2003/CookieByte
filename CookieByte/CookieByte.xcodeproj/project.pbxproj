@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		DE0F90872BF51FAA000F962A /* CookieCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0F90862BF51FAA000F962A /* CookieCollection.swift */; };
 		DE27ACAA2C05116100387E27 /* PixPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE27ACA92C05116100387E27 /* PixPopUp.swift */; };
+		DE27ACB02C0549B500387E27 /* DonePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE27ACAF2C0549B500387E27 /* DonePopUp.swift */; };
 		DE91CE8F2BFEE6DD0045D369 /* PopUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */; };
 		DE91CE912BFEEE2E0045D369 /* CartCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE91CE902BFEEE2E0045D369 /* CartCard.swift */; };
 		DE93DF4F2BFE6C5A00F0E63C /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF4E2BFE6C5A00F0E63C /* RoundButton.swift */; };
@@ -33,6 +34,7 @@
 /* Begin PBXFileReference section */
 		DE0F90862BF51FAA000F962A /* CookieCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCollection.swift; sourceTree = "<group>"; };
 		DE27ACA92C05116100387E27 /* PixPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixPopUp.swift; sourceTree = "<group>"; };
+		DE27ACAF2C0549B500387E27 /* DonePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonePopUp.swift; sourceTree = "<group>"; };
 		DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpModel.swift; sourceTree = "<group>"; };
 		DE91CE902BFEEE2E0045D369 /* CartCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCard.swift; sourceTree = "<group>"; };
 		DE93DF4E2BFE6C5A00F0E63C /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */,
+				DE27ACAF2C0549B500387E27 /* DonePopUp.swift */,
 				DEB721152BFBC5CE003E7150 /* CookiePopUp.swift */,
 				DE27ACA92C05116100387E27 /* PixPopUp.swift */,
 				DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */,
@@ -214,6 +217,7 @@
 				DE93DF572BFEBCA500F0E63C /* CartPopUp.swift in Sources */,
 				DED62C112BF405AD005AE51B /* ForeachExemple.swift in Sources */,
 				DE93DF552BFEBAE000F0E63C /* FavoriteCollection.swift in Sources */,
+				DE27ACB02C0549B500387E27 /* DonePopUp.swift in Sources */,
 				DEB721182BFBE995003E7150 /* MainButtons.swift in Sources */,
 				DE9EBA4C2C042B1A00C8C648 /* CartCardCollection.swift in Sources */,
 				DE93DF4F2BFE6C5A00F0E63C /* RoundButton.swift in Sources */,

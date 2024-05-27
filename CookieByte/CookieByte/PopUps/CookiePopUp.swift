@@ -211,6 +211,8 @@ class CookiePopUp: UIView {
             window.addSubview(popup)
             popup.animateIn()
         }
+        
+        self.removeFromSuperview()
     }
     
     
