@@ -7,22 +7,14 @@
 
 import UIKit
 
-class CartPopUp: UIView {
+class PopUpModel: UIView {
 
     private lazy var VStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [topBar, card])
+        let vStack = UIStackView(arrangedSubviews: [])
         vStack.axis = .vertical
         vStack.spacing = 10
         vStack.translatesAutoresizingMaskIntoConstraints = false
         return vStack
-    }()
-    
-    private let label: UILabel = {
-        let label = UILabel()
-        label.text = "Carrinho"
-        label.font = UIFont.systemFont(ofSize: 32, weight: .bold)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
     }()
     
     private let container: UIView = {
@@ -35,23 +27,13 @@ class CartPopUp: UIView {
     }()
     
     private let roundButton: UIView = {
-        let round = CloseButton()
+        let round = RoundButton()
         round.setButtonType(type: .close)
         round.translatesAutoresizingMaskIntoConstraints = false
+        round.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
         return round
     }()
     
-    private lazy var topBar: UIStackView = {
-        let bar = UIStackView(arrangedSubviews: [label, roundButton])
-        bar.axis = .horizontal
-        bar.translatesAutoresizingMaskIntoConstraints = false
-        return bar
-    }()
-    
-    private let card: UIView = {
-        let card = CartCard()
-        return card
-    }()
     
     // Body
     override init(frame: CGRect) {
@@ -61,18 +43,12 @@ class CartPopUp: UIView {
         self.backgroundColor = .gray.withAlphaComponent(0.7)
         self.frame = UIScreen.main.bounds
         
-        roundButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(buttonTapped)))
-        
         addUI()
+        animateIn()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    @objc private func buttonTapped() {
-        print("Round button tapped") // Debug print
-        animateOut()
     }
     
     @objc fileprivate func animateOut(){
@@ -95,11 +71,12 @@ class CartPopUp: UIView {
         })
     }
 
+    
     // Functions
     func addUI() {
         self.addSubview(container)
         container.addSubview(VStack)
-        container.addSubview(topBar)
+        container.addSubview(roundButton)
         
         NSLayoutConstraint.activate([
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -107,22 +84,18 @@ class CartPopUp: UIView {
             container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.85),
             container.heightAnchor.constraint(equalToConstant: 700),
             
-            VStack.topAnchor.constraint(equalTo: topBar.bottomAnchor),
+            VStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
             VStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
             VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
             VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
             
-            topBar.topAnchor.constraint(equalTo: container.topAnchor),
-            topBar.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.12),
-            topBar.widthAnchor.constraint(equalTo: container.widthAnchor),
-            
-            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            
-            roundButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 270),
+            roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -40),
+            roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
         ])
     }
+
 }
 
 #Preview(){
-    return CartPopUp()
+    PopUpModel()
 }

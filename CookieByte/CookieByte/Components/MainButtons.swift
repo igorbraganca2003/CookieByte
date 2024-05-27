@@ -52,7 +52,6 @@ class MainButtons: UIView {
     }
     
     private let button: UIButton = {
-        
         let button = UIButton()
         button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
         button.layer.borderWidth = 5
@@ -78,9 +77,12 @@ class MainButtons: UIView {
         addSubview(button)
         NSLayoutConstraint.activate([
             button.centerXAnchor.constraint(equalTo: centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: centerYAnchor),
             button.heightAnchor.constraint(equalToConstant: 60),
             button.widthAnchor.constraint(equalToConstant: 292)
         ])
+        
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     
     func setButton(type: ButtonType) {
@@ -89,8 +91,22 @@ class MainButtons: UIView {
         button.setTitleColor(type.labelColor, for: .normal)
     }
     
+    @objc private func buttonTapped() {
+        animateButton()
+    }
+    
+    private func animateButton() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.button.transform = CGAffineTransform(translationX: 8, y: 8)
+            self.button.layer.shadowOffset = CGSize(width: 0, height: 0)
+        }) { _ in
+            UIView.animate(withDuration: 0.2, animations: {
+                self.button.transform = .identity
+                self.button.layer.shadowOffset = CGSize(width: 8, height: 8)
+            })
+        }
+    }
 }
-
 
 #Preview(){
     return MainButtons()

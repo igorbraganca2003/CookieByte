@@ -11,6 +11,9 @@ class CartCard: UIView {
     
     private lazy var cartCard: UIStackView = {
         let card = UIStackView(arrangedSubviews: [image, vStack, qntStack])
+        card.axis = .horizontal
+        card.alignment = .fill
+        card.spacing = 10
         card.backgroundColor = .white
         card.layer.borderColor = UIColor.black.cgColor
         card.layer.borderWidth = 6
@@ -27,8 +30,8 @@ class CartCard: UIView {
     
     private let image: UIImageView = {
         let imageView = UIImageView()
-        let image = UIImage(named: "CookieM")
-        imageView.image = image
+        imageView.image = UIImage(named: "CookieT")
+        imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = UIColor(named: "Cookie2Back")
         imageView.layer.borderWidth = 6
         imageView.layer.borderColor = UIColor.black.cgColor
@@ -39,7 +42,7 @@ class CartCard: UIView {
     private let label: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
-        label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -49,7 +52,7 @@ class CartCard: UIView {
     private let price: UILabel = {
         let price = UILabel()
         price.textAlignment = .left
-        price.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        price.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         price.numberOfLines = 0
         price.lineBreakMode = .byWordWrapping
         price.translatesAutoresizingMaskIntoConstraints = false
@@ -92,21 +95,25 @@ class CartCard: UIView {
         return plus
     }()
     
-    
     // Body
-    override func draw(_ rect: CGRect) {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         setCard()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // Func
-    func setCard(){
+    func setCard() {
         self.addSubview(cartCard)
         
         NSLayoutConstraint.activate([
             cartCard.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             cartCard.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            cartCard.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.2),
-            cartCard.widthAnchor.constraint(equalTo: self.widthAnchor),
+            cartCard.heightAnchor.constraint(equalTo: self.heightAnchor),
+            cartCard.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1.15),
             
             image.leadingAnchor.constraint(equalTo: cartCard.leadingAnchor),
             image.widthAnchor.constraint(equalTo: cartCard.widthAnchor, constant: -190),
@@ -119,31 +126,28 @@ class CartCard: UIView {
         ])
     }
     
-    //Funções que aumentam e diminui a quantidade
     var quantity = 1 {
         didSet {
             qntLabel.text = "\(quantity)"
         }
     }
     
-    @objc private func incrementQuantity() {
+    @objc func incrementQuantity() {
         quantity += 1
     }
     
-    @objc private func decrementQuantity() {
+    @objc func decrementQuantity() {
         if quantity > 1 {
             quantity -= 1
         }
     }
     
-    func config(with cookie: CookiesModel) {
-        label.text = cookie.cookieName
-        price.text = String(format: "R$ %.2f",cookie.price)
-    }
-    
-    func qntModel(with order: OrderModel) {
+    func config(with order: OrderModel) {
+        label.text = order.cookie
+        price.text = "R$ \(order.price)"
         quantity = order.qnt
     }
+    
 }
 
 #Preview {

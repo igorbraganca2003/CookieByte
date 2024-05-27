@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import ObjectiveC
 
-class CookiePopUp: UIView {
+class CosdcokiePopUp: UIView {
     
     private lazy var VStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [imageCookie, HStack, priceLabel, descLabel, buttonStack])
+        let vStack = UIStackView(arrangedSubviews: [imageCookie, HStack, priceLabel, descLabel])
         vStack.axis = .vertical
         vStack.spacing = 10
         vStack.translatesAutoresizingMaskIntoConstraints = false
@@ -36,7 +37,7 @@ class CookiePopUp: UIView {
     }()
     
     private let roundButton: UIView = {
-        let round = CloseButton()
+        let round = RoundButton()
         round.setButtonType(type: .close)
         round.translatesAutoresizingMaskIntoConstraints = false
         round.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
@@ -96,21 +97,15 @@ class CookiePopUp: UIView {
         return mainButton
     }()
     
-    private let addCartButton: UIView = {
-        let cartButton = MainButtons(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
-        cartButton.setButton(type: .addCart)
-        cartButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(addToCart)))
-        cartButton.translatesAutoresizingMaskIntoConstraints = false
-        return cartButton
-    }()
     
-    private lazy var buttonStack: UIStackView = {
-        let buttonStack = UIStackView(arrangedSubviews: [addCartButton, buyButton])
-        buttonStack.axis = .vertical
-        buttonStack.spacing = 10
-        buttonStack.translatesAutoresizingMaskIntoConstraints = false
-        return buttonStack
+    private let addCartButton: UIView = {
+        let mainButton = MainButtons()
+        mainButton.setButton(type: .addCart)
+        mainButton.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(addToCart)))
+        mainButton.translatesAutoresizingMaskIntoConstraints = false
+        return mainButton
     }()
+
     
     // Body
     override init(frame: CGRect) {
@@ -148,15 +143,6 @@ class CookiePopUp: UIView {
         })
     }
     
-    @objc func addToCart() {
-        let cookieName = label.text ?? "Cookie"
-        let priceText = priceLabel.text?.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: ".") ?? "0.0"
-        let price = Float(priceText) ?? 0.0
-        let newOrder = OrderModel(user: "defaultUser", cookie: cookieName, date: Date(), price: price, qnt: 1, status: false)
-        Order.shared.addOrder(newOrder)
-        print("Pedido adicionado: \(newOrder)")
-    }
-    
     func configure(with cookie: CookiesModel) {
         if let originalImage = UIImage(named: cookie.pic) {
             let newSize = CGSize(width: originalImage.size.width * 0.4, height: originalImage.size.height * 0.4)
@@ -181,13 +167,26 @@ class CookiePopUp: UIView {
         descLabel.text = cookie.description
         imageCookie.backgroundColor = cookie.color
     }
-
+    
+    @objc func addToCart() {
+        guard let cookieName = label.text,
+              let priceText = priceLabel.text,
+              let price = Float(priceText.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: ".")) else {
+            return
+        }
+        
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, status: true)
+        Order.shared.addOrder(newOrder)
+        print("Pedido adicionado: \(newOrder)")
+    }
     
     // Functions
     func addUI() {
         self.addSubview(container)
         container.addSubview(VStack)
         container.addSubview(roundButton)
+        container.addSubview(addCartButton)
+        container.addSubview(buyButton)
         
         NSLayoutConstraint.activate([
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -214,18 +213,20 @@ class CookiePopUp: UIView {
             
             priceLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
             priceLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
-            
+        
             descLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
             descLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
             descLabel.topAnchor.constraint(equalTo: priceLabel.centerYAnchor, constant: 30),
             
-            buttonStack.topAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: 0),
-            addCartButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 40),
-            buyButton.topAnchor.constraint(equalTo: addCartButton.centerYAnchor, constant: 45),
+            addCartButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 560),
+            addCartButton.centerXAnchor.constraint(equalTo:self.centerXAnchor),
+            
+            buyButton.centerXAnchor.constraint(equalTo:self.centerXAnchor),
+            buyButton.topAnchor.constraint(equalTo: addCartButton.centerYAnchor, constant: 80),
         ])
     }
 }
 
 #Preview(){
-    return CookiePopUp()
+    return CosdcokiePopUp()
 }
