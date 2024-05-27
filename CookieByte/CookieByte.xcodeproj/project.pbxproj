@@ -15,7 +15,6 @@
 		DE93DF552BFEBAE000F0E63C /* FavoriteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF542BFEBAE000F0E63C /* FavoriteCollection.swift */; };
 		DE93DF572BFEBCA500F0E63C /* CartPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */; };
 		DE9EBA4C2C042B1A00C8C648 /* CartCardCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9EBA4B2C042B1A00C8C648 /* CartCardCollection.swift */; };
-		DE9EBA4E2C042ED600C8C648 /* edc.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9EBA4D2C042ED600C8C648 /* edc.swift */; };
 		DEB721162BFBC5CE003E7150 /* CookiePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB721152BFBC5CE003E7150 /* CookiePopUp.swift */; };
 		DEB721182BFBE995003E7150 /* MainButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB721172BFBE995003E7150 /* MainButtons.swift */; };
 		DECD81912BFD335F0039B81E /* teste.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD81902BFD335F0039B81E /* teste.swift */; };
@@ -39,7 +38,6 @@
 		DE93DF542BFEBAE000F0E63C /* FavoriteCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCollection.swift; sourceTree = "<group>"; };
 		DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartPopUp.swift; sourceTree = "<group>"; };
 		DE9EBA4B2C042B1A00C8C648 /* CartCardCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCardCollection.swift; sourceTree = "<group>"; };
-		DE9EBA4D2C042ED600C8C648 /* edc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = edc.swift; sourceTree = "<group>"; };
 		DEB721152BFBC5CE003E7150 /* CookiePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookiePopUp.swift; sourceTree = "<group>"; };
 		DEB721172BFBE995003E7150 /* MainButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButtons.swift; sourceTree = "<group>"; };
 		DECD81902BFD335F0039B81E /* teste.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = teste.swift; sourceTree = "<group>"; };
@@ -94,7 +92,6 @@
 		DED62BE42BF3E0CB005AE51B = {
 			isa = PBXGroup;
 			children = (
-				DE9EBA4D2C042ED600C8C648 /* edc.swift */,
 				DE93DF522BFE872500F0E63C /* DetailViewController.swift */,
 				DED62BEF2BF3E0CC005AE51B /* CookieByte */,
 				DED62BEE2BF3E0CC005AE51B /* Products */,
@@ -210,7 +207,6 @@
 				DEB721162BFBC5CE003E7150 /* CookiePopUp.swift in Sources */,
 				DED62BF52BF3E0CC005AE51B /* HomeViewController.swift in Sources */,
 				DED62BF12BF3E0CC005AE51B /* AppDelegate.swift in Sources */,
-				DE9EBA4E2C042ED600C8C648 /* edc.swift in Sources */,
 				DED62C0D2BF40226005AE51B /* OrderModel.swift in Sources */,
 				DE93DF572BFEBCA500F0E63C /* CartPopUp.swift in Sources */,
 				DED62C112BF405AD005AE51B /* ForeachExemple.swift in Sources */,

@@ -106,7 +106,13 @@ class MainButtons: UIView {
             })
         }
     }
+    
+    // Método público para adicionar o target ao botão interno
+    func addTarget(_ target: Any?, action: Selector, for event: UIControl.Event) {
+        button.addTarget(target, action: action, for: event)
+    }
 }
+
 
 #Preview(){
     return MainButtons()

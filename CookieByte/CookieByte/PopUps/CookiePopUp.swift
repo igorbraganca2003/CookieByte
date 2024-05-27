@@ -36,7 +36,7 @@ class CookiePopUp: UIView {
         return imageView
     }()
     
-    private let roundButton: UIView = {
+    private let roundButton: RoundButton = {
         let round = RoundButton()
         round.setButtonType(type: .close)
         round.translatesAutoresizingMaskIntoConstraints = false
@@ -90,20 +90,16 @@ class CookiePopUp: UIView {
         return desc
     }()
     
-    private let buyButton: UIView = {
-        let mainButton = MainButtons(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+    private let buyButton: MainButtons = {
+        let mainButton = MainButtons()
         mainButton.setButton(type: .buy)
         mainButton.translatesAutoresizingMaskIntoConstraints = false
         return mainButton
     }()
     
-    private let addCartButton: UIButton = {
-        let cartButton = UIButton()
-    
-        cartButton.setTitle("buy", for: .normal)
-        cartButton.isUserInteractionEnabled = true
-        cartButton.setTitleColor(.accent, for: .normal)
-        cartButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
+    private let addCartButton: MainButtons = {
+        let cartButton = MainButtons()
+        cartButton.setButton(type: .addCart)
         cartButton.translatesAutoresizingMaskIntoConstraints = false
         return cartButton
     }()
@@ -111,7 +107,6 @@ class CookiePopUp: UIView {
     private lazy var buttonStack: UIStackView = {
         let buttonStack = UIStackView(arrangedSubviews: [addCartButton, buyButton])
         buttonStack.axis = .vertical
-        buttonStack.spacing = 10
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         return buttonStack
     }()
@@ -126,13 +121,16 @@ class CookiePopUp: UIView {
         
         addUI()
         animateIn()
+        
+        buyButton.addTarget(self, action: #selector(buyButtonTapped), for: .touchUpInside)
+        addCartButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc fileprivate func animateOut(){
+    @objc fileprivate func animateOut() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
             self.container.transform = CGAffineTransform(translationX: 0, y: self.frame.height)
             self.alpha = 0
@@ -143,7 +141,7 @@ class CookiePopUp: UIView {
         }
     }
     
-    @objc func animateIn(){
+    @objc func animateIn() {
         self.container.transform = CGAffineTransform(translationX: 0, y: -self.frame.height)
         self.alpha = 0
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
@@ -179,14 +177,20 @@ class CookiePopUp: UIView {
     
     @objc func addToCart() {
         guard let cookieName = label.text,
+              let cookieImage = imageCookie.image,
+              let cookieBack = imageCookie.backgroundColor,
               let priceText = priceLabel.text,
               let price = Float(priceText.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: ".")) else {
             return
         }
         
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, status: true)
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
+    }
+    
+    @objc func buyButtonTapped() {
+        print("Botão de compra pressionado")
     }
     
     // Functions
@@ -225,13 +229,18 @@ class CookiePopUp: UIView {
             descLabel.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
             descLabel.topAnchor.constraint(equalTo: priceLabel.centerYAnchor, constant: 30),
             
-            buttonStack.topAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: 0),
-            addCartButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 40),
-            buyButton.topAnchor.constraint(equalTo: addCartButton.centerYAnchor, constant: 45),
+            buttonStack.topAnchor.constraint(equalTo: descLabel.bottomAnchor),
+            buttonStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            
+            addCartButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 10),
+            addCartButton.centerYAnchor.constraint(equalTo: addCartButton.centerYAnchor),
+            
+            buyButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 100),
+            buyButton.centerYAnchor.constraint(equalTo: buyButton.centerYAnchor)
         ])
     }
 }
 
-#Preview(){
-    return CookiePopUp()
+#Preview {
+    CookiePopUp()
 }

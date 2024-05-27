@@ -30,9 +30,9 @@ class CartCard: UIView {
     
     private let image: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "CookieT")
+//        imageView.image = UIImage(named: "CookieT")
         imageView.contentMode = .scaleAspectFit
-        imageView.backgroundColor = UIColor(named: "Cookie2Back")
+//        imageView.backgroundColor = UIColor(named: "Cookie2Back")
         imageView.layer.borderWidth = 6
         imageView.layer.borderColor = UIColor.black.cgColor
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -146,7 +146,15 @@ class CartCard: UIView {
         label.text = order.cookie
         price.text = "R$ \(order.price)"
         quantity = order.qnt
+        image.image = order.pic
+        image.backgroundColor = order.color
+        
     }
+    
+//    func configImg(with cookie: CookiesModel){
+//        image.image = UIImage(named: "\(cookie.pic)")
+//        image.backgroundColor = cookie.color
+//    }
     
 }
 

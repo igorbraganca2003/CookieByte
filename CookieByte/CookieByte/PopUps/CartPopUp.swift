@@ -17,7 +17,9 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         collectionView.backgroundColor = .clear
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.dataSource = self
+        collectionView.showsVerticalScrollIndicator = false
         collectionView.delegate = self
+        collectionView.layer.borderWidth = 2
         collectionView.register(CartCardCollection.self, forCellWithReuseIdentifier: "CartCardCell")
         return collectionView
     }()
@@ -47,17 +49,38 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return label
     }()
     
+    private let emptyLabel: UILabel = {
+        let empty = UILabel()
+        empty.text = "Carrinho Vazio"
+        empty.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        empty.translatesAutoresizingMaskIntoConstraints = false
+        return empty
+    }()
+    
+    private let buyButton: MainButtons = {
+        let buy = MainButtons()
+        buy.isUserInteractionEnabled = true
+        buy.setButton(type: .buy)
+        buy.translatesAutoresizingMaskIntoConstraints = false
+        return buy
+    }()
+    
+    
+    
     // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
+//        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
         self.backgroundColor = .gray.withAlphaComponent(0.7)
         self.frame = UIScreen.main.bounds
         
         addUI()
         animateIn()
         loadCartItems()
+        
+        
+
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -84,6 +107,10 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         })
     }
     
+    @objc func buyButtonTapped() {
+        print("Botão de compra pressionado")
+    }
+    
     // Carrega os itens do carrinho
     func loadCartItems() {
         self.cartCollectionView.reloadData()
@@ -105,12 +132,14 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return CGSize(width: collectionView.frame.width - 40, height: 120)
     }
     
+    
+    
     // Adiciona os elementos visuais
     func addUI() {
         self.addSubview(container)
         container.addSubview(closeButton)
         container.addSubview(titleLabel)
-        container.addSubview(cartCollectionView)
+
         
         NSLayoutConstraint.activate([
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -123,12 +152,30 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
             
             titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            
-            cartCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
-            cartCollectionView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            cartCollectionView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
-            cartCollectionView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20)
         ])
+        
+        if Order.shared.orders.count >= 1 {
+            container.addSubview(cartCollectionView)
+            container.addSubview(buyButton)
+            buyButton.addTarget(self, action: #selector(buyButtonTapped), for: .touchUpInside)
+            NSLayoutConstraint.activate([
+                cartCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+                cartCollectionView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
+                cartCollectionView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
+                cartCollectionView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -95),
+                
+                buyButton.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -55),
+                buyButton.centerXAnchor.constraint(equalTo: container.centerXAnchor)
+            ])
+        } else {
+            container.addSubview(emptyLabel)
+            
+            NSLayoutConstraint.activate([
+                emptyLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+                emptyLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+            ])
+        }
+        
     }
 }
 
