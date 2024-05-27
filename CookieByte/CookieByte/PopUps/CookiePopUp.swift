@@ -111,6 +111,8 @@ class CookiePopUp: UIView {
         return buttonStack
     }()
     
+    
+    
     // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -187,11 +189,30 @@ class CookiePopUp: UIView {
         let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
+        
+        animateOut()
     }
     
     @objc func buyButtonTapped() {
-        print("Botão de compra pressionado")
+        guard let cookieName = label.text,
+              let cookieImage = imageCookie.image,
+              let cookieBack = imageCookie.backgroundColor,
+              let priceText = priceLabel.text,
+              let price = Float(priceText.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: ".")) else {
+            return
+        }
+        
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
+        Order.shared.addOrder(newOrder)
+        print("Pedido adicionado: \(newOrder)")
+    
+        let popup = CartPopUp()
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            window.addSubview(popup)
+            popup.animateIn()
+        }
     }
+    
     
     // Functions
     func addUI() {

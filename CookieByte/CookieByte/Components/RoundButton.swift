@@ -55,6 +55,9 @@ class RoundButton: UIView {
         roundButton.setImage(type.buttonImage, for: .normal)
     }
 
+    func addTarget(_ target: Any?, action: Selector, for event: UIControl.Event) {
+        roundButton.addTarget(target, action: action, for: event)
+    }
 }
 
 

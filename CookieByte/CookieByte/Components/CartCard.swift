@@ -70,7 +70,7 @@ class CartCard: UIView {
     private let remove: UIButton = {
         let remove = UIButton()
         remove.setTitle("-", for: .normal)
-        remove.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        remove.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         remove.setTitleColor(UIColor.black, for: .normal)
         remove.addTarget(self, action: #selector(decrementQuantity), for: .touchUpInside)
         remove.translatesAutoresizingMaskIntoConstraints = false
@@ -79,7 +79,7 @@ class CartCard: UIView {
     
     private let qntLabel: UILabel = {
         let qnt = UILabel()
-        qnt.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        qnt.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         qnt.text = "1" // Valor inicial
         qnt.translatesAutoresizingMaskIntoConstraints = false
         return qnt
@@ -88,7 +88,7 @@ class CartCard: UIView {
     private let plus: UIButton = {
         let plus = UIButton()
         plus.setTitle("+", for: .normal)
-        plus.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        plus.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         plus.setTitleColor(UIColor.accent, for: .normal)
         plus.addTarget(self, action: #selector(incrementQuantity), for: .touchUpInside)
         plus.translatesAutoresizingMaskIntoConstraints = false
@@ -108,6 +108,7 @@ class CartCard: UIView {
     // Func
     func setCard() {
         self.addSubview(cartCard)
+        cartCard.addSubview(qntStack)
         
         NSLayoutConstraint.activate([
             cartCard.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -123,6 +124,9 @@ class CartCard: UIView {
             vStack.leftAnchor.constraint(equalTo: cartCard.leftAnchor, constant: 113),
             vStack.topAnchor.constraint(equalTo: cartCard.topAnchor, constant: -15),
             vStack.heightAnchor.constraint(lessThanOrEqualTo: cartCard.heightAnchor),
+            
+            qntStack.leadingAnchor.constraint(equalTo: cartCard.leadingAnchor, constant: 200),
+            qntStack.trailingAnchor.constraint(equalTo: cartCard.trailingAnchor, constant: 100)
         ])
     }
     
@@ -150,12 +154,6 @@ class CartCard: UIView {
         image.backgroundColor = order.color
         
     }
-    
-//    func configImg(with cookie: CookiesModel){
-//        image.image = UIImage(named: "\(cookie.pic)")
-//        image.backgroundColor = cookie.color
-//    }
-    
 }
 
 #Preview {
