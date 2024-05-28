@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CloseButton: UIView {
+class RoundButton: UIView {
     
     enum buttonType {
         case close
@@ -25,9 +25,6 @@ class CloseButton: UIView {
     
     private let roundButton: UIButton = {
         let round = UIButton()
-//        let xbutton = UIImage(named: "XButton")
-        
-//        close.setImage(xbutton, for: .normal)
         round.translatesAutoresizingMaskIntoConstraints = false
         round.imageView?.contentMode = .scaleAspectFit
         
@@ -49,7 +46,6 @@ class CloseButton: UIView {
         
         NSLayoutConstraint.activate([
             roundButton.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            roundButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             roundButton.widthAnchor.constraint(equalToConstant: 40),
             roundButton.heightAnchor.constraint(equalToConstant: 40)
         ])
@@ -59,9 +55,12 @@ class CloseButton: UIView {
         roundButton.setImage(type.buttonImage, for: .normal)
     }
 
+    func addTarget(_ target: Any?, action: Selector, for event: UIControl.Event) {
+        roundButton.addTarget(target, action: action, for: event)
+    }
 }
 
 
 #Preview(){
-    CloseButton()
+    RoundButton()
 }

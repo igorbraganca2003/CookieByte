@@ -14,6 +14,8 @@ class MainButtons: UIView {
         case confirmPay
         case addCart
         case applePay
+        case buyMore
+        case pay
         
         var label: String {
             switch self {
@@ -25,25 +27,29 @@ class MainButtons: UIView {
                 return "Adicionar ao carrinho"
             case .applePay:
                 return  "Pay"
+            case .buyMore:
+                return "Continar Comprando"
+            case .pay:
+                return "Pagar"
             }
         }
         
         var backColor: UIColor {
             switch self {
-            case .buy:
+            case .buy, .pay:
                 return UIColor(named: "AccentColor") ?? .orange
             case .confirmPay:
                 return UIColor(named: "GreenCookie") ?? .green
-            case .addCart, .applePay:
+            case .addCart, .applePay, .buyMore:
                 return UIColor(.white)
             }
         }
         
         var labelColor: UIColor {
             switch self {
-            case .buy, .confirmPay:
+            case .buy, .confirmPay, .pay:
                 return UIColor(.white)
-            case .addCart:
+            case .addCart, .buyMore:
                 return UIColor(named: "AccentColor") ?? .orange
             case .applePay:
                 return UIColor(.black)
@@ -52,7 +58,6 @@ class MainButtons: UIView {
     }
     
     private let button: UIButton = {
-        
         let button = UIButton()
         button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
         button.layer.borderWidth = 5
@@ -78,9 +83,12 @@ class MainButtons: UIView {
         addSubview(button)
         NSLayoutConstraint.activate([
             button.centerXAnchor.constraint(equalTo: centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: centerYAnchor),
             button.heightAnchor.constraint(equalToConstant: 60),
             button.widthAnchor.constraint(equalToConstant: 292)
         ])
+        
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
     }
     
     func setButton(type: ButtonType) {
@@ -89,6 +97,26 @@ class MainButtons: UIView {
         button.setTitleColor(type.labelColor, for: .normal)
     }
     
+    @objc private func buttonTapped() {
+        animateButton()
+    }
+    
+    private func animateButton() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.button.transform = CGAffineTransform(translationX: 8, y: 8)
+            self.button.layer.shadowOffset = CGSize(width: 0, height: 0)
+        }) { _ in
+            UIView.animate(withDuration: 0.2, animations: {
+                self.button.transform = .identity
+                self.button.layer.shadowOffset = CGSize(width: 8, height: 8)
+            })
+        }
+    }
+    
+    // Método público para adicionar o target ao botão interno
+    func addTarget(_ target: Any?, action: Selector, for event: UIControl.Event) {
+        button.addTarget(target, action: action, for: event)
+    }
 }
 
 

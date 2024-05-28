@@ -8,10 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		DE0F90872BF51FAA000F962A /* CookieCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0F90862BF51FAA000F962A /* CookieCollection.swift */; };
-		DE93DF4F2BFE6C5A00F0E63C /* CloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF4E2BFE6C5A00F0E63C /* CloseButton.swift */; };
+		DE14CA0F2C06182500ED9488 /* IconCartDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE14CA0E2C06182500ED9488 /* IconCartDelegate.swift */; };
+		DE14CA112C06463800ED9488 /* WelcomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE14CA102C06463800ED9488 /* WelcomView.swift */; };
+		DE27ACAA2C05116100387E27 /* PixPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE27ACA92C05116100387E27 /* PixPopUp.swift */; };
+		DE27ACB02C0549B500387E27 /* DonePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE27ACAF2C0549B500387E27 /* DonePopUp.swift */; };
+		DE91CE8F2BFEE6DD0045D369 /* PopUpModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */; };
+		DE91CE912BFEEE2E0045D369 /* CartCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE91CE902BFEEE2E0045D369 /* CartCard.swift */; };
+		DE93DF4F2BFE6C5A00F0E63C /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF4E2BFE6C5A00F0E63C /* RoundButton.swift */; };
 		DE93DF532BFE872500F0E63C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF522BFE872500F0E63C /* DetailViewController.swift */; };
 		DE93DF552BFEBAE000F0E63C /* FavoriteCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF542BFEBAE000F0E63C /* FavoriteCollection.swift */; };
 		DE93DF572BFEBCA500F0E63C /* CartPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */; };
+		DE9EBA4C2C042B1A00C8C648 /* CartCardCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9EBA4B2C042B1A00C8C648 /* CartCardCollection.swift */; };
 		DEB721162BFBC5CE003E7150 /* CookiePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB721152BFBC5CE003E7150 /* CookiePopUp.swift */; };
 		DEB721182BFBE995003E7150 /* MainButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB721172BFBE995003E7150 /* MainButtons.swift */; };
 		DECD81912BFD335F0039B81E /* teste.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD81902BFD335F0039B81E /* teste.swift */; };
@@ -28,10 +35,17 @@
 
 /* Begin PBXFileReference section */
 		DE0F90862BF51FAA000F962A /* CookieCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCollection.swift; sourceTree = "<group>"; };
-		DE93DF4E2BFE6C5A00F0E63C /* CloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseButton.swift; sourceTree = "<group>"; };
+		DE14CA0E2C06182500ED9488 /* IconCartDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCartDelegate.swift; sourceTree = "<group>"; };
+		DE14CA102C06463800ED9488 /* WelcomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WelcomView.swift; path = CookieByte/WelcomView.swift; sourceTree = SOURCE_ROOT; };
+		DE27ACA92C05116100387E27 /* PixPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixPopUp.swift; sourceTree = "<group>"; };
+		DE27ACAF2C0549B500387E27 /* DonePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonePopUp.swift; sourceTree = "<group>"; };
+		DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpModel.swift; sourceTree = "<group>"; };
+		DE91CE902BFEEE2E0045D369 /* CartCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCard.swift; sourceTree = "<group>"; };
+		DE93DF4E2BFE6C5A00F0E63C /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
 		DE93DF522BFE872500F0E63C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		DE93DF542BFEBAE000F0E63C /* FavoriteCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteCollection.swift; sourceTree = "<group>"; };
 		DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartPopUp.swift; sourceTree = "<group>"; };
+		DE9EBA4B2C042B1A00C8C648 /* CartCardCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCardCollection.swift; sourceTree = "<group>"; };
 		DEB721152BFBC5CE003E7150 /* CookiePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookiePopUp.swift; sourceTree = "<group>"; };
 		DEB721172BFBE995003E7150 /* MainButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButtons.swift; sourceTree = "<group>"; };
 		DECD81902BFD335F0039B81E /* teste.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = teste.swift; sourceTree = "<group>"; };
@@ -63,12 +77,27 @@
 			isa = PBXGroup;
 			children = (
 				DE0F90862BF51FAA000F962A /* CookieCollection.swift */,
+				DE9EBA4B2C042B1A00C8C648 /* CartCardCollection.swift */,
+				DE91CE902BFEEE2E0045D369 /* CartCard.swift */,
 				DE93DF542BFEBAE000F0E63C /* FavoriteCollection.swift */,
 				DEB721172BFBE995003E7150 /* MainButtons.swift */,
-				DE93DF4E2BFE6C5A00F0E63C /* CloseButton.swift */,
+				DE93DF4E2BFE6C5A00F0E63C /* RoundButton.swift */,
 				DECD81902BFD335F0039B81E /* teste.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		DE4D6DEB2C0100F600F0ECFC /* PopUps */ = {
+			isa = PBXGroup;
+			children = (
+				DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */,
+				DE27ACAF2C0549B500387E27 /* DonePopUp.swift */,
+				DEB721152BFBC5CE003E7150 /* CookiePopUp.swift */,
+				DE14CA0E2C06182500ED9488 /* IconCartDelegate.swift */,
+				DE27ACA92C05116100387E27 /* PixPopUp.swift */,
+				DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */,
+			);
+			path = PopUps;
 			sourceTree = "<group>";
 		};
 		DED62BE42BF3E0CB005AE51B = {
@@ -91,13 +120,13 @@
 		DED62BEF2BF3E0CC005AE51B /* CookieByte */ = {
 			isa = PBXGroup;
 			children = (
-				DED62C0A2BF40175005AE51B /* Model */,
 				DED62BF02BF3E0CC005AE51B /* AppDelegate.swift */,
 				DED62BF22BF3E0CC005AE51B /* SceneDelegate.swift */,
+				DED62C0A2BF40175005AE51B /* Model */,
 				DED62BF42BF3E0CC005AE51B /* HomeViewController.swift */,
+				DE14CA102C06463800ED9488 /* WelcomView.swift */,
 				DED62C102BF405AD005AE51B /* ForeachExemple.swift */,
-				DEB721152BFBC5CE003E7150 /* CookiePopUp.swift */,
-				DE93DF562BFEBCA500F0E63C /* CartPopUp.swift */,
+				DE4D6DEB2C0100F600F0ECFC /* PopUps */,
 				DE0F90852BF51F81000F962A /* Components */,
 				DED62BF92BF3E0CD005AE51B /* Assets.xcassets */,
 				DED62BFB2BF3E0CD005AE51B /* LaunchScreen.storyboard */,
@@ -186,6 +215,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DE91CE8F2BFEE6DD0045D369 /* PopUpModel.swift in Sources */,
 				DEB721162BFBC5CE003E7150 /* CookiePopUp.swift in Sources */,
 				DED62BF52BF3E0CC005AE51B /* HomeViewController.swift in Sources */,
 				DED62BF12BF3E0CC005AE51B /* AppDelegate.swift in Sources */,
@@ -193,13 +223,19 @@
 				DE93DF572BFEBCA500F0E63C /* CartPopUp.swift in Sources */,
 				DED62C112BF405AD005AE51B /* ForeachExemple.swift in Sources */,
 				DE93DF552BFEBAE000F0E63C /* FavoriteCollection.swift in Sources */,
+				DE27ACB02C0549B500387E27 /* DonePopUp.swift in Sources */,
 				DEB721182BFBE995003E7150 /* MainButtons.swift in Sources */,
-				DE93DF4F2BFE6C5A00F0E63C /* CloseButton.swift in Sources */,
+				DE9EBA4C2C042B1A00C8C648 /* CartCardCollection.swift in Sources */,
+				DE14CA112C06463800ED9488 /* WelcomView.swift in Sources */,
+				DE93DF4F2BFE6C5A00F0E63C /* RoundButton.swift in Sources */,
 				DED62BF32BF3E0CC005AE51B /* SceneDelegate.swift in Sources */,
+				DE14CA0F2C06182500ED9488 /* IconCartDelegate.swift in Sources */,
 				DED62C072BF40156005AE51B /* UserModel .swift in Sources */,
 				DED62C0F2BF40541005AE51B /* CookieModel.swift in Sources */,
 				DE93DF532BFE872500F0E63C /* DetailViewController.swift in Sources */,
 				DE0F90872BF51FAA000F962A /* CookieCollection.swift in Sources */,
+				DE91CE912BFEEE2E0045D369 /* CartCard.swift in Sources */,
+				DE27ACAA2C05116100387E27 /* PixPopUp.swift in Sources */,
 				DECD81912BFD335F0039B81E /* teste.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

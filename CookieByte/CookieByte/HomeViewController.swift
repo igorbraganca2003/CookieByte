@@ -9,7 +9,11 @@ import UIKit
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
     
+    //Icone de carrinho
     private var cookieCollection: CookieCollection?
+    var icon: IconCartDelegate = IconCartDelegate()
+    
+    var cart: Int = Order.shared.orders.count
     
     private let scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -43,15 +47,40 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         return favoriteLabel
     }()
     
+    
     override func viewDidLoad() {
+        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
+        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         super.viewDidLoad()
-        
         self.title = "Bem-vindo"
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: nil, action: nil)
         
+        //Icone de carrinho
+        self.navigationItem.rightBarButtonItems = [
+            
+            UIBarButtonItem(image: UIImage(systemName: "cart.fill.badge.plus"), style: .plain, target: self, action: #selector(didTapButton)),
+            
+            UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: self, action: #selector(didTapButton))
+        ]
+        
+        if cart >= 1{
+            self.navigationItem.rightBarButtonItems?[1].isHidden = true
+        } else {
+            self.navigationItem.rightBarButtonItems?[0].isHidden = true
+        }
+        
+        cookieCollection?.viewController = self
+        icon.viewController = self
         self.setUI()
+    }
+    
+    @objc func didTapButton(){
+        let popup = CartPopUp()
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            window.addSubview(popup)
+            popup.animateIn()
+        }
     }
     
     func setUI() {
