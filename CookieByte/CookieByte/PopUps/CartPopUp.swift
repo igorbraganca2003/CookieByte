@@ -43,6 +43,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Carrinho"
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -80,8 +81,13 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     private let emptyState: UILabel = {
         let empty = UILabel()
         empty.text = "Carrinho vazio"
+        empty.textColor = .black
+        empty.textAlignment = .center
+        empty.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        empty.translatesAutoresizingMaskIntoConstraints = false
         return empty
     }()
+    
     
     
     // Body
@@ -130,6 +136,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
             popup.animateIn()
         }
         print("Botão de compra pressionado")
+        self.removeFromSuperview()
     }
     
     // Carrega os itens do carrinho
@@ -203,7 +210,8 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
             container.addSubview(emptyState)
             
             NSLayoutConstraint.activate([
-//                emptyState.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+                emptyState.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+                emptyState.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             ])
         }
     }

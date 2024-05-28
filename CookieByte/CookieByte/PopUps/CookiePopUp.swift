@@ -6,9 +6,15 @@
 //
 
 import UIKit
-import ObjectiveC
 
 class CookiePopUp: UIView {
+    
+    // Icone de carrinho
+    let delegate: IconCartDelegate = IconCartDelegate()
+    var viewController: HomeViewController?
+    
+    private var currentCookie: CookiesModel?
+    
     
     private lazy var VStack: UIStackView = {
         let vStack = UIStackView(arrangedSubviews: [imageCookie, HStack, priceLabel, descLabel, buttonStack])
@@ -45,7 +51,7 @@ class CookiePopUp: UIView {
     }()
     
     private lazy var HStack: UIStackView = {
-        let hStack = UIStackView(arrangedSubviews: [label, heartButton])
+        let hStack = UIStackView(arrangedSubviews: [label])
         hStack.axis = .horizontal
         hStack.spacing = 10
         hStack.translatesAutoresizingMaskIntoConstraints = false
@@ -55,6 +61,7 @@ class CookiePopUp: UIView {
     private let label: UILabel = {
         let label = UILabel()
         label.text = "Cookie M&M's"
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -66,6 +73,8 @@ class CookiePopUp: UIView {
         let buttonImage = UIImage(systemName: "heart", withConfiguration: config)
         heart.setImage(buttonImage, for: .normal)
         heart.tintColor = .black
+        heart.translatesAutoresizingMaskIntoConstraints = false
+        heart.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
         return heart
     }()
     
@@ -112,7 +121,7 @@ class CookiePopUp: UIView {
     }()
     
     
-    
+
     // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -124,8 +133,11 @@ class CookiePopUp: UIView {
         addUI()
         animateIn()
         
-        buyButton.addTarget(self, action: #selector(buyButtonTapped), for: .touchUpInside)
         addCartButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
+        buyButton.addTarget(self, action: #selector(payButton), for: .touchUpInside)
+
+        delegate.uiView = self
+        delegate.viewController = self.viewController
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -153,6 +165,8 @@ class CookiePopUp: UIView {
     }
     
     func configure(with cookie: CookiesModel) {
+        currentCookie = cookie
+        
         if let originalImage = UIImage(named: cookie.pic) {
             let newSize = CGSize(width: originalImage.size.width * 0.4, height: originalImage.size.height * 0.4)
             UIGraphicsBeginImageContextWithOptions(newSize, false, 0.0)
@@ -175,25 +189,35 @@ class CookiePopUp: UIView {
         priceLabel.text = String(format: "R$ %.2f", cookie.price)
         descLabel.text = cookie.description
         imageCookie.backgroundColor = cookie.color
+        
+        updateHeartButton()
+    }
+    
+    @objc func toggleFavorite() {
+        guard var cookie = currentCookie else { return }
+        cookie.isFavorite.toggle()
+        currentCookie = cookie
+        updateHeartButton()
+    }
+    
+    func updateHeartButton() {
+        guard let cookie = currentCookie else { return }
+        let config = UIImage.SymbolConfiguration(pointSize: 24)
+        let buttonImageName = cookie.isFavorite ? "heart.fill" : "heart"
+        let buttonImage = UIImage(systemName: buttonImageName, withConfiguration: config)
+        heartButton.setImage(buttonImage, for: .normal)
+    }
+    
+    @objc func payButton() {
+        let popup = PixPopUp()
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            window.addSubview(popup)
+            popup.animateIn()
+        }
+        print("Botão de compra pressionado")
     }
     
     @objc func addToCart() {
-        guard let cookieName = label.text,
-              let cookieImage = imageCookie.image,
-              let cookieBack = imageCookie.backgroundColor,
-              let priceText = priceLabel.text,
-              let price = Float(priceText.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: ".")) else {
-            return
-        }
-        
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
-        Order.shared.addOrder(newOrder)
-        print("Pedido adicionado: \(newOrder)")
-        
-        animateOut()
-    }
-    
-    @objc func buyButtonTapped() {
         guard let cookieName = label.text,
               let cookieImage = imageCookie.image,
               let cookieBack = imageCookie.backgroundColor,
@@ -215,8 +239,6 @@ class CookiePopUp: UIView {
         self.removeFromSuperview()
     }
     
-    
-    // Functions
     func addUI() {
         self.addSubview(container)
         container.addSubview(VStack)

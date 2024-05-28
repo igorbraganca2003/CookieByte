@@ -10,10 +10,9 @@ import UIKit
 class PixPopUp: UIView {
     
     private lazy var VStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [imageView, priceLabel, pixLabel, ConfirmButton])
+        let vStack = UIStackView(arrangedSubviews: [imageView, priceLabel, pixLabel, buttonStack])
         vStack.axis = .vertical
         vStack.spacing = 10
-        vStack.alignment = .center
         vStack.translatesAutoresizingMaskIntoConstraints = false
         return vStack
     }()
@@ -53,6 +52,8 @@ class PixPopUp: UIView {
     private let priceLabel: UILabel = {
         let price = UILabel()
         price.text = "R$ 5,00"
+        price.textColor = .black
+        price.textAlignment = .center
         price.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
         price.textColor = UIColor(named: "GreenCookie")
         price.translatesAutoresizingMaskIntoConstraints = false
@@ -62,6 +63,8 @@ class PixPopUp: UIView {
     private let pixLabel: UILabel = {
         let key = UILabel()
         key.text = "(11) 98936-4585"
+        key.textAlignment = .center
+        key.textColor = .black
         key.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         key.translatesAutoresizingMaskIntoConstraints = false
         return key
@@ -74,12 +77,20 @@ class PixPopUp: UIView {
         return confirm
     }()
     
+    private lazy var buttonStack: UIStackView = {
+        let buttonStack = UIStackView(arrangedSubviews: [ConfirmButton])
+        buttonStack.axis = .vertical
+        buttonStack.translatesAutoresizingMaskIntoConstraints = false
+        return buttonStack
+    }()
+    
+    
     
     // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-//        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
         self.backgroundColor = .gray.withAlphaComponent(0.7)
         self.frame = UIScreen.main.bounds
         
@@ -113,15 +124,23 @@ class PixPopUp: UIView {
         })
     }
     
-    @objc func payConfirmed(){
+    @objc func payConfirmed() {
         let popup = DonePopUp()
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             window.addSubview(popup)
             popup.animateIn()
         }
+
+        // Remove orders with status true
+        Order.shared.removeCompletedOrders()
         
         self.removeFromSuperview()
     }
+
+    
+//    func configPrice(){
+//        priceLabel.text = Order.shared.orders[indexPath.item].price
+//    }
     
     // Functions
     func addUI() {
@@ -148,9 +167,8 @@ class PixPopUp: UIView {
             backButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
             
             imageView.topAnchor.constraint(equalTo: container.topAnchor, constant: 120),
-            imageView.heightAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.6),
-            imageView.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.6),
-            imageView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            imageView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 60),
+            imageView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -60),
             
             priceLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 350),
             

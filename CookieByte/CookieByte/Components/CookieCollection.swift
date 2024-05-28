@@ -11,6 +11,10 @@ import UIKit
 
 class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     
+    //Icone de carrinho
+    var viewController: HomeViewController?
+    var icon: IconCartDelegate = IconCartDelegate()
+    
     // Objetos
     private let cookieCard: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -124,6 +128,10 @@ class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         
         let popup = CookiePopUp()
         popup.configure(with: cookie)
+        
+        //Icone de carrinho
+        popup.viewController = self.viewController
+        icon.viewController = self.viewController
         
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             window.addSubview(popup)

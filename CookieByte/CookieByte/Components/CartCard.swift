@@ -10,7 +10,7 @@ import UIKit
 class CartCard: UIView {
     
     private lazy var cartCard: UIStackView = {
-        let card = UIStackView(arrangedSubviews: [image, vStack, qntStack])
+        let card = UIStackView(arrangedSubviews: [image, vStack])
         card.axis = .horizontal
         card.alignment = .fill
         card.spacing = 10
@@ -30,9 +30,7 @@ class CartCard: UIView {
     
     private let image: UIImageView = {
         let imageView = UIImageView()
-//        imageView.image = UIImage(named: "CookieT")
         imageView.contentMode = .scaleAspectFit
-//        imageView.backgroundColor = UIColor(named: "Cookie2Back")
         imageView.layer.borderWidth = 6
         imageView.layer.borderColor = UIColor.black.cgColor
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -42,6 +40,7 @@ class CartCard: UIView {
     private let label: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
+        label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -52,6 +51,7 @@ class CartCard: UIView {
     private let price: UILabel = {
         let price = UILabel()
         price.textAlignment = .left
+        price.textColor = .black
         price.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         price.numberOfLines = 0
         price.lineBreakMode = .byWordWrapping
@@ -79,8 +79,9 @@ class CartCard: UIView {
     
     private let qntLabel: UILabel = {
         let qnt = UILabel()
+        qnt.textColor = .black
         qnt.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        qnt.text = "1" // Valor inicial
+        qnt.text = "1" 
         qnt.translatesAutoresizingMaskIntoConstraints = false
         return qnt
     }()
@@ -108,7 +109,7 @@ class CartCard: UIView {
     // Func
     func setCard() {
         self.addSubview(cartCard)
-        cartCard.addSubview(qntStack)
+//        cartCard.addSubview(qntStack)
         
         NSLayoutConstraint.activate([
             cartCard.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -125,8 +126,8 @@ class CartCard: UIView {
             vStack.topAnchor.constraint(equalTo: cartCard.topAnchor, constant: -15),
             vStack.heightAnchor.constraint(lessThanOrEqualTo: cartCard.heightAnchor),
             
-            qntStack.leadingAnchor.constraint(equalTo: cartCard.leadingAnchor, constant: 200),
-            qntStack.trailingAnchor.constraint(equalTo: cartCard.trailingAnchor, constant: 100)
+//            qntStack.leadingAnchor.constraint(equalTo: cartCard.leadingAnchor, constant: 200),
+//            qntStack.trailingAnchor.constraint(equalTo: cartCard.trailingAnchor, constant: 100)
         ])
     }
     
