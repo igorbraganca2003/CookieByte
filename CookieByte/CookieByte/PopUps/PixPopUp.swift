@@ -51,7 +51,6 @@ class PixPopUp: UIView {
     
     private let priceLabel: UILabel = {
         let price = UILabel()
-        price.text = "R$ 5,00"
         price.textColor = .black
         price.textAlignment = .center
         price.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
@@ -83,8 +82,6 @@ class PixPopUp: UIView {
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         return buttonStack
     }()
-    
-    
     
     // Body
     override init(frame: CGRect) {
@@ -121,7 +118,9 @@ class PixPopUp: UIView {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
             self.container.transform = .identity
             self.alpha = 1
-        })
+        }) { _ in
+            self.updateTotalPrice()
+        }
     }
     
     @objc func payConfirmed() {
@@ -131,16 +130,19 @@ class PixPopUp: UIView {
             popup.animateIn()
         }
 
-        // Remove orders with status true
         Order.shared.removeCompletedOrders()
         
         self.removeFromSuperview()
     }
-
     
-//    func configPrice(){
-//        priceLabel.text = Order.shared.orders[indexPath.item].price
-//    }
+    func updateTotalPrice() {
+        let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Float($1.qnt)) }
+        if totalPrice > 0 {
+            priceLabel.text = String(format: "Total: R$ %.2f", totalPrice)
+        } else {
+            priceLabel.text = "R$ 0,00"
+        }
+    }
     
     // Functions
     func addUI() {
@@ -172,13 +174,13 @@ class PixPopUp: UIView {
             
             priceLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 350),
             
-            pixLabel.topAnchor.constraint(equalTo: priceLabel.topAnchor, constant: 100),
+            pixLabel.topAnchor.constraint(equalTo: priceLabel.topAnchor, constant: 80),
             
             ConfirmButton.topAnchor.constraint(equalTo: pixLabel.topAnchor, constant: 140)
         ])
     }
 }
 
-#Preview(){
+#Preview() {
     PixPopUp()
 }
