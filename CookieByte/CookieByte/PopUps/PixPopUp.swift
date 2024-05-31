@@ -49,7 +49,7 @@ class PixPopUp: UIView {
         return pix
     }()
     
-    private let priceLabel: UILabel = {
+    let priceLabel: UILabel = {
         let price = UILabel()
         price.textColor = .black
         price.textAlignment = .center
@@ -92,57 +92,26 @@ class PixPopUp: UIView {
         self.frame = UIScreen.main.bounds
         
         addUI()
-        animateIn()
         
-        ConfirmButton.addTarget(self, action: #selector(payConfirmed), for: .touchUpInside)
+        ConfirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
+        
+        CookieController.updateTotalPrice(label: priceLabel)
+        
+        CookieController.animateIn(view: self, container: container)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc fileprivate func animateOut(){
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
-            self.container.transform = CGAffineTransform(translationX: 0, y: self.frame.height)
-            self.alpha = 0
-        }) { (complete) in
-            if complete {
-                self.removeFromSuperview()
-            }
-        }
+    @objc fileprivate func animateOut() {
+        CookieController.animateOut(view: self, container: container)
     }
     
-    @objc func animateIn(){
-        self.container.transform = CGAffineTransform(translationX: 0, y: -self.frame.height)
-        self.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
-            self.container.transform = .identity
-            self.alpha = 1
-        }) { _ in
-            self.updateTotalPrice()
-        }
+    @objc fileprivate func confirmButtonTapped() {
+        CookieController.payConfirmed(from: self)
     }
     
-    @objc func payConfirmed() {
-        let popup = DonePopUp()
-        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-            window.addSubview(popup)
-            popup.animateIn()
-        }
-
-        Order.shared.removeCompletedOrders()
-        
-        self.removeFromSuperview()
-    }
-    
-    func updateTotalPrice() {
-        let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Float($1.qnt)) }
-        if totalPrice > 0 {
-            priceLabel.text = String(format: "Total: R$ %.2f", totalPrice)
-        } else {
-            priceLabel.text = "R$ 0,00"
-        }
-    }
     
     // Functions
     func addUI() {

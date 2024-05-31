@@ -1,8 +1,8 @@
 //
-//  novoCarrinho.swift
+//  CookiePopUp.swift
 //  CookieByte
 //
-//  Created by Igor Bragança Toledo on 27/05/24.
+//  Created by Igor Bragança Toledo on 20/05/24.
 //
 
 import UIKit
@@ -10,14 +10,36 @@ import UIKit
 class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     private lazy var VStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [buttonStack])
+        let vStack = UIStackView(arrangedSubviews: [roundButton])
         vStack.axis = .vertical
-        vStack.spacing = 10
         vStack.translatesAutoresizingMaskIntoConstraints = false
         return vStack
     }()
     
-    private lazy var cartCollectionView: UICollectionView = {
+    private let backContainer: UIView = {
+        let backContainer = UIView()
+        backContainer.backgroundColor = .gray.withAlphaComponent(0.7)
+        backContainer.translatesAutoresizingMaskIntoConstraints = false
+        return backContainer
+    }()
+    
+    private let container: UIView = {
+        let container = UIView()
+        container.backgroundColor = .white
+        container.layer.borderColor = UIColor.black.cgColor
+        container.layer.borderWidth = 6
+        container.translatesAutoresizingMaskIntoConstraints = false
+        return container
+    }()
+    
+    private let roundButton: RoundButton = {
+        let round = RoundButton()
+        round.setButtonType(type: .close)
+        round.translatesAutoresizingMaskIntoConstraints = false
+        return round
+    }()
+    
+    lazy var cartCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         
@@ -31,15 +53,6 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return collectionView
     }()
     
-    private let container: UIView = {
-        let container = UIView()
-        container.backgroundColor = .white
-        container.layer.borderColor = UIColor.black.cgColor
-        container.layer.borderWidth = 6
-        container.translatesAutoresizingMaskIntoConstraints = false
-        return container
-    }()
-    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Carrinho"
@@ -47,14 +60,6 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
-    }()
-    
-    private let roundButton: RoundButton = {
-        let round = RoundButton()
-        round.setButtonType(type: .close)
-        round.translatesAutoresizingMaskIntoConstraints = false
-        round.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
-        return round
     }()
     
     private let payButton: MainButtons = {
@@ -89,63 +94,36 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     }()
     
     
-    
-    // Body
+    //Body
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
-        self.backgroundColor = .gray.withAlphaComponent(0.7)
         self.frame = UIScreen.main.bounds
         
         addUI()
-        animateIn()
         
+        roundButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         payButton.addTarget(self, action: #selector(payButtonTapped), for: .touchUpInside)
         keepBuying.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
+        
+        CookieController.animateIn(view: self, container: container)
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     @objc fileprivate func animateOut() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
-            self.container.transform = CGAffineTransform(translationX: 0, y: self.frame.height)
-            self.alpha = 0
-        }) { (complete) in
-            if complete {
-                self.removeFromSuperview()
-            }
-        }
+        CookieController.animateOut(view: self, container: container)
     }
     
-    @objc func animateIn() {
-        self.container.transform = CGAffineTransform(translationX: 0, y: -self.frame.height)
-        self.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
-            self.container.transform = .identity
-            self.alpha = 1
-        })
-    }
-    
-    @objc func payButtonTapped(){
-        let popup = PixPopUp()
-        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-            window.addSubview(popup)
-            popup.animateIn()
-        }
-        print("Botão de compra pressionado")
-        self.removeFromSuperview()
-    }
-    
-    // Carrega os itens do carrinho
-    func loadCartItems() {
-        self.cartCollectionView.reloadData()
+    @objc func payButtonTapped() {
+        CookieController.payButtonTapped()
     }
     
     // UICollectionViewDataSource
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return Order.shared.orders.count
     }
     
@@ -161,30 +139,41 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     }
     
     
-    
-    // Functions
     func addUI() {
+        self.addSubview(backContainer)
         self.addSubview(container)
-        container.addSubview(roundButton)
+        container.addSubview(VStack)
         container.addSubview(titleLabel)
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateOut))
+        backContainer.addGestureRecognizer(tapGesture)
         
         NSLayoutConstraint.activate([
-            container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.85),
+            backContainer.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            backContainer.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            backContainer.widthAnchor.constraint(equalTo: self.widthAnchor),
+            backContainer.heightAnchor.constraint(equalTo: self.heightAnchor),
+            
+            container.centerYAnchor.constraint(equalTo: backContainer.centerYAnchor),
+            container.centerXAnchor.constraint(equalTo: backContainer.centerXAnchor),
+            container.widthAnchor.constraint(equalTo: backContainer.widthAnchor, multiplier: 0.85),
             container.heightAnchor.constraint(equalToConstant: 700),
+            
+            VStack.topAnchor.constraint(equalTo: container.topAnchor),
+            VStack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            
+            roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: -620),
+            roundButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 275),
             
             titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            
-            roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -60),
-            roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
         ])
         
         if Order.shared.orders.count >= 1 {
-            container.addSubview(VStack)
             container.addSubview(cartCollectionView)
+            container.addSubview(buttonStack)
             
             NSLayoutConstraint.activate([
                 cartCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
@@ -192,15 +181,14 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
                 cartCollectionView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
                 cartCollectionView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -190),
                 
-                VStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
-                VStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-                VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
-                VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
+                buttonStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 510),
+                buttonStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
+                buttonStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -28),
+                buttonStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -30),
                 
-                buttonStack.topAnchor.constraint(equalTo: container.centerYAnchor, constant: 150),
                 buttonStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
                 
-                keepBuying.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 10),
+                keepBuying.topAnchor.constraint(equalTo: buttonStack.topAnchor),
                 keepBuying.centerYAnchor.constraint(equalTo: keepBuying.centerYAnchor),
                 
                 payButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 100),
@@ -214,10 +202,10 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
                 emptyState.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             ])
         }
+        
     }
 }
 
-
-#Preview {
-    CartPopUp()
+#Preview(){
+    return CartPopUp()
 }

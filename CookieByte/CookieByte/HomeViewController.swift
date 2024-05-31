@@ -79,7 +79,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         let popup = CartPopUp()
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             window.addSubview(popup)
-            popup.animateIn()
+            CookieController.animateIn(view: popup, container: popup)
         }
     }
     

@@ -13,15 +13,20 @@ class CookiePopUp: UIView {
     let delegate: IconCartDelegate = IconCartDelegate()
     var viewController: HomeViewController?
     
-    private var currentCookie: CookiesModel?
-    
+    var currentCookie: CookiesModel?
     
     private lazy var VStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [imageCookie, HStack, priceLabel, descLabel, buttonStack])
+        let vStack = UIStackView(arrangedSubviews: [imageCookie, roundButton, HStack, priceLabel, descLabel, buttonStack, ])
         vStack.axis = .vertical
-        vStack.spacing = 10
         vStack.translatesAutoresizingMaskIntoConstraints = false
         return vStack
+    }()
+    
+    private let backContainer: UIView = {
+        let backContainer = UIView()
+        backContainer.backgroundColor = .gray.withAlphaComponent(0.7)
+        backContainer.translatesAutoresizingMaskIntoConstraints = false
+        return backContainer
     }()
     
     private let container: UIView = {
@@ -33,21 +38,20 @@ class CookiePopUp: UIView {
         return container
     }()
     
-    private let imageCookie: UIImageView = {
+    private let roundButton: RoundButton = {
+        let round = RoundButton()
+        round.setButtonType(type: .close)
+        round.translatesAutoresizingMaskIntoConstraints = false
+        return round
+    }()
+    
+    let imageCookie: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.borderWidth = 6
         imageView.layer.borderColor = UIColor.black.cgColor
         imageView.contentMode = .center
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
-    }()
-    
-    private let roundButton: RoundButton = {
-        let round = RoundButton()
-        round.setButtonType(type: .close)
-        round.translatesAutoresizingMaskIntoConstraints = false
-        round.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
-        return round
     }()
     
     private lazy var HStack: UIStackView = {
@@ -58,7 +62,7 @@ class CookiePopUp: UIView {
         return hStack
     }()
     
-    private let label: UILabel = {
+    let label: UILabel = {
         let label = UILabel()
         label.text = "Cookie M&M's"
         label.textColor = .black
@@ -67,18 +71,18 @@ class CookiePopUp: UIView {
         return label
     }()
     
-    private let heartButton: UIButton = {
+    let heartButton: UIButton = {
         let heart = UIButton()
         let config = UIImage.SymbolConfiguration(pointSize: 24)
         let buttonImage = UIImage(systemName: "heart", withConfiguration: config)
         heart.setImage(buttonImage, for: .normal)
         heart.tintColor = .black
         heart.translatesAutoresizingMaskIntoConstraints = false
-        heart.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
+        //        heart.addTarget(self, action: #selector(toggleFavorite), for: .touchUpInside)
         return heart
     }()
     
-    private let priceLabel: UILabel = {
+    let priceLabel: UILabel = {
         let price = UILabel()
         price.text = "R$ 4.00"
         price.font = UIFont.systemFont(ofSize: 22, weight: .bold)
@@ -87,7 +91,7 @@ class CookiePopUp: UIView {
         return price
     }()
     
-    private let descLabel: UITextView = {
+    let descLabel: UITextView = {
         let desc = UITextView()
         desc.text = "Cookies tradicionais, contém: Açúcar, Açúcar Mascavo, Sal, Manteiga, Ovos, Farinha, Baunilha, Gotas de Chocolate, Confeitos M&M's."
         desc.font = UIFont.systemFont(ofSize: 16)
@@ -121,21 +125,20 @@ class CookiePopUp: UIView {
     }()
     
     
-
     // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
-        self.backgroundColor = .gray.withAlphaComponent(0.7)
         self.frame = UIScreen.main.bounds
         
         addUI()
-        animateIn()
+        
+        CookieController.animateIn(view: self, container: container)
         
         addCartButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
         buyButton.addTarget(self, action: #selector(payButton), for: .touchUpInside)
-
+        roundButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
+        
         delegate.uiView = self
         delegate.viewController = self.viewController
     }
@@ -145,23 +148,11 @@ class CookiePopUp: UIView {
     }
     
     @objc fileprivate func animateOut() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
-            self.container.transform = CGAffineTransform(translationX: 0, y: self.frame.height)
-            self.alpha = 0
-        }) { (complete) in
-            if complete {
-                self.removeFromSuperview()
-            }
-        }
+        CookieController.animateOut(view: self, container: container)
     }
     
-    @objc func animateIn() {
-        self.container.transform = CGAffineTransform(translationX: 0, y: -self.frame.height)
-        self.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
-            self.container.transform = .identity
-            self.alpha = 1
-        })
+    @objc func addToCart(){
+        CookieController.addToCart(from: self)
     }
     
     func configure(with cookie: CookiesModel) {
@@ -190,73 +181,38 @@ class CookiePopUp: UIView {
         descLabel.text = cookie.description
         imageCookie.backgroundColor = cookie.color
         
-        updateHeartButton()
+//        CookieController.updateHeartButton(self)
     }
     
-    @objc func toggleFavorite() {
-        guard var cookie = currentCookie else { return }
-        cookie.isFavorite.toggle()
-        currentCookie = cookie
-        updateHeartButton()
-    }
     
-    func updateHeartButton() {
-        guard let cookie = currentCookie else { return }
-        let config = UIImage.SymbolConfiguration(pointSize: 24)
-        let buttonImageName = cookie.isFavorite ? "heart.fill" : "heart"
-        let buttonImage = UIImage(systemName: buttonImageName, withConfiguration: config)
-        heartButton.setImage(buttonImage, for: .normal)
-    }
     
-    @objc func payButton() {
-        let popup = PixPopUp()
-        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-            window.addSubview(popup)
-            popup.animateIn()
-        }
-        print("Botão de compra pressionado")
-    }
-    
-    @objc func addToCart() {
-        guard let cookieName = label.text,
-              let cookieImage = imageCookie.image,
-              let cookieBack = imageCookie.backgroundColor,
-              let priceText = priceLabel.text,
-              let price = Float(priceText.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: ".")) else {
-            return
-        }
-        
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
-        Order.shared.addOrder(newOrder)
-        print("Pedido adicionado: \(newOrder)")
-    
-        let popup = CartPopUp()
-        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
-            window.addSubview(popup)
-            popup.animateIn()
-        }
-        
-        self.removeFromSuperview()
-    }
     
     func addUI() {
+        self.addSubview(backContainer)
         self.addSubview(container)
         container.addSubview(VStack)
-        container.addSubview(roundButton)
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateOut))
+        backContainer.addGestureRecognizer(tapGesture)
         
         NSLayoutConstraint.activate([
-            container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.85),
+            backContainer.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            backContainer.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            backContainer.widthAnchor.constraint(equalTo: self.widthAnchor),
+            backContainer.heightAnchor.constraint(equalTo: self.heightAnchor),
+            
+            container.centerYAnchor.constraint(equalTo: backContainer.centerYAnchor),
+            container.centerXAnchor.constraint(equalTo: backContainer.centerXAnchor),
+            container.widthAnchor.constraint(equalTo: backContainer.widthAnchor, multiplier: 0.85),
             container.heightAnchor.constraint(equalToConstant: 700),
             
-            VStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
-            VStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
-            VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
+            VStack.topAnchor.constraint(equalTo: container.topAnchor),
+            VStack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor),
             
-            roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -60),
-            roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
+            roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: -220),
+            roundButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 275),
             
             imageCookie.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.4),
             imageCookie.topAnchor.constraint(equalTo: container.topAnchor, constant: 0),
@@ -277,15 +233,14 @@ class CookiePopUp: UIView {
             buttonStack.topAnchor.constraint(equalTo: descLabel.bottomAnchor),
             buttonStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             
-            addCartButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 10),
-            addCartButton.centerYAnchor.constraint(equalTo: addCartButton.centerYAnchor),
+            addCartButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 50),
+            addCartButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -6),
             
-            buyButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 100),
-            buyButton.centerYAnchor.constraint(equalTo: buyButton.centerYAnchor)
+            buyButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 90)
         ])
     }
 }
 
-#Preview {
-    CookiePopUp()
+#Preview(){
+    return CookiePopUp()
 }

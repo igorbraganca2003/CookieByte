@@ -85,7 +85,7 @@ class MainButtons: UIView {
             button.centerXAnchor.constraint(equalTo: centerXAnchor),
             button.centerYAnchor.constraint(equalTo: centerYAnchor),
             button.heightAnchor.constraint(equalToConstant: 60),
-            button.widthAnchor.constraint(equalToConstant: 292)
+            button.widthAnchor.constraint(equalToConstant: 285)
         ])
         
         button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)

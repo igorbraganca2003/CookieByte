@@ -59,7 +59,6 @@ class DonePopUp: UIView {
     }()
     
     
-    
     // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,31 +68,16 @@ class DonePopUp: UIView {
         self.frame = UIScreen.main.bounds
         
         addUI()
-        animateIn()
+        
+        CookieController.animateIn(view: self, container: container)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc fileprivate func animateOut(){
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
-            self.container.transform = CGAffineTransform(translationX: 0, y: self.frame.height)
-            self.alpha = 0
-        }) { (complete) in
-            if complete {
-                self.removeFromSuperview()
-            }
-        }
-    }
-    
-    @objc func animateIn(){
-        self.container.transform = CGAffineTransform(translationX: 0, y: -self.frame.height)
-        self.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
-            self.container.transform = .identity
-            self.alpha = 1
-        })
+    @objc fileprivate func animateOut() {
+        CookieController.animateOut(view: self, container: container)
     }
 
     
