@@ -34,4 +34,8 @@ class Order {
     func removeCompletedOrders() {
         orders.removeAll { $0.status }
     }
+    
+    func filter(){
+        
+    }
 }

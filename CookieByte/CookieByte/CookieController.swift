@@ -11,13 +11,19 @@ class CookieController: UIView {
     
     var cookiePop: CookiePopUp = CookiePopUp()
     
+    // Icone de carrinho
+    let delegate: IconCartDelegate = IconCartDelegate()
+    var viewController: HomeViewController?
+    
+    var currentCookie: CookiesModel?
+    
     
     //MARK: - Funções de animações
     
     static func animateIn(view: UIView, container: UIView) {
         container.transform = CGAffineTransform(translationX: 0, y: -view.frame.height)
         view.alpha = 0
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, animations: {
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 1, animations: {
             container.transform = .identity
             view.alpha = 1
         })
@@ -40,7 +46,7 @@ class CookieController: UIView {
     
     // Atualiza o preço no popUp do pix
     static func updateTotalPrice(label: UILabel) {
-        let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Float($1.qnt)) }
+        let totalPrice = Order.shared.orders.reduce(into: 0) { $0 + ($1.price * Float($1.qnt)) }
         print("Total price: \(totalPrice)")  // Para depuração
         if totalPrice > 0 {
             label.text = String(format: "Total: R$ %.2f", totalPrice)
@@ -136,7 +142,7 @@ class CookieController: UIView {
         print("Botão de compra pressionado")
     }
     
-    @objc func addToCart() {
+    static func addToCart(from cookiePop: CookiePopUp) {
         guard let cookieName = cookiePop.label.text,
               let cookieImage = cookiePop.imageCookie.image,
               let cookieBack = cookiePop.imageCookie.backgroundColor,
@@ -145,16 +151,51 @@ class CookieController: UIView {
             return
         }
         
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: CookieController().quantity, pic: cookieImage, status: true, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
-    
+        
         let popup = CartPopUp()
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             window.addSubview(popup)
             CookieController.animateIn(view: popup, container: popup)
         }
         
-        self.removeFromSuperview()
+        cookiePop.removeFromSuperview()
+    }
+    
+    
+    //MARK: - Calculo de quantidade do carrinho
+    var quantity = 1 {
+        didSet {
+            CartCard().qntLabel.text = "\(quantity)"
+        }
+    }
+    
+    @objc func incrementQuantity() {
+        quantity += 1
+    }
+    
+    @objc func decrementQuantity() {
+        if quantity > 1 {
+            quantity -= 1
+        }
+    }
+    
+}
+
+
+
+
+
+//MARK: - Altera o icone do carrinho
+class IconCartDelegate {
+    var uiView: CookiePopUp?
+    var viewController: HomeViewController?
+    
+    func changeIcon(){
+        viewController?.navigationItem.rightBarButtonItems?[1].isHidden = true
+        viewController?.navigationItem.rightBarButtonItems?[0].isHidden = true
+        print("chamou")
     }
 }

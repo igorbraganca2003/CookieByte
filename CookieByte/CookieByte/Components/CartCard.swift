@@ -71,13 +71,13 @@ class CartCard: UIView {
         let remove = UIButton()
         remove.setTitle("-", for: .normal)
         remove.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        remove.setTitleColor(UIColor.black, for: .normal)
-        remove.addTarget(self, action: #selector(decrementQuantity), for: .touchUpInside)
+        remove.setTitleColor(UIColor.accent, for: .normal)
+        remove.addTarget(self, action: #selector(CookieController.decrementQuantity), for: .touchUpInside)
         remove.translatesAutoresizingMaskIntoConstraints = false
         return remove
     }()
     
-    private let qntLabel: UILabel = {
+    let qntLabel: UILabel = {
         let qnt = UILabel()
         qnt.textColor = .black
         qnt.font = UIFont.systemFont(ofSize: 30, weight: .bold)
@@ -91,7 +91,7 @@ class CartCard: UIView {
         plus.setTitle("+", for: .normal)
         plus.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         plus.setTitleColor(UIColor.accent, for: .normal)
-        plus.addTarget(self, action: #selector(incrementQuantity), for: .touchUpInside)
+        plus.addTarget(self, action: #selector(CookieController.incrementQuantity), for: .touchUpInside)
         plus.translatesAutoresizingMaskIntoConstraints = false
         return plus
     }()
@@ -106,10 +106,20 @@ class CartCard: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func config(with order: OrderModel) {
+        label.text = order.cookie
+        price.text = "R$ \(order.price)"
+        CookieController().quantity = order.qnt
+        image.image = order.pic
+        image.backgroundColor = order.color
+        
+    }
+    
+    
     // Func
     func setCard() {
         self.addSubview(cartCard)
-//        cartCard.addSubview(qntStack)
+        cartCard.addSubview(qntStack)
         
         NSLayoutConstraint.activate([
             cartCard.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -126,34 +136,10 @@ class CartCard: UIView {
             vStack.topAnchor.constraint(equalTo: cartCard.topAnchor, constant: -15),
             vStack.heightAnchor.constraint(lessThanOrEqualTo: cartCard.heightAnchor),
             
-//            qntStack.leadingAnchor.constraint(equalTo: cartCard.leadingAnchor, constant: 200),
-//            qntStack.trailingAnchor.constraint(equalTo: cartCard.trailingAnchor, constant: 100)
+            qntStack.leadingAnchor.constraint(equalTo: cartCard.leadingAnchor, constant: 200),
+            qntStack.trailingAnchor.constraint(equalTo: cartCard.trailingAnchor, constant: -10),
+            qntStack.centerYAnchor.constraint(equalTo: cartCard.centerYAnchor)
         ])
-    }
-    
-    var quantity = 1 {
-        didSet {
-            qntLabel.text = "\(quantity)"
-        }
-    }
-    
-    @objc func incrementQuantity() {
-        quantity += 1
-    }
-    
-    @objc func decrementQuantity() {
-        if quantity > 1 {
-            quantity -= 1
-        }
-    }
-    
-    func config(with order: OrderModel) {
-        label.text = order.cookie
-        price.text = "R$ \(order.price)"
-        quantity = order.qnt
-        image.image = order.pic
-        image.backgroundColor = order.color
-        
     }
 }
 

@@ -11,7 +11,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     //Icone de carrinho
     private var cookieCollection: CookieCollection?
-    var icon: IconCartDelegate = IconCartDelegate()
+    var icon: CookiePopUp = CookiePopUp()
     
     var cart: Int = Order.shared.orders.count
     

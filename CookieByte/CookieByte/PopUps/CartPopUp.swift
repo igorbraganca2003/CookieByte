@@ -152,7 +152,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
             backContainer.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             backContainer.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             backContainer.widthAnchor.constraint(equalTo: self.widthAnchor),
-            backContainer.heightAnchor.constraint(equalTo: self.heightAnchor),
+            backContainer.heightAnchor.constraint(equalTo: self.heightAnchor, constant: 100),
             
             container.centerYAnchor.constraint(equalTo: backContainer.centerYAnchor),
             container.centerXAnchor.constraint(equalTo: backContainer.centerXAnchor),

@@ -155,6 +155,10 @@ class CookiePopUp: UIView {
         CookieController.addToCart(from: self)
     }
     
+    @objc func payButton() {
+        CookieController.payButtonTapped()
+    }
+    
     func configure(with cookie: CookiesModel) {
         currentCookie = cookie
         
@@ -199,7 +203,7 @@ class CookiePopUp: UIView {
             backContainer.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             backContainer.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             backContainer.widthAnchor.constraint(equalTo: self.widthAnchor),
-            backContainer.heightAnchor.constraint(equalTo: self.heightAnchor),
+            backContainer.heightAnchor.constraint(equalTo: self.heightAnchor, constant: 100),
             
             container.centerYAnchor.constraint(equalTo: backContainer.centerYAnchor),
             container.centerXAnchor.constraint(equalTo: backContainer.centerXAnchor),
