@@ -12,7 +12,7 @@ struct OrderModel {
     let cookie: String
     let date: Date
     let price: Float
-    let qnt: Int
+    let qnt: Int?
     let pic: UIImage?
     let status: Bool
     let color: UIColor?
@@ -21,8 +21,7 @@ struct OrderModel {
 class Order {
     static var shared = Order()
     var orders: [OrderModel] = [
-                OrderModel(user: "Gabriel", cookie: "Cookie1", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieT"), status: true, color: UIColor(named: "Cookie1Back")),
-        //        OrderModel(user: "Lucas", cookie: "Cookie2", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieB"), status: true, color: UIColor(named: "Cookie2Back"))
+        OrderModel(user: "Gabriel", cookie: "Cookie Chocolate", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieT"), status: true, color: UIColor(named: "Cookie1Back"))
     ]
     
     init() {}
@@ -33,6 +32,10 @@ class Order {
     
     func removeCompletedOrders() {
         orders.removeAll { $0.status }
+    }
+    
+    func removeOrder(at index: Int) {
+        orders.remove(at: index)
     }
     
     func filter(){

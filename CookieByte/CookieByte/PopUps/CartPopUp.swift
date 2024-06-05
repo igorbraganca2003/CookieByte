@@ -129,7 +129,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CartCardCell", for: indexPath) as! CartCardCollection
-        cell.cartCard.config(with: Order.shared.orders[indexPath.item])
+        cell.cartCard.config(with: Order.shared.orders[indexPath.item], atIndex: indexPath.item)
         return cell
     }
     

@@ -9,6 +9,14 @@ import UIKit
 
 class CartCard: UIView {
     
+    var index: Int = 0
+    
+    var quantity = 1 {
+        didSet {
+            qntLabel.text = "\(quantity)"
+        }
+    }
+    
     private lazy var cartCard: UIStackView = {
         let card = UIStackView(arrangedSubviews: [image, vStack])
         card.axis = .horizontal
@@ -18,13 +26,15 @@ class CartCard: UIView {
         card.layer.borderColor = UIColor.black.cgColor
         card.layer.borderWidth = 6
         card.translatesAutoresizingMaskIntoConstraints = false
+        card.isUserInteractionEnabled = true
         return card
     }()
     
     private lazy var vStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [label, price])
+        let vStack = UIStackView(arrangedSubviews: [topStack, bottomStack])
         vStack.axis = .vertical
         vStack.translatesAutoresizingMaskIntoConstraints = false
+        vStack.isUserInteractionEnabled = true
         return vStack
     }()
     
@@ -33,6 +43,7 @@ class CartCard: UIView {
         imageView.contentMode = .scaleAspectFit
         imageView.layer.borderWidth = 6
         imageView.layer.borderColor = UIColor.black.cgColor
+        imageView.isUserInteractionEnabled = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
@@ -41,9 +52,10 @@ class CartCard: UIView {
         let label = UILabel()
         label.textAlignment = .left
         label.textColor = .black
-        label.font = UIFont.systemFont(ofSize: 17, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
+        label.isUserInteractionEnabled = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -55,14 +67,41 @@ class CartCard: UIView {
         price.font = UIFont.systemFont(ofSize: 15, weight: .medium)
         price.numberOfLines = 0
         price.lineBreakMode = .byWordWrapping
+        price.isUserInteractionEnabled = true
         price.translatesAutoresizingMaskIntoConstraints = false
         return price
+    }()
+    
+    private lazy var topStack: UIStackView = {
+        let tStack = UIStackView(arrangedSubviews: [label, trash])
+        tStack.axis = .horizontal
+        tStack.isUserInteractionEnabled = true
+        tStack.translatesAutoresizingMaskIntoConstraints = false
+        return tStack
+    }()
+    
+    private lazy var bottomStack: UIStackView = {
+        let bStack = UIStackView(arrangedSubviews: [price, qntStack])
+        bStack.axis = .horizontal
+        bStack.isUserInteractionEnabled = true
+        bStack.translatesAutoresizingMaskIntoConstraints = false
+        return bStack
+    }()
+    
+    private let trash: UIButton = {
+        let trash = UIButton()
+        let trashImage = UIImage(systemName: "trash")
+        trash.setImage(trashImage, for: .normal)
+        trash.isUserInteractionEnabled = true
+        trash.translatesAutoresizingMaskIntoConstraints = false
+        return trash
     }()
     
     private lazy var qntStack: UIStackView = {
         let qnt = UIStackView(arrangedSubviews: [remove, qntLabel, plus])
         qnt.axis = .horizontal
         qnt.distribution = .equalSpacing
+        qnt.isUserInteractionEnabled = true
         qnt.translatesAutoresizingMaskIntoConstraints = false
         return qnt
     }()
@@ -72,7 +111,8 @@ class CartCard: UIView {
         remove.setTitle("-", for: .normal)
         remove.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         remove.setTitleColor(UIColor.accent, for: .normal)
-        remove.addTarget(self, action: #selector(CookieController.decrementQuantity), for: .touchUpInside)
+        remove.addTarget(self, action: #selector(decrementQuantity), for: .touchUpInside)
+        remove.isUserInteractionEnabled = true
         remove.translatesAutoresizingMaskIntoConstraints = false
         return remove
     }()
@@ -81,7 +121,7 @@ class CartCard: UIView {
         let qnt = UILabel()
         qnt.textColor = .black
         qnt.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        qnt.text = "1" 
+        qnt.isUserInteractionEnabled = true
         qnt.translatesAutoresizingMaskIntoConstraints = false
         return qnt
     }()
@@ -91,7 +131,8 @@ class CartCard: UIView {
         plus.setTitle("+", for: .normal)
         plus.titleLabel?.font = UIFont.systemFont(ofSize: 30, weight: .bold)
         plus.setTitleColor(UIColor.accent, for: .normal)
-        plus.addTarget(self, action: #selector(CookieController.incrementQuantity), for: .touchUpInside)
+        plus.addTarget(self, action: #selector(incrementQuantity), for: .touchUpInside)
+        plus.isUserInteractionEnabled = true
         plus.translatesAutoresizingMaskIntoConstraints = false
         return plus
     }()
@@ -100,26 +141,53 @@ class CartCard: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setCard()
+        trash.addTarget(self, action: #selector(removeItem), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func config(with order: OrderModel) {
+    @objc func removeItem() {
+        guard index < Order.shared.orders.count else {
+            return // Evita acessar índices inválidos
+        }
+        Order.shared.removeOrder(at: index)
+    }
+    
+    @objc func incrementQuantity() {
+        quantity += 1
+        qntLabel.text = "\(quantity)"
+        print(quantity)
+    }
+    
+    @objc func decrementQuantity() {
+        if quantity > 1 {
+            quantity -= 1
+        }
+        qntLabel.text = "\(quantity)"
+        print(quantity)
+    }
+    
+    func config(with order: OrderModel, atIndex index: Int) {
         label.text = order.cookie
         price.text = "R$ \(order.price)"
-        CookieController().quantity = order.qnt
+        if let quantity = order.qnt {
+            self.quantity = quantity
+            qntLabel.text = "\(quantity)"
+        }
         image.image = order.pic
         image.backgroundColor = order.color
-        
+        self.index = index
     }
+
+
     
     
     // Func
     func setCard() {
         self.addSubview(cartCard)
-        cartCard.addSubview(qntStack)
+        cartCard.addSubview(vStack)
         
         NSLayoutConstraint.activate([
             cartCard.centerXAnchor.constraint(equalTo: self.centerXAnchor),
@@ -131,14 +199,23 @@ class CartCard: UIView {
             image.widthAnchor.constraint(equalTo: cartCard.widthAnchor, constant: -190),
             image.heightAnchor.constraint(equalTo: cartCard.heightAnchor),
             
-            vStack.widthAnchor.constraint(equalTo: cartCard.widthAnchor, multiplier: 0.35),
-            vStack.leftAnchor.constraint(equalTo: cartCard.leftAnchor, constant: 113),
-            vStack.topAnchor.constraint(equalTo: cartCard.topAnchor, constant: -15),
-            vStack.heightAnchor.constraint(lessThanOrEqualTo: cartCard.heightAnchor),
+            vStack.widthAnchor.constraint(equalTo: cartCard.widthAnchor, multiplier: 0.56),
+            vStack.leftAnchor.constraint(equalTo: cartCard.leftAnchor, constant: 112),
             
-            qntStack.leadingAnchor.constraint(equalTo: cartCard.leadingAnchor, constant: 200),
-            qntStack.trailingAnchor.constraint(equalTo: cartCard.trailingAnchor, constant: -10),
-            qntStack.centerYAnchor.constraint(equalTo: cartCard.centerYAnchor)
+            topStack.widthAnchor.constraint(equalTo: vStack.widthAnchor),
+            topStack.heightAnchor.constraint(equalTo: vStack.heightAnchor, multiplier: 0.6),
+            
+            label.widthAnchor.constraint(equalTo: topStack.widthAnchor, multiplier: 0.8),
+            
+            trash.trailingAnchor.constraint(equalTo: vStack.trailingAnchor),
+            
+            bottomStack.widthAnchor.constraint(equalTo: vStack.widthAnchor),
+            bottomStack.heightAnchor.constraint(equalTo: vStack.heightAnchor, multiplier: 0.5),
+            
+            qntStack.widthAnchor.constraint(equalTo: bottomStack.widthAnchor, multiplier: 0.45),
+            qntStack.trailingAnchor.constraint(equalTo: vStack.trailingAnchor),
+            
+            remove.heightAnchor.constraint(equalTo: qntStack.heightAnchor, constant: 1)
         ])
     }
 }

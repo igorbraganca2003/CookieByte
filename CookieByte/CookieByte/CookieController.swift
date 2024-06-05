@@ -46,7 +46,7 @@ class CookieController: UIView {
     
     // Atualiza o preço no popUp do pix
     static func updateTotalPrice(label: UILabel) {
-        let totalPrice = Order.shared.orders.reduce(into: 0) { $0 + ($1.price * Float($1.qnt)) }
+        let totalPrice = Order.shared.orders.reduce(into: 0) { $0 + ($1.price * Float($1.qnt!)) }
         print("Total price: \(totalPrice)")  // Para depuração
         if totalPrice > 0 {
             label.text = String(format: "Total: R$ %.2f", totalPrice)
@@ -151,7 +151,7 @@ class CookieController: UIView {
             return
         }
         
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: CookieController().quantity, pic: cookieImage, status: true, color: cookieBack)
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
         
@@ -166,21 +166,21 @@ class CookieController: UIView {
     
     
     //MARK: - Calculo de quantidade do carrinho
-    var quantity = 1 {
-        didSet {
-            CartCard().qntLabel.text = "\(quantity)"
-        }
-    }
-    
-    @objc func incrementQuantity() {
-        quantity += 1
-    }
-    
-    @objc func decrementQuantity() {
-        if quantity > 1 {
-            quantity -= 1
-        }
-    }
+//    var quantity = 1 {
+//        didSet {
+//            CartCard().qntLabel.text = "\(quantity)"
+//        }
+//    }
+//    
+//    @objc static func incrementQuantity() {
+//        quantity += 1
+//    }
+//    
+//    @objc static func decrementQuantity() {
+//        if quantity > 1 {
+//            quantity -= 1
+//        }
+//    }
     
 }
 
