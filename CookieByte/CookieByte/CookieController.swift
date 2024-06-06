@@ -46,7 +46,7 @@ class CookieController: UIView {
     
     // Atualiza o preço no popUp do pix
     static func updateTotalPrice(label: UILabel) {
-        let totalPrice = Order.shared.orders.reduce(into: 0) { $0 + ($1.price * Float($1.qnt!)) }
+        let totalPrice = Order.shared.orders.reduce(into: 0) { $0 + ($1.price * Float($1.qnt)) }
         print("Total price: \(totalPrice)")  // Para depuração
         if totalPrice > 0 {
             label.text = String(format: "Total: R$ %.2f", totalPrice)

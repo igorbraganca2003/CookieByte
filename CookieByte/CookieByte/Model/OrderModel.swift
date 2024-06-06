@@ -12,16 +12,22 @@ struct OrderModel {
     let cookie: String
     let date: Date
     let price: Float
-    let qnt: Int?
+    var qnt: Int = 1
     let pic: UIImage?
     let status: Bool
     let color: UIColor?
 }
 
 class Order {
+    
+    var cart = CartCard()
+    
     static var shared = Order()
+    
     var orders: [OrderModel] = [
-        OrderModel(user: "Gabriel", cookie: "Cookie Chocolate", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieT"), status: true, color: UIColor(named: "Cookie1Back"))
+        
+//        OrderModel(user: "Gabriel", cookie: "Cookie Chocolate", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieT"), status: true, color: UIColor(named: "Cookie1Back"))
+        
     ]
     
     init() {}
@@ -33,12 +39,12 @@ class Order {
     func removeCompletedOrders() {
         orders.removeAll { $0.status }
     }
-    
-    func removeOrder(at index: Int) {
-        orders.remove(at: index)
-    }
-    
-    func filter(){
-        
+
+    func removeOrder(at index: Int){
+        if index < orders.count {
+            orders.remove(at: index)
+            NotificationCenter.default.post(name: NSNotification.Name("OrderUpdated"), object: nil)
+            print("Pedidos restantes: \(orders)")
+        }
     }
 }

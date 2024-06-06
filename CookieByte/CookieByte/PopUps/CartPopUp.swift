@@ -88,11 +88,17 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         empty.text = "Carrinho vazio"
         empty.textColor = .black
         empty.textAlignment = .center
-        empty.font = UIFont.systemFont(ofSize: 28, weight: .bold)
+        empty.font = UIFont.systemFont(ofSize: 36, weight: .bold)
         empty.translatesAutoresizingMaskIntoConstraints = false
         return empty
     }()
     
+    private let maneiro: UIImageView = {
+        let maneiro = UIImageView()
+        maneiro.image = UIImage(named: "ManeiroEmpty")
+        maneiro.translatesAutoresizingMaskIntoConstraints = false
+        return maneiro
+    }()
     
     //Body
     override init(frame: CGRect) {
@@ -106,9 +112,10 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         payButton.addTarget(self, action: #selector(payButtonTapped), for: .touchUpInside)
         keepBuying.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(orderUpdated), name: NSNotification.Name("OrderUpdated"), object: nil)
+        
         CookieController.animateIn(view: self, container: container)
     }
-    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -122,6 +129,14 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         CookieController.payButtonTapped()
     }
     
+    @objc func orderUpdated() {
+        cartCollectionView.reloadData()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("OrderUpdated"), object: nil)
+    }
+    
     // UICollectionViewDataSource
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return Order.shared.orders.count
@@ -129,7 +144,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CartCardCell", for: indexPath) as! CartCardCollection
-        cell.cartCard.config(with: Order.shared.orders[indexPath.item], atIndex: indexPath.item)
+        cell.cartCard.config(with: Order.shared.orders[indexPath.item], at: indexPath.item)
         return cell
     }
     
@@ -138,13 +153,11 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return CGSize(width: collectionView.frame.width - 40, height: 120)
     }
     
-    
     func addUI() {
         self.addSubview(backContainer)
         self.addSubview(container)
         container.addSubview(VStack)
-        container.addSubview(titleLabel)
-        
+
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateOut))
         backContainer.addGestureRecognizer(tapGesture)
         
@@ -166,16 +179,17 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
             
             roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: -620),
             roundButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 275),
-            
-            titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
-            titleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
         ])
         
         if Order.shared.orders.count >= 1 {
             container.addSubview(cartCollectionView)
             container.addSubview(buttonStack)
+            container.addSubview(titleLabel)
             
             NSLayoutConstraint.activate([
+                titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+                titleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
+                
                 cartCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
                 cartCollectionView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
                 cartCollectionView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
@@ -196,10 +210,16 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
             ])
         } else {
             container.addSubview(emptyState)
+            container.addSubview(maneiro)
             
             NSLayoutConstraint.activate([
-                emptyState.centerYAnchor.constraint(equalTo: self.centerYAnchor),
                 emptyState.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+                emptyState.topAnchor.constraint(equalTo: container.topAnchor, constant: 120),
+                
+                maneiro.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+                maneiro.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.64),
+                maneiro.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.4),
+                maneiro.topAnchor.constraint(equalTo: emptyState.topAnchor, constant: 125),
             ])
         }
         

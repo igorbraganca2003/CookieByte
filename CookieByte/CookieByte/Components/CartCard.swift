@@ -9,13 +9,23 @@ import UIKit
 
 class CartCard: UIView {
     
-    var index: Int = 0
-    
     var quantity = 1 {
         didSet {
             qntLabel.text = "\(quantity)"
         }
     }
+    
+    var orderIndex: Int?
+    
+    private lazy var trash: UIButton = {
+        let trash = UIButton()
+        let trashImage = UIImage(systemName: "trash")
+        trash.setImage(trashImage, for: .normal)
+        trash.isUserInteractionEnabled = true
+        trash.translatesAutoresizingMaskIntoConstraints = false
+        trash.addTarget(self, action: #selector(removeItem), for: .touchUpInside)
+        return trash
+    }()
     
     private lazy var cartCard: UIStackView = {
         let card = UIStackView(arrangedSubviews: [image, vStack])
@@ -88,19 +98,10 @@ class CartCard: UIView {
         return bStack
     }()
     
-    private let trash: UIButton = {
-        let trash = UIButton()
-        let trashImage = UIImage(systemName: "trash")
-        trash.setImage(trashImage, for: .normal)
-        trash.isUserInteractionEnabled = true
-        trash.translatesAutoresizingMaskIntoConstraints = false
-        return trash
-    }()
-    
     private lazy var qntStack: UIStackView = {
         let qnt = UIStackView(arrangedSubviews: [remove, qntLabel, plus])
         qnt.axis = .horizontal
-        qnt.distribution = .equalSpacing
+        qnt.distribution = .fill
         qnt.isUserInteractionEnabled = true
         qnt.translatesAutoresizingMaskIntoConstraints = false
         return qnt
@@ -141,7 +142,6 @@ class CartCard: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setCard()
-        trash.addTarget(self, action: #selector(removeItem), for: .touchUpInside)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -149,42 +149,55 @@ class CartCard: UIView {
     }
     
     @objc func removeItem() {
-        guard index < Order.shared.orders.count else {
-            return // Evita acessar índices inválidos
-        }
+        guard let index = orderIndex else { return }
         Order.shared.removeOrder(at: index)
+        print("Item removido no índice \(index)")
     }
     
     @objc func incrementQuantity() {
-        quantity += 1
-        qntLabel.text = "\(quantity)"
-        print(quantity)
+        guard let orderIndex = orderIndex else { return }
+        Order.shared.orders[orderIndex].qnt += 1
+        updateQuantityLabel()
+        updatePrice()
     }
     
     @objc func decrementQuantity() {
-        if quantity > 1 {
-            quantity -= 1
+        guard let orderIndex = orderIndex else { return }
+        if Order.shared.orders[orderIndex].qnt > 1 {
+            Order.shared.orders[orderIndex].qnt -= 1
+            updateQuantityLabel()
+            updatePrice()
         }
-        qntLabel.text = "\(quantity)"
-        print(quantity)
     }
     
-    func config(with order: OrderModel, atIndex index: Int) {
+    
+    private func updateQuantityLabel() {
+        guard let orderIndex = orderIndex, orderIndex < Order.shared.orders.count else { return }
+        let order = Order.shared.orders[orderIndex]
+        qntLabel.text = "\(order.qnt)"
+    }
+    
+    
+    private func updatePrice() {
+        guard let orderIndex = orderIndex, orderIndex < Order.shared.orders.count else { return }
+        let order = Order.shared.orders[orderIndex]
+        let totalPrice = order.price * Float(order.qnt)
+        price.text = String(format: "R$ %.2f", totalPrice)
+    }
+    
+    func config(with order: OrderModel, at index: Int) {
         label.text = order.cookie
         price.text = "R$ \(order.price)"
-        if let quantity = order.qnt {
-            self.quantity = quantity
-            qntLabel.text = "\(quantity)"
-        }
         image.image = order.pic
         image.backgroundColor = order.color
-        self.index = index
+        qntLabel.text = "\(order.qnt)"
+        
+        self.orderIndex = index
+        updatePrice()
     }
-
-
     
     
-    // Func
+    
     func setCard() {
         self.addSubview(cartCard)
         cartCard.addSubview(vStack)
@@ -212,7 +225,7 @@ class CartCard: UIView {
             bottomStack.widthAnchor.constraint(equalTo: vStack.widthAnchor),
             bottomStack.heightAnchor.constraint(equalTo: vStack.heightAnchor, multiplier: 0.5),
             
-            qntStack.widthAnchor.constraint(equalTo: bottomStack.widthAnchor, multiplier: 0.45),
+            qntStack.widthAnchor.constraint(equalTo: bottomStack.widthAnchor, multiplier: 0.5),
             qntStack.trailingAnchor.constraint(equalTo: vStack.trailingAnchor),
             
             remove.heightAnchor.constraint(equalTo: qntStack.heightAnchor, constant: 1)
