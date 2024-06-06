@@ -26,7 +26,10 @@ class Order {
     
     var orders: [OrderModel] = [
         
-//        OrderModel(user: "Gabriel", cookie: "Cookie Chocolate", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieT"), status: true, color: UIColor(named: "Cookie1Back"))
+        OrderModel(user: "Gabriel", cookie: "Cookie Chocolate", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieT"), status: true, color: UIColor(named: "Cookie1Back")),
+        OrderModel(user: "Gabriel", cookie: "Cookie Chocolate", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieM"), status: true, color: UIColor(named: "Cookie2Back")),
+        OrderModel(user: "Gabriel", cookie: "Cookie Chocolate", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieB"), status: true, color: UIColor(named: "Cookie3Back")),
+        OrderModel(user: "Gabriel", cookie: "Cookie Chocolate", date: Date(), price: 4.0, qnt: 1, pic: UIImage(named: "CookieT"), status: true, color: UIColor(named: "Cookie1Back")),
         
     ]
     

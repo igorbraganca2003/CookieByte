@@ -62,6 +62,29 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return label
     }()
     
+    private lazy var priceStack: UIStackView = {
+        let priceStack = UIStackView(arrangedSubviews: [totalLabel, priceLabel])
+        priceStack.axis = .horizontal
+        priceStack.spacing = 100
+        priceStack.translatesAutoresizingMaskIntoConstraints = false
+        return priceStack
+    }()
+    
+    private let totalLabel: UILabel = {
+        let total = UILabel()
+        total.text = "Valor Total"
+        total.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        total.translatesAutoresizingMaskIntoConstraints = false
+        return total
+    }()
+    
+    private let priceLabel: UILabel = {
+        let price = UILabel()
+        price.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        price.translatesAutoresizingMaskIntoConstraints = false
+        return price
+    }()
+    
     private let payButton: MainButtons = {
         let mainButton = MainButtons()
         mainButton.setButton(type: .pay)
@@ -100,7 +123,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return maneiro
     }()
     
-    //Body
+    // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -115,6 +138,9 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         NotificationCenter.default.addObserver(self, selector: #selector(orderUpdated), name: NSNotification.Name("OrderUpdated"), object: nil)
         
         CookieController.animateIn(view: self, container: container)
+        
+        // Atualizar preço total na inicialização
+        updateTotalPrice()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -131,6 +157,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     
     @objc func orderUpdated() {
         cartCollectionView.reloadData()
+        updateTotalPrice()
     }
 
     deinit {
@@ -138,7 +165,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     }
     
     // UICollectionViewDataSource
-    @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return Order.shared.orders.count
     }
     
@@ -151,6 +178,11 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     // UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width - 40, height: 120)
+    }
+    
+    private func updateTotalPrice() {
+        print("Updating total price...")
+        CookieController.updateTotalPrice(label: priceLabel)
     }
     
     func addUI() {
@@ -184,6 +216,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         if Order.shared.orders.count >= 1 {
             container.addSubview(cartCollectionView)
             container.addSubview(buttonStack)
+            container.addSubview(priceStack)
             container.addSubview(titleLabel)
             
             NSLayoutConstraint.activate([
@@ -193,7 +226,10 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
                 cartCollectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
                 cartCollectionView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
                 cartCollectionView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
-                cartCollectionView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -190),
+                cartCollectionView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -230),
+                
+                priceStack.topAnchor.constraint(equalTo: cartCollectionView.bottomAnchor, constant: 20),
+                priceStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
                 
                 buttonStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 510),
                 buttonStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
@@ -222,9 +258,9 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
                 maneiro.topAnchor.constraint(equalTo: emptyState.topAnchor, constant: 125),
             ])
         }
-        
     }
 }
+
 
 #Preview(){
     return CartPopUp()

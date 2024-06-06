@@ -44,12 +44,12 @@ class CookieController: UIView {
     
     //MARK: - PixPopUp
     
-    // Atualiza o preço no popUp do pix
+    // Atualiza o preço total dentro do carrinho
     static func updateTotalPrice(label: UILabel) {
-        let totalPrice = Order.shared.orders.reduce(into: 0) { $0 + ($1.price * Float($1.qnt)) }
-        print("Total price: \(totalPrice)")  // Para depuração
+        let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Float($1.qnt)) }
+        print("Total price: \(totalPrice)")
         if totalPrice > 0 {
-            label.text = String(format: "Total: R$ %.2f", totalPrice)
+            label.text = String(format: "R$ %.2f", totalPrice)
         } else {
             label.text = "R$ 0,00"
         }
@@ -163,25 +163,6 @@ class CookieController: UIView {
         
         cookiePop.removeFromSuperview()
     }
-    
-    
-    //MARK: - Calculo de quantidade do carrinho
-//    var quantity = 1 {
-//        didSet {
-//            CartCard().qntLabel.text = "\(quantity)"
-//        }
-//    }
-//    
-//    @objc static func incrementQuantity() {
-//        quantity += 1
-//    }
-//    
-//    @objc static func decrementQuantity() {
-//        if quantity > 1 {
-//            quantity -= 1
-//        }
-//    }
-    
 }
 
 

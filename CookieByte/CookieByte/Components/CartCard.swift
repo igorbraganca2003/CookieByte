@@ -159,16 +159,19 @@ class CartCard: UIView {
         Order.shared.orders[orderIndex].qnt += 1
         updateQuantityLabel()
         updatePrice()
+        NotificationCenter.default.post(name: NSNotification.Name("OrderUpdated"), object: nil)
     }
-    
+
     @objc func decrementQuantity() {
         guard let orderIndex = orderIndex else { return }
         if Order.shared.orders[orderIndex].qnt > 1 {
             Order.shared.orders[orderIndex].qnt -= 1
             updateQuantityLabel()
             updatePrice()
+            NotificationCenter.default.post(name: NSNotification.Name("OrderUpdated"), object: nil)
         }
     }
+
     
     
     private func updateQuantityLabel() {
