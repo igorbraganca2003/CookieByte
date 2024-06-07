@@ -46,7 +46,7 @@ class CookieController: UIView {
     
     // Atualiza o preço total dentro do carrinho
     static func updateTotalPrice(label: UILabel) {
-        let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Float($1.qnt)) }
+        let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Int(Float($1.qnt))) }
         print("Total price: \(totalPrice)")
         if totalPrice > 0 {
             label.text = String(format: "R$ %.2f", totalPrice)
@@ -151,7 +151,7 @@ class CookieController: UIView {
             return
         }
         
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: Int(price), qnt: 1, pic: cookieImage, status: true, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
         

@@ -12,6 +12,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     private lazy var VStack: UIStackView = {
         let vStack = UIStackView(arrangedSubviews: [roundButton])
         vStack.axis = .vertical
+        vStack.isUserInteractionEnabled = true
         vStack.translatesAutoresizingMaskIntoConstraints = false
         return vStack
     }()
@@ -28,6 +29,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         container.backgroundColor = .white
         container.layer.borderColor = UIColor.black.cgColor
         container.layer.borderWidth = 6
+        container.isUserInteractionEnabled = true
         container.translatesAutoresizingMaskIntoConstraints = false
         return container
     }()
@@ -158,6 +160,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     @objc func orderUpdated() {
         cartCollectionView.reloadData()
         updateTotalPrice()
+        updateCartUI()
     }
 
     deinit {
@@ -189,6 +192,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         self.addSubview(backContainer)
         self.addSubview(container)
         container.addSubview(VStack)
+//        container.addSubview(roundButton)
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateOut))
         backContainer.addGestureRecognizer(tapGesture)
@@ -210,10 +214,35 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
             VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor),
             
             roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: -620),
-            roundButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 275),
+            roundButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 270)
         ])
         
-        if Order.shared.orders.count >= 1 {
+        updateCartUI()
+    }
+    
+    private func updateCartUI() {
+        // Remover todas as subviews antes de adicionar novas, exceto o roundButton
+        container.subviews.forEach { subview in
+            if subview != roundButton && subview != VStack {
+                subview.removeFromSuperview()
+            }
+        }
+        container.addSubview(VStack)
+        
+        if Order.shared.orders.isEmpty {
+            container.addSubview(emptyState)
+            container.addSubview(maneiro)
+            
+            NSLayoutConstraint.activate([
+                emptyState.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+                emptyState.topAnchor.constraint(equalTo: container.topAnchor, constant: 120),
+                
+                maneiro.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+                maneiro.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.64),
+                maneiro.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.4),
+                maneiro.topAnchor.constraint(equalTo: emptyState.topAnchor, constant: 125),
+            ])
+        } else {
             container.addSubview(cartCollectionView)
             container.addSubview(buttonStack)
             container.addSubview(priceStack)
@@ -243,19 +272,6 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
                 
                 payButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 100),
                 payButton.centerYAnchor.constraint(equalTo: payButton.centerYAnchor)
-            ])
-        } else {
-            container.addSubview(emptyState)
-            container.addSubview(maneiro)
-            
-            NSLayoutConstraint.activate([
-                emptyState.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-                emptyState.topAnchor.constraint(equalTo: container.topAnchor, constant: 120),
-                
-                maneiro.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-                maneiro.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.64),
-                maneiro.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.4),
-                maneiro.topAnchor.constraint(equalTo: emptyState.topAnchor, constant: 125),
             ])
         }
     }

@@ -104,7 +104,7 @@ class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         nameLabel.textAlignment = .left
         
         let priceLabel = UILabel(frame: CGRect(x: 0, y: containerView.frame.height + 10, width: containerView.frame.width, height: 100))
-        priceLabel.text = "R$ \(cookie.price)"
+        priceLabel.text = String(format: "R$ %.2f", cookie.price)
         priceLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
         priceLabel.textColor = .black
         priceLabel.textAlignment = .left

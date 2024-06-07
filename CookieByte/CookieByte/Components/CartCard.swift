@@ -161,7 +161,7 @@ class CartCard: UIView {
         updatePrice()
         NotificationCenter.default.post(name: NSNotification.Name("OrderUpdated"), object: nil)
     }
-
+    
     @objc func decrementQuantity() {
         guard let orderIndex = orderIndex else { return }
         if Order.shared.orders[orderIndex].qnt > 1 {
@@ -171,8 +171,6 @@ class CartCard: UIView {
             NotificationCenter.default.post(name: NSNotification.Name("OrderUpdated"), object: nil)
         }
     }
-
-    
     
     private func updateQuantityLabel() {
         guard let orderIndex = orderIndex, orderIndex < Order.shared.orders.count else { return }
@@ -184,7 +182,7 @@ class CartCard: UIView {
     private func updatePrice() {
         guard let orderIndex = orderIndex, orderIndex < Order.shared.orders.count else { return }
         let order = Order.shared.orders[orderIndex]
-        let totalPrice = order.price * Float(order.qnt)
+        let totalPrice = order.price * order.qnt
         price.text = String(format: "R$ %.2f", totalPrice)
     }
     
