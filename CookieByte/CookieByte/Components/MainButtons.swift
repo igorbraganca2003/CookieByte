@@ -22,7 +22,7 @@ class MainButtons: UIView {
             case .buy:
                 return "Comprar"
             case .confirmPay:
-                return "Confirmar o pagamento"
+                return "Confirmar Pagamento"
             case .addCart:
                 return "Adicionar ao carrinho"
             case .applePay:

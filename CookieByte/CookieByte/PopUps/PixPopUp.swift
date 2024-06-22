@@ -4,13 +4,12 @@
 //
 //  Created by Igor Bragança Toledo on 27/05/24.
 //
-
 import UIKit
 
 class PixPopUp: UIView {
     
     private lazy var VStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [imageView, priceLabel, pixLabel, buttonStack])
+        let vStack = UIStackView(arrangedSubviews: [imageView, priceLabel, pixLabelBack, copyButton, buttonStack])
         vStack.axis = .vertical
         vStack.spacing = 10
         vStack.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +43,6 @@ class PixPopUp: UIView {
     
     private let imageView: UIImageView = {
         let pix = UIImageView()
-        pix.image = UIImage(named: "pix")
         pix.translatesAutoresizingMaskIntoConstraints = false
         return pix
     }()
@@ -53,21 +51,44 @@ class PixPopUp: UIView {
         let price = UILabel()
         price.textColor = .black
         price.textAlignment = .center
-        price.font = UIFont.systemFont(ofSize: 25, weight: .heavy)
+        price.font = UIFont.systemFont(ofSize: 32, weight: .heavy)
         price.textColor = UIColor(named: "GreenCookie")
         price.translatesAutoresizingMaskIntoConstraints = false
         return price
     }()
     
+    private let pixLabelBack: UIView = {
+        let back = UIView()
+        back.backgroundColor = UIColor(named: "LightGrayCookie")
+        back.translatesAutoresizingMaskIntoConstraints = false
+        return back
+    }()
+    
     private let pixLabel: UILabel = {
         let key = UILabel()
-        key.text = "(11) 98936-4585"
         key.textAlignment = .center
         key.textColor = .black
-        key.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        key.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         key.translatesAutoresizingMaskIntoConstraints = false
+        key.numberOfLines = 1
         return key
     }()
+    
+    private let copyButton: UIButton = {
+        let copy = UIButton()
+        let title = "Copiar Código Pix"
+        
+        let attributedTitle = NSAttributedString(string: title, attributes: [
+            .foregroundColor: UIColor(named: "GreenCookie") ?? .green,
+            .underlineStyle: NSUnderlineStyle.single.rawValue
+        ])
+        
+        copy.setAttributedTitle(attributedTitle, for: .normal)
+        copy.addTarget(self, action: #selector(copyPixCode), for: .touchUpInside)
+        copy.translatesAutoresizingMaskIntoConstraints = false
+        return copy
+    }()
+
     
     private let ConfirmButton: MainButtons = {
         let confirm = MainButtons()
@@ -83,7 +104,6 @@ class PixPopUp: UIView {
         return buttonStack
     }()
     
-    // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -98,6 +118,8 @@ class PixPopUp: UIView {
         CookieController.updateTotalPrice(label: priceLabel)
         
         CookieController.animateIn(view: self, container: container)
+        
+        setPix()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -112,13 +134,52 @@ class PixPopUp: UIView {
         CookieController.payConfirmed(from: self)
     }
     
+    @objc fileprivate func copyPixCode() {
+        UIPasteboard.general.string = pixLabel.text
+        let alert = UIAlertController(title: "Copiado", message: "Código Pix copiado para a área de transferência", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        if let viewController = self.window?.rootViewController {
+            viewController.present(alert, animated: true, completion: nil)
+        }
+    }
     
-    // Functions
+    func setPix() {
+        let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Double($1.qnt)) }
+        
+        var pixType: PixEnum
+        
+        switch totalPrice {
+        case 4:
+            pixType = .four
+        case 8:
+            pixType = .eight
+        case 12:
+            pixType = .twelve
+        case 16:
+            pixType = .sixteen
+        case 20:
+            pixType = .twenty
+        case 24:
+            pixType = .twentyfour
+        case 28:
+            pixType = .twentyeight
+        case 32:
+            pixType = .thirtytwo
+        default:
+            pixType = .empty
+        }
+        
+        imageView.image = pixType.qrCode
+        pixLabel.text = pixType.label
+    }
+    
     func addUI() {
         self.addSubview(container)
         container.addSubview(VStack)
         container.addSubview(roundButton)
         container.addSubview(backButton)
+        container.addSubview(pixLabelBack)
+        pixLabelBack.addSubview(pixLabel)
         
         NSLayoutConstraint.activate([
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -137,19 +198,32 @@ class PixPopUp: UIView {
             backButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
             backButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
             
-            imageView.topAnchor.constraint(equalTo: container.topAnchor, constant: 120),
-            imageView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 60),
-            imageView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -60),
+            imageView.heightAnchor.constraint(equalTo: VStack.heightAnchor, constant: -400),
+            imageView.widthAnchor.constraint(equalTo: VStack.widthAnchor, constant: -50),
+            imageView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            imageView.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 60),
+
+            priceLabel.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 250),
+            priceLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             
-            priceLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 350),
+            pixLabelBack.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 420),
+            pixLabelBack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            pixLabelBack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.8),
+            pixLabelBack.heightAnchor.constraint(equalTo: VStack.heightAnchor, multiplier: 0.07),
             
-            pixLabel.topAnchor.constraint(equalTo: priceLabel.topAnchor, constant: 80),
+            pixLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            pixLabel.centerYAnchor.constraint(equalTo: pixLabelBack.centerYAnchor),
+            pixLabel.widthAnchor.constraint(equalTo: pixLabelBack.widthAnchor, multiplier: 0.9),
             
-            ConfirmButton.topAnchor.constraint(equalTo: pixLabel.topAnchor, constant: 140)
+            copyButton.topAnchor.constraint(equalTo: pixLabelBack.bottomAnchor, constant: 20),
+            copyButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            
+            ConfirmButton.topAnchor.constraint(equalTo: copyButton.bottomAnchor, constant: 50),
+            ConfirmButton.centerXAnchor.constraint(equalTo: VStack.centerXAnchor)
         ])
     }
 }
 
-#Preview() {
-    PixPopUp()
+#Preview {
+    return PixPopUp()
 }

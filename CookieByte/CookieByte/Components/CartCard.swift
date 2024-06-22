@@ -182,10 +182,10 @@ class CartCard: UIView {
     private func updatePrice() {
         guard let orderIndex = orderIndex, orderIndex < Order.shared.orders.count else { return }
         let order = Order.shared.orders[orderIndex]
-        let totalPrice = order.price * order.qnt
+        let totalPrice = order.price * Double(order.qnt)
         price.text = String(format: "R$ %.2f", totalPrice)
     }
-    
+
     func config(with order: OrderModel, at index: Int) {
         label.text = order.cookie
         price.text = "R$ \(order.price)"

@@ -154,7 +154,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     }
     
     @objc func payButtonTapped() {
-        CookieController.payButtonTapped()
+        CookieController.payButtonTapped(from: CookiePopUp().self)
     }
     
     @objc func orderUpdated() {

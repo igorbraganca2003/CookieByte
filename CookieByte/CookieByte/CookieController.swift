@@ -46,7 +46,7 @@ class CookieController: UIView {
     
     // Atualiza o preço total dentro do carrinho
     static func updateTotalPrice(label: UILabel) {
-        let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Int(Float($1.qnt))) }
+        let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Double($1.qnt)) }
         print("Total price: \(totalPrice)")
         if totalPrice > 0 {
             label.text = String(format: "R$ %.2f", totalPrice)
@@ -71,12 +71,31 @@ class CookieController: UIView {
     
     //MARK: - Função carrinho
     
-    @objc static func payButtonTapped() {
+    @objc static func payButtonTapped(from cookiePop: CookiePopUp) {
         let popup = PixPopUp()
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             window.addSubview(popup)
             animateIn(view: popup, container: popup)
         }
+        
+        guard let cookieName = cookiePop.label.text,
+              let cookieImage = cookiePop.imageCookie.image,
+              let cookieBack = cookiePop.imageCookie.backgroundColor,
+              let priceText = cookiePop.priceLabel.text?.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: "."),
+              let price = Double(priceText) else {
+            return
+        }
+        
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
+        Order.shared.addOrder(newOrder)
+        print("Pedido adicionado: \(newOrder)")
+        
+        let cartPopup = CartPopUp()
+        if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
+            window.addSubview(cartPopup)
+            CookieController.animateIn(view: cartPopup, container: cartPopup)
+        }
+        
         print("Botão de compra pressionado")
         CartPopUp().removeFromSuperview()
     }
@@ -142,16 +161,17 @@ class CookieController: UIView {
         print("Botão de compra pressionado")
     }
     
+    // Na função addToCart:
     static func addToCart(from cookiePop: CookiePopUp) {
         guard let cookieName = cookiePop.label.text,
               let cookieImage = cookiePop.imageCookie.image,
               let cookieBack = cookiePop.imageCookie.backgroundColor,
-              let priceText = cookiePop.priceLabel.text,
-              let price = Float(priceText.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: ".")) else {
+              let priceText = cookiePop.priceLabel.text?.replacingOccurrences(of: "R$ ", with: "").replacingOccurrences(of: ",", with: "."),
+              let price = Double(priceText) else {
             return
         }
         
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: Int(price), qnt: 1, pic: cookieImage, status: true, color: cookieBack)
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
         
@@ -163,6 +183,7 @@ class CookieController: UIView {
         
         cookiePop.removeFromSuperview()
     }
+
 }
 
 

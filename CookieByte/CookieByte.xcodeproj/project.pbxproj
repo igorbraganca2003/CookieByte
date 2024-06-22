@@ -33,6 +33,7 @@
 		DED62C0D2BF40226005AE51B /* OrderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62C0C2BF40226005AE51B /* OrderModel.swift */; };
 		DED62C0F2BF40541005AE51B /* CookieModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62C0E2BF40541005AE51B /* CookieModel.swift */; };
 		DED62C112BF405AD005AE51B /* ForeachExemple.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62C102BF405AD005AE51B /* ForeachExemple.swift */; };
+		DEF499612C1CA19C00DB910D /* PixEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEF499602C1CA19C00DB910D /* PixEnum.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -64,6 +65,7 @@
 		DED62C0C2BF40226005AE51B /* OrderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderModel.swift; sourceTree = "<group>"; };
 		DED62C0E2BF40541005AE51B /* CookieModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieModel.swift; sourceTree = "<group>"; };
 		DED62C102BF405AD005AE51B /* ForeachExemple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForeachExemple.swift; sourceTree = "<group>"; };
+		DEF499602C1CA19C00DB910D /* PixEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixEnum.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +156,7 @@
 			children = (
 				DED62C062BF40156005AE51B /* UserModel .swift */,
 				DED62C0C2BF40226005AE51B /* OrderModel.swift */,
+				DEF499602C1CA19C00DB910D /* PixEnum.swift */,
 				DED62C0E2BF40541005AE51B /* CookieModel.swift */,
 			);
 			path = Model;
@@ -240,6 +243,7 @@
 				DED62C112BF405AD005AE51B /* ForeachExemple.swift in Sources */,
 				DE93DF552BFEBAE000F0E63C /* FavoriteCollection.swift in Sources */,
 				DE27ACB02C0549B500387E27 /* DonePopUp.swift in Sources */,
+				DEF499612C1CA19C00DB910D /* PixEnum.swift in Sources */,
 				DEB721182BFBE995003E7150 /* MainButtons.swift in Sources */,
 				DE9EBA4C2C042B1A00C8C648 /* CartCardCollection.swift in Sources */,
 				DE14CA112C06463800ED9488 /* WelcomView.swift in Sources */,

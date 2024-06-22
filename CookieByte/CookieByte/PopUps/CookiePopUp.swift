@@ -156,7 +156,7 @@ class CookiePopUp: UIView {
     }
     
     @objc func payButton() {
-        CookieController.payButtonTapped()
+        CookieController.payButtonTapped(from: self)
     }
     
     func configure(with cookie: CookiesModel) {
