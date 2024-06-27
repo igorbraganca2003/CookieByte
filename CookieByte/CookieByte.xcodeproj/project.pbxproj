@@ -11,6 +11,7 @@
 		DE14CA112C06463800ED9488 /* WelcomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE14CA102C06463800ED9488 /* WelcomView.swift */; };
 		DE27ACAA2C05116100387E27 /* PixPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE27ACA92C05116100387E27 /* PixPopUp.swift */; };
 		DE27ACB02C0549B500387E27 /* DonePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE27ACAF2C0549B500387E27 /* DonePopUp.swift */; };
+		DE2FD7D02C2CD45000AB4CB2 /* PayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2FD7CF2C2CD45000AB4CB2 /* PayController.swift */; };
 		DE7DE0712C0A0E480006A29A /* CookiePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7DE0702C0A0E480006A29A /* CookiePopUp.swift */; };
 		DE7DE0732C0A128C0006A29A /* CookieController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7DE0722C0A128C0006A29A /* CookieController.swift */; };
 		DE7DE0752C0A19B50006A29A /* CartPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE7DE0742C0A19B50006A29A /* CartPopUp.swift */; };
@@ -41,6 +42,9 @@
 		DE14CA102C06463800ED9488 /* WelcomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WelcomView.swift; path = CookieByte/WelcomView.swift; sourceTree = SOURCE_ROOT; };
 		DE27ACA92C05116100387E27 /* PixPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixPopUp.swift; sourceTree = "<group>"; };
 		DE27ACAF2C0549B500387E27 /* DonePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonePopUp.swift; sourceTree = "<group>"; };
+		DE2FD7CF2C2CD45000AB4CB2 /* PayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayController.swift; sourceTree = "<group>"; };
+		DE6BB8902C2B130E00B3C62F /* CookieByte.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CookieByte.entitlements; sourceTree = "<group>"; };
+		DE6BB8912C2B132600B3C62F /* CookieByteDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CookieByteDebug.entitlements; sourceTree = "<group>"; };
 		DE7DE0702C0A0E480006A29A /* CookiePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookiePopUp.swift; sourceTree = "<group>"; };
 		DE7DE0722C0A128C0006A29A /* CookieController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieController.swift; sourceTree = "<group>"; };
 		DE7DE0742C0A19B50006A29A /* CartPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartPopUp.swift; sourceTree = "<group>"; };
@@ -135,7 +139,10 @@
 		DED62BEF2BF3E0CC005AE51B /* CookieByte */ = {
 			isa = PBXGroup;
 			children = (
+				DE6BB8912C2B132600B3C62F /* CookieByteDebug.entitlements */,
+				DE6BB8902C2B130E00B3C62F /* CookieByte.entitlements */,
 				DED62BF02BF3E0CC005AE51B /* AppDelegate.swift */,
+				DE2FD7CF2C2CD45000AB4CB2 /* PayController.swift */,
 				DED62BF22BF3E0CC005AE51B /* SceneDelegate.swift */,
 				DE7DE0722C0A128C0006A29A /* CookieController.swift */,
 				DED62C0A2BF40175005AE51B /* Model */,
@@ -256,6 +263,7 @@
 				DE91CE912BFEEE2E0045D369 /* CartCard.swift in Sources */,
 				DE27ACAA2C05116100387E27 /* PixPopUp.swift in Sources */,
 				DECD81912BFD335F0039B81E /* teste.swift in Sources */,
+				DE2FD7D02C2CD45000AB4CB2 /* PayController.swift in Sources */,
 				DE7DE0732C0A128C0006A29A /* CookieController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -398,6 +406,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CookieByte/CookieByteDebug.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VB5FKSJKF2;
@@ -430,6 +439,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = CookieByte/CookieByte.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VB5FKSJKF2;

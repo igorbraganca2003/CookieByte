@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PassKit
 
 class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -96,7 +97,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     
     private let keepBuying: MainButtons = {
         let cartButton = MainButtons()
-        cartButton.setButton(type: .buyMore)
+        cartButton.setButton(type: .applePay)
         cartButton.translatesAutoresizingMaskIntoConstraints = false
         return cartButton
     }()
@@ -140,9 +141,12 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         NotificationCenter.default.addObserver(self, selector: #selector(orderUpdated), name: NSNotification.Name("OrderUpdated"), object: nil)
         
         CookieController.animateIn(view: self, container: container)
-        
+
         // Atualizar preço total na inicialização
         updateTotalPrice()
+        
+        //ApplePay Button
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
