@@ -4,7 +4,6 @@
 //
 //  Created by Igor Bragança Toledo on 20/05/24.
 //
-
 import UIKit
 import PassKit
 
@@ -95,15 +94,16 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return mainButton
     }()
     
-    private let keepBuying: MainButtons = {
-        let cartButton = MainButtons()
-        cartButton.setButton(type: .applePay)
-        cartButton.translatesAutoresizingMaskIntoConstraints = false
-        return cartButton
+    private let applePayButton: PKPaymentButton = {
+        let payButton = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
+        payButton.addTarget(self, action: #selector(applePayButtonTapped), for: .touchUpInside)
+        payButton.translatesAutoresizingMaskIntoConstraints = false
+        return payButton
     }()
+
     
     private lazy var buttonStack: UIStackView = {
-        let buttonStack = UIStackView(arrangedSubviews: [keepBuying, payButton])
+        let buttonStack = UIStackView(arrangedSubviews: [applePayButton, payButton])
         buttonStack.axis = .vertical
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         return buttonStack
@@ -126,6 +126,8 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return maneiro
     }()
     
+    private let payController = PayController() // Adicione isso para inicializar o PayController
+    
     // Body
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -136,7 +138,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         
         roundButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         payButton.addTarget(self, action: #selector(payButtonTapped), for: .touchUpInside)
-        keepBuying.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
+        applePayButton.addTarget(self, action: #selector(applePayButtonTapped), for: .touchUpInside)
         
         NotificationCenter.default.addObserver(self, selector: #selector(orderUpdated), name: NSNotification.Name("OrderUpdated"), object: nil)
         
@@ -144,9 +146,6 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
 
         // Atualizar preço total na inicialização
         updateTotalPrice()
-        
-        //ApplePay Button
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -160,6 +159,23 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     @objc func payButtonTapped() {
         CookieController.payButtonTapped(from: CookiePopUp().self)
     }
+    
+    @objc func applePayButtonTapped() {
+        let items = Order.shared.orders.map { order in
+            return PKPaymentSummaryItem(label: order.cookie, amount: NSDecimalNumber(decimal: Decimal(order.price * Double(order.qnt))))
+        }
+        let totalAmount = Order.shared.orders.reduce(0) { $0 + $1.price * Double($1.qnt) }
+        let total = PKPaymentSummaryItem(label: "Total", amount: NSDecimalNumber(decimal: Decimal(totalAmount)))
+        
+        payController.startPayment(items: items + [total]) { success, data in
+            if success {
+                print("Apple Pay Payment Successful: \(data ?? [:])")
+            } else {
+                print("Apple Pay Payment Failed")
+            }
+        }
+    }
+
     
     @objc func orderUpdated() {
         cartCollectionView.reloadData()
@@ -271,8 +287,10 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
                 
                 buttonStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
                 
-                keepBuying.topAnchor.constraint(equalTo: buttonStack.topAnchor),
-                keepBuying.centerYAnchor.constraint(equalTo: keepBuying.centerYAnchor),
+                applePayButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 30),
+                applePayButton.centerYAnchor.constraint(equalTo: buttonStack.centerYAnchor),
+                applePayButton.heightAnchor.constraint(equalTo: buttonStack.heightAnchor, multiplier: 0.3),
+                applePayButton.widthAnchor.constraint(equalTo: buttonStack.widthAnchor),
                 
                 payButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 100),
                 payButton.centerYAnchor.constraint(equalTo: payButton.centerYAnchor)
@@ -280,7 +298,6 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         }
     }
 }
-
 
 #Preview(){
     return CartPopUp()
