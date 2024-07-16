@@ -50,11 +50,16 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
-        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
+        
         super.viewDidLoad()
         self.title = "Bem-vindo"
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.prefersLargeTitles = true
+        
+        navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
+        
+        //Chama o pedido de Localização
+        LocationController.locationShared.requestLocalization()
         
         //Icone de carrinho
         self.navigationItem.rightBarButtonItems = [

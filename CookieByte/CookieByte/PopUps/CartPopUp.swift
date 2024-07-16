@@ -89,21 +89,29 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     
     private let payButton: MainButtons = {
         let mainButton = MainButtons()
-        mainButton.setButton(type: .pay)
+        mainButton.setButton(type: .pix)
         mainButton.translatesAutoresizingMaskIntoConstraints = false
         return mainButton
     }()
     
     private let applePayButton: PKPaymentButton = {
-        let payButton = PKPaymentButton(paymentButtonType: .buy, paymentButtonStyle: .black)
+        let payButton = PKPaymentButton(paymentButtonType: .plain, paymentButtonStyle: .white)
         payButton.addTarget(self, action: #selector(applePayButtonTapped), for: .touchUpInside)
         payButton.translatesAutoresizingMaskIntoConstraints = false
+        payButton.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
+        payButton.layer.borderWidth = 5
+        payButton.layer.borderColor = UIColor.black.cgColor
+        payButton.layer.shadowOffset = CGSize(width: 8, height: 8)
+        payButton.layer.shadowRadius = 0
+        payButton.layer.shadowOpacity = 10
+        payButton.layer.shadowColor = UIColor.black.cgColor
+        
         return payButton
     }()
-
+    
     
     private lazy var buttonStack: UIStackView = {
-        let buttonStack = UIStackView(arrangedSubviews: [applePayButton, payButton])
+        let buttonStack = UIStackView(arrangedSubviews: [payButton, applePayButton])
         buttonStack.axis = .vertical
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         return buttonStack
@@ -126,7 +134,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         return maneiro
     }()
     
-    private let payController = PayController() // Adicione isso para inicializar o PayController
+    private let payController = PayController()
     
     // Body
     override init(frame: CGRect) {
@@ -143,7 +151,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         NotificationCenter.default.addObserver(self, selector: #selector(orderUpdated), name: NSNotification.Name("OrderUpdated"), object: nil)
         
         CookieController.animateIn(view: self, container: container)
-
+        
         // Atualizar preço total na inicialização
         updateTotalPrice()
     }
@@ -157,32 +165,55 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     }
     
     @objc func payButtonTapped() {
-        CookieController.payButtonTapped(from: CookiePopUp().self)
-    }
-    
-    @objc func applePayButtonTapped() {
-        let items = Order.shared.orders.map { order in
-            return PKPaymentSummaryItem(label: order.cookie, amount: NSDecimalNumber(decimal: Decimal(order.price * Double(order.qnt))))
-        }
-        let totalAmount = Order.shared.orders.reduce(0) { $0 + $1.price * Double($1.qnt) }
-        let total = PKPaymentSummaryItem(label: "Total", amount: NSDecimalNumber(decimal: Decimal(totalAmount)))
-        
-        payController.startPayment(items: items + [total]) { success, data in
-            if success {
-                print("Apple Pay Payment Successful: \(data ?? [:])")
-            } else {
-                print("Apple Pay Payment Failed")
+        if LocationController.locationShared.inOrOut {
+            CookieController.payButtonTapped(from: CookiePopUp().self)
+            print("Dentro da localização ")
+        } else {
+            let alert = UIAlertController(title: "Fora da Localização", message: "Para concluir sua compra é necessário estar dentro da área da Universidade Presbiteriana Mackenzie", preferredStyle: UIAlertController.Style.alert)
+            
+            alert.addAction(UIAlertAction(title: "Entendido", style: UIAlertAction.Style.default, handler: nil))
+            
+            if let viewController = self.window?.rootViewController {
+                viewController.present(alert, animated: true, completion: nil)
             }
+            print("fora da localização")
         }
     }
 
+    @objc func applePayButtonTapped() {
+        if LocationController.locationShared.inOrOut {
+            let items = Order.shared.orders.map { order in
+                return PKPaymentSummaryItem(label: order.cookie, amount: NSDecimalNumber(decimal: Decimal(order.price * Double(order.qnt))))
+            }
+            let totalAmount = Order.shared.orders.reduce(0) { $0 + $1.price * Double($1.qnt) }
+            let total = PKPaymentSummaryItem(label: "Total", amount: NSDecimalNumber(decimal: Decimal(totalAmount)))
+            
+            payController.startPayment(items: items + [total]) { success, data in
+                if success {
+                    print("Apple Pay Payment Successful: \(data ?? [:])")
+                } else {
+                    print("Apple Pay Payment Failed")
+                }
+            }
+        } else {
+            let alert = UIAlertController(title: "Fora da Localização", message: "Para concluir sua compra é necessário estar próximo da área da Universidade Presbiteriana Mackenzie", preferredStyle: UIAlertController.Style.alert)
+            
+            alert.addAction(UIAlertAction(title: "Entendido", style: UIAlertAction.Style.default, handler: nil))
+            
+            if let viewController = self.window?.rootViewController {
+                viewController.present(alert, animated: true, completion: nil)
+            }
+            print("fora da localização")
+        }
+    }
+    
     
     @objc func orderUpdated() {
         cartCollectionView.reloadData()
         updateTotalPrice()
         updateCartUI()
     }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name("OrderUpdated"), object: nil)
     }
@@ -212,8 +243,8 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         self.addSubview(backContainer)
         self.addSubview(container)
         container.addSubview(VStack)
-//        container.addSubview(roundButton)
-
+        //        container.addSubview(roundButton)
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateOut))
         backContainer.addGestureRecognizer(tapGesture)
         
@@ -287,13 +318,13 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
                 
                 buttonStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
                 
-                applePayButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 30),
-                applePayButton.centerYAnchor.constraint(equalTo: buttonStack.centerYAnchor),
-                applePayButton.heightAnchor.constraint(equalTo: buttonStack.heightAnchor, multiplier: 0.3),
-                applePayButton.widthAnchor.constraint(equalTo: buttonStack.widthAnchor),
+                payButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 20),
+                payButton.centerYAnchor.constraint(equalTo: buttonStack.centerYAnchor),
+                payButton.heightAnchor.constraint(equalTo: buttonStack.heightAnchor, multiplier: 0.37),
+                payButton.widthAnchor.constraint(equalTo: buttonStack.widthAnchor),
                 
-                payButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 100),
-                payButton.centerYAnchor.constraint(equalTo: payButton.centerYAnchor)
+                applePayButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 100),
+                applePayButton.centerYAnchor.constraint(equalTo: applePayButton.centerYAnchor)
             ])
         }
     }

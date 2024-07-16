@@ -22,6 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.rootViewController = UINavigationController(rootViewController: HomeViewController())
         window?.makeKeyAndVisible()
+        
+//        LocationController.getCurrentLocation()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

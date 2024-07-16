@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CookieController: UIView {
+class CookieController: UIViewController {
     
     var cookiePop: CookiePopUp = CookiePopUp()
     
@@ -185,8 +185,6 @@ class CookieController: UIView {
     }
 
 }
-
-
 
 
 

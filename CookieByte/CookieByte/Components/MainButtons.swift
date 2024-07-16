@@ -13,7 +13,7 @@ class MainButtons: UIView {
         case buy
         case confirmPay
         case addCart
-        case applePay
+        case pix
         case buyMore
         case pay
         
@@ -25,8 +25,8 @@ class MainButtons: UIView {
                 return "Confirmar Pagamento"
             case .addCart:
                 return "Adicionar ao carrinho"
-            case .applePay:
-                return  "Pay"
+            case .pix:
+                return  "Pagar Com Pix"
             case .buyMore:
                 return "Continar Comprando"
             case .pay:
@@ -38,21 +38,19 @@ class MainButtons: UIView {
             switch self {
             case .buy, .pay:
                 return UIColor(named: "AccentColor") ?? .orange
-            case .confirmPay:
+            case .confirmPay, .pix:
                 return UIColor(named: "GreenCookie") ?? .green
-            case .addCart, .applePay, .buyMore:
+            case .addCart, .buyMore:
                 return UIColor(.white)
             }
         }
         
         var labelColor: UIColor {
             switch self {
-            case .buy, .confirmPay, .pay:
+            case .buy, .confirmPay, .pay, .pix:
                 return UIColor(.white)
             case .addCart, .buyMore:
                 return UIColor(named: "AccentColor") ?? .orange
-            case .applePay:
-                return UIColor(.black)
             }
         }
     }

@@ -18,16 +18,16 @@ class WelcomeView: UIView {
         return container
     }()
 
-//    private lazy var welcomeView: UIStackView = {
-//        let stack = UIStackView(arrangedSubviews: [appName, srChocolato, welcome])
-//        stack.translatesAutoresizingMaskIntoConstraints = false
-//        stack.axis = .vertical
-//        stack.alignment = .fill // Mudança para garantir que os subviews preencham a largura da stack
-//        stack.distribution = .fillEqually // Mudança para garantir que os subviews tenham tamanhos proporcionais
-//        stack.spacing = 10
-//        stack.backgroundColor = .blue // Use a cor padrão .blue se .blueCookie não estiver definida
-//        return stack
-//    }()
+    private lazy var welcomeView: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [appName, srChocolato, welcome])
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.alignment = .fill // Mudança para garantir que os subviews preencham a largura da stack
+        stack.distribution = .fillEqually // Mudança para garantir que os subviews tenham tamanhos proporcionais
+        stack.spacing = 10
+        stack.backgroundColor = .blue // Use a cor padrão .blue se .blueCookie não estiver definida
+        return stack
+    }()
     
     private let appName: UILabel = {
         let label = UILabel()
@@ -63,7 +63,7 @@ class WelcomeView: UIView {
     
     func addUI(){
         self.addSubview(container)
-        container.addSubview(appName)
+        container.addSubview(welcomeView)
         
         NSLayoutConstraint.activate([
             container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
@@ -71,12 +71,15 @@ class WelcomeView: UIView {
             container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 5),
             container.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 12),
             
-            appName.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
-            appName.leadingAnchor.constraint(equalTo: container.trailingAnchor, constant: 100)
+            welcomeView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
+            welcomeView.centerYAnchor.constraint(equalTo: container.centerYAnchor),
+            
+            
+//            appName.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+//            appName.leadingAnchor.constraint(equalTo: container.trailingAnchor, constant: 100)
             
         ])
     }
-
 }
 
 #Preview(){
