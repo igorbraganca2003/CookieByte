@@ -27,7 +27,7 @@ class LocationController: NSObject, CLLocationManagerDelegate, ObservableObject 
     }
     
     func requestLocalization() {
-        locationManager.requestAlwaysAuthorization()
+        locationManager.requestWhenInUseAuthorization()  // Alterado para requestWhenInUseAuthorization
         locationManager.startUpdatingLocation()
     }
     

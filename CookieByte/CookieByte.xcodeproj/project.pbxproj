@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		DE0F90872BF51FAA000F962A /* CookieCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE0F90862BF51FAA000F962A /* CookieCollection.swift */; };
 		DE14CA112C06463800ED9488 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE14CA102C06463800ED9488 /* WelcomeView.swift */; };
-		DE27ACAA2C05116100387E27 /* PixPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE27ACA92C05116100387E27 /* PixPopUp.swift */; };
+		DE27ACAA2C05116100387E27 /* OldPixPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE27ACA92C05116100387E27 /* OldPixPopUp.swift */; };
 		DE27ACB02C0549B500387E27 /* DonePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE27ACAF2C0549B500387E27 /* DonePopUp.swift */; };
 		DE2FD7D02C2CD45000AB4CB2 /* PayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE2FD7CF2C2CD45000AB4CB2 /* PayController.swift */; };
 		DE4BC6DA2C41E25A0092FDA5 /* PointsCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4BC6D92C41E25A0092FDA5 /* PointsCard.swift */; };
@@ -25,6 +25,7 @@
 		DE9EBA4C2C042B1A00C8C648 /* CartCardCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE9EBA4B2C042B1A00C8C648 /* CartCardCollection.swift */; };
 		DEB721162BFBC5CE003E7150 /* OldCookiePopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB721152BFBC5CE003E7150 /* OldCookiePopUp.swift */; };
 		DEB721182BFBE995003E7150 /* MainButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB721172BFBE995003E7150 /* MainButtons.swift */; };
+		DECC5E072C4AA021004DD22E /* PixPopUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECC5E062C4AA021004DD22E /* PixPopUp.swift */; };
 		DECD81912BFD335F0039B81E /* teste.swift in Sources */ = {isa = PBXBuildFile; fileRef = DECD81902BFD335F0039B81E /* teste.swift */; };
 		DED62BF12BF3E0CC005AE51B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62BF02BF3E0CC005AE51B /* AppDelegate.swift */; };
 		DED62BF32BF3E0CC005AE51B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DED62BF22BF3E0CC005AE51B /* SceneDelegate.swift */; };
@@ -41,7 +42,7 @@
 /* Begin PBXFileReference section */
 		DE0F90862BF51FAA000F962A /* CookieCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieCollection.swift; sourceTree = "<group>"; };
 		DE14CA102C06463800ED9488 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = WelcomeView.swift; path = CookieByte/WelcomeView.swift; sourceTree = SOURCE_ROOT; };
-		DE27ACA92C05116100387E27 /* PixPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixPopUp.swift; sourceTree = "<group>"; };
+		DE27ACA92C05116100387E27 /* OldPixPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldPixPopUp.swift; sourceTree = "<group>"; };
 		DE27ACAF2C0549B500387E27 /* DonePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DonePopUp.swift; sourceTree = "<group>"; };
 		DE2FD7CF2C2CD45000AB4CB2 /* PayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PayController.swift; sourceTree = "<group>"; };
 		DE4BC6D92C41E25A0092FDA5 /* PointsCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointsCard.swift; sourceTree = "<group>"; };
@@ -59,6 +60,7 @@
 		DE9EBA4B2C042B1A00C8C648 /* CartCardCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCardCollection.swift; sourceTree = "<group>"; };
 		DEB721152BFBC5CE003E7150 /* OldCookiePopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldCookiePopUp.swift; sourceTree = "<group>"; };
 		DEB721172BFBE995003E7150 /* MainButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainButtons.swift; sourceTree = "<group>"; };
+		DECC5E062C4AA021004DD22E /* PixPopUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PixPopUp.swift; sourceTree = "<group>"; };
 		DECD81902BFD335F0039B81E /* teste.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = teste.swift; sourceTree = "<group>"; };
 		DED62BED2BF3E0CC005AE51B /* CookieByte.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CookieByte.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DED62BF02BF3E0CC005AE51B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -94,7 +96,6 @@
 				DE93DF542BFEBAE000F0E63C /* FavoriteCollection.swift */,
 				DEB721172BFBE995003E7150 /* MainButtons.swift */,
 				DE93DF4E2BFE6C5A00F0E63C /* RoundButton.swift */,
-				DECD81902BFD335F0039B81E /* teste.swift */,
 				DE4BC6D92C41E25A0092FDA5 /* PointsCard.swift */,
 			);
 			path = Components;
@@ -104,9 +105,9 @@
 			isa = PBXGroup;
 			children = (
 				DE91CE8E2BFEE6DD0045D369 /* PopUpModel.swift */,
+				DECC5E062C4AA021004DD22E /* PixPopUp.swift */,
 				DE7DE0702C0A0E480006A29A /* CookiePopUp.swift */,
 				DE7DE0742C0A19B50006A29A /* CartPopUp.swift */,
-				DE27ACA92C05116100387E27 /* PixPopUp.swift */,
 				DE27ACAF2C0549B500387E27 /* DonePopUp.swift */,
 			);
 			path = PopUps;
@@ -115,8 +116,10 @@
 		DE7DE0762C0A1DA90006A29A /* Trash */ = {
 			isa = PBXGroup;
 			children = (
+				DE27ACA92C05116100387E27 /* OldPixPopUp.swift */,
 				DED62C102BF405AD005AE51B /* ForeachExemple.swift */,
 				DE93DF562BFEBCA500F0E63C /* OldCartPopUp.swift */,
+				DECD81902BFD335F0039B81E /* teste.swift */,
 				DEB721152BFBC5CE003E7150 /* OldCookiePopUp.swift */,
 			);
 			path = Trash;
@@ -245,6 +248,7 @@
 				DE91CE8F2BFEE6DD0045D369 /* PopUpModel.swift in Sources */,
 				DEB721162BFBC5CE003E7150 /* OldCookiePopUp.swift in Sources */,
 				DED62BF52BF3E0CC005AE51B /* HomeViewController.swift in Sources */,
+				DECC5E072C4AA021004DD22E /* PixPopUp.swift in Sources */,
 				DE7DE0712C0A0E480006A29A /* CookiePopUp.swift in Sources */,
 				DED62BF12BF3E0CC005AE51B /* AppDelegate.swift in Sources */,
 				DE7DE0752C0A19B50006A29A /* CartPopUp.swift in Sources */,
@@ -264,7 +268,7 @@
 				DED62C0F2BF40541005AE51B /* CookieModel.swift in Sources */,
 				DE0F90872BF51FAA000F962A /* CookieCollection.swift in Sources */,
 				DE91CE912BFEEE2E0045D369 /* CartCard.swift in Sources */,
-				DE27ACAA2C05116100387E27 /* PixPopUp.swift in Sources */,
+				DE27ACAA2C05116100387E27 /* OldPixPopUp.swift in Sources */,
 				DECD81912BFD335F0039B81E /* teste.swift in Sources */,
 				DE2FD7D02C2CD45000AB4CB2 /* PayController.swift in Sources */,
 				DE93C89E2C3E1BC80081A7C3 /* LocationController.swift in Sources */,

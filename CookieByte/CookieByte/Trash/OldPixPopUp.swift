@@ -1,26 +1,20 @@
 //
-//  CookiePopUp.swift
+//  File.swift
 //  CookieByte
 //
-//  Created by Igor Bragança Toledo on 20/05/24.
+//  Created by Igor Bragança Toledo on 27/05/24.
 //
 
 import UIKit
 
-class PixPopUp: UIView {
+class OldPixPopUp: UIView {
 
     private lazy var VStack: UIStackView = {
         let vStack = UIStackView(arrangedSubviews: [imageView, priceLabel, pixLabelBack, copyButton, buttonStack])
         vStack.axis = .vertical
+        vStack.spacing = 10
         vStack.translatesAutoresizingMaskIntoConstraints = false
         return vStack
-    }()
-    
-    private let backContainer: UIView = {
-        let backContainer = UIView()
-        backContainer.backgroundColor = .gray.withAlphaComponent(0.7)
-        backContainer.translatesAutoresizingMaskIntoConstraints = false
-        return backContainer
     }()
     
     private let container: UIView = {
@@ -32,19 +26,17 @@ class PixPopUp: UIView {
         return container
     }()
     
-    private let roundButton: RoundButton = {
+    private let roundButton: UIView = {
         let round = RoundButton()
         round.setButtonType(type: .close)
-        round.isUserInteractionEnabled = true
         round.translatesAutoresizingMaskIntoConstraints = false
+        round.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
         return round
     }()
     
-    private let backButton: RoundButton = {
+    private let backButton: UIView = {
         let round = RoundButton()
         round.setButtonType(type: .back)
-        round.addTarget(self, action: #selector(backToCart), for: .touchUpInside)
-        round.isUserInteractionEnabled = true
         round.translatesAutoresizingMaskIntoConstraints = false
         return round
     }()
@@ -57,9 +49,10 @@ class PixPopUp: UIView {
     
     let priceLabel: UILabel = {
         let price = UILabel()
-        price.textColor = UIColor(named: "GreenCookie")
+        price.textColor = .black
         price.textAlignment = .center
         price.font = UIFont.systemFont(ofSize: 32, weight: .heavy)
+        price.textColor = UIColor(named: "GreenCookie")
         price.translatesAutoresizingMaskIntoConstraints = false
         return price
     }()
@@ -96,6 +89,7 @@ class PixPopUp: UIView {
         return copy
     }()
     
+    
     private let ConfirmButton: MainButtons = {
         let confirm = MainButtons()
         confirm.setButton(type: .confirmPay)
@@ -112,18 +106,26 @@ class PixPopUp: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(animateOut)))
+        self.backgroundColor = .gray.withAlphaComponent(0.7)
         self.frame = UIScreen.main.bounds
         
-        CookieController.animateIn(view: self, container: container)
-        CookieController.updateTotalPrice(label: priceLabel)
+        addUI()
         
         ConfirmButton.addTarget(self, action: #selector(confirmButtonTapped), for: .touchUpInside)
-        roundButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         
-        addUI()
+        // Configure the tap gesture recognizer for backButton
+        let backButtonTap = UITapGestureRecognizer(target: self, action: #selector(backToCart))
+        backButton.addGestureRecognizer(backButtonTap)
+        
+        CookieController.updateTotalPrice(label: priceLabel)
+        
+        CookieController.animateIn(view: self, container: container)
+        
         setPix()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -151,7 +153,6 @@ class PixPopUp: UIView {
             window.addSubview(popup)
             CookieController.animateIn(view: popup, container: popup)
         }
-        print("botão voltar clicado")
     }
     
     func setPix() {
@@ -185,7 +186,6 @@ class PixPopUp: UIView {
     }
     
     func addUI() {
-        self.addSubview(backContainer)
         self.addSubview(container)
         container.addSubview(VStack)
         container.addSubview(roundButton)
@@ -193,40 +193,32 @@ class PixPopUp: UIView {
         container.addSubview(pixLabelBack)
         pixLabelBack.addSubview(pixLabel)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateOut))
-        backContainer.addGestureRecognizer(tapGesture)
-        
         NSLayoutConstraint.activate([
-            backContainer.centerYAnchor.constraint(equalTo: self.centerYAnchor),
-            backContainer.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            backContainer.widthAnchor.constraint(equalTo: self.widthAnchor),
-            backContainer.heightAnchor.constraint(equalTo: self.heightAnchor, constant: 100),
-            
-            container.centerYAnchor.constraint(equalTo: backContainer.centerYAnchor),
-            container.centerXAnchor.constraint(equalTo: backContainer.centerXAnchor),
-            container.widthAnchor.constraint(equalTo: backContainer.widthAnchor, multiplier: 0.85),
+            container.centerYAnchor.constraint(equalTo: self.centerYAnchor),
+            container.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            container.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.85),
             container.heightAnchor.constraint(equalToConstant: 700),
             
-            VStack.topAnchor.constraint(equalTo: container.topAnchor),
-            VStack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor),
+            VStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
+            VStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
+            VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
+            VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -20),
             
+            roundButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -60),
             roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
-            roundButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 265),
             
             backButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
             backButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
             
-            imageView.heightAnchor.constraint(equalTo: VStack.heightAnchor, constant: -440),
-            imageView.widthAnchor.constraint(equalTo: VStack.widthAnchor, constant: -80),
+            imageView.heightAnchor.constraint(equalTo: VStack.heightAnchor, constant: -400),
+            imageView.widthAnchor.constraint(equalTo: VStack.widthAnchor, constant: -50),
             imageView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-            imageView.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 80),
-
-            priceLabel.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 260),
+            imageView.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 60),
+            
+            priceLabel.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 250),
             priceLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             
-            pixLabelBack.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 450),
+            pixLabelBack.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 420),
             pixLabelBack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             pixLabelBack.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.8),
             pixLabelBack.heightAnchor.constraint(equalTo: VStack.heightAnchor, multiplier: 0.07),
@@ -238,15 +230,12 @@ class PixPopUp: UIView {
             copyButton.topAnchor.constraint(equalTo: pixLabelBack.bottomAnchor, constant: 20),
             copyButton.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             
-            ConfirmButton.topAnchor.constraint(equalTo: copyButton.bottomAnchor, constant: 30),
-            ConfirmButton.centerXAnchor.constraint(equalTo: VStack.centerXAnchor, constant: -2.5)
-            
+            ConfirmButton.topAnchor.constraint(equalTo: copyButton.bottomAnchor, constant: 50),
+            ConfirmButton.centerXAnchor.constraint(equalTo: VStack.centerXAnchor)
         ])
     }
 }
 
-
 #Preview {
-    PixPopUp()
+    return OldPixPopUp()
 }
-

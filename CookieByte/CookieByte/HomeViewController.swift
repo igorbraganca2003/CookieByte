@@ -59,7 +59,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         
         //Chama o pedido de Localização
-        LocationController.locationShared.requestLocalization()
+//        LocationController.locationShared.requestLocalization()
         
         //Icone de carrinho
         self.navigationItem.rightBarButtonItems = [

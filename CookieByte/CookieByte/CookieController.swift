@@ -57,16 +57,21 @@ class CookieController: UIViewController {
     
     //Confirma o pagamento
     static func payConfirmed(from view: UIView) {
+        // Adiciona o popup de confirmação (DonePopUp)
         let popup = DonePopUp()
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             window.addSubview(popup)
             animateIn(view: popup, container: popup)
         }
         
+        // Remove as ordens completadas
         Order.shared.removeCompletedOrders()
         
+        // Remove a instância atual do view (PixPopUp ou outro)
         view.removeFromSuperview()
     }
+
+
     
     
     //MARK: - Função carrinho
@@ -97,7 +102,6 @@ class CookieController: UIViewController {
         }
         
         print("Botão de compra pressionado")
-        CartPopUp().removeFromSuperview()
     }
     
     // Carrega os itens do carrinho

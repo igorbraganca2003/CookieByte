@@ -165,46 +165,54 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     }
     
     @objc func payButtonTapped() {
-        if LocationController.locationShared.inOrOut {
+//        if LocationController.locationShared.inOrOut {
             CookieController.payButtonTapped(from: CookiePopUp().self)
-            print("Dentro da localização ")
-        } else {
-            let alert = UIAlertController(title: "Fora da Localização", message: "Para concluir sua compra é necessário estar dentro da área da Universidade Presbiteriana Mackenzie", preferredStyle: UIAlertController.Style.alert)
-            
-            alert.addAction(UIAlertAction(title: "Entendido", style: UIAlertAction.Style.default, handler: nil))
-            
-            if let viewController = self.window?.rootViewController {
-                viewController.present(alert, animated: true, completion: nil)
-            }
-            print("fora da localização")
-        }
+            removeSuperView(from: self)
+//            print("Dentro da localização ")
+//        } else {
+//            let alert = UIAlertController(title: "Fora da Localização", message: "Para concluir sua compra é necessário estar dentro da área da Universidade Presbiteriana Mackenzie", preferredStyle: UIAlertController.Style.alert)
+//            
+//            alert.addAction(UIAlertAction(title: "Entendido", style: UIAlertAction.Style.default, handler: nil))
+//            
+//            if let viewController = self.window?.rootViewController {
+//                viewController.present(alert, animated: true, completion: nil)
+//            }
+//            print("fora da localização")
+//        }
+    }
+    
+    @objc func removeSuperView(from view: UIView) {
+        view.removeFromSuperview()
     }
 
     @objc func applePayButtonTapped() {
-        if LocationController.locationShared.inOrOut {
-            let items = Order.shared.orders.map { order in
-                return PKPaymentSummaryItem(label: order.cookie, amount: NSDecimalNumber(decimal: Decimal(order.price * Double(order.qnt))))
-            }
-            let totalAmount = Order.shared.orders.reduce(0) { $0 + $1.price * Double($1.qnt) }
-            let total = PKPaymentSummaryItem(label: "Total", amount: NSDecimalNumber(decimal: Decimal(totalAmount)))
-            
-            payController.startPayment(items: items + [total]) { success, data in
-                if success {
-                    print("Apple Pay Payment Successful: \(data ?? [:])")
-                } else {
-                    print("Apple Pay Payment Failed")
-                }
-            }
-        } else {
-            let alert = UIAlertController(title: "Fora da Localização", message: "Para concluir sua compra é necessário estar próximo da área da Universidade Presbiteriana Mackenzie", preferredStyle: UIAlertController.Style.alert)
-            
-            alert.addAction(UIAlertAction(title: "Entendido", style: UIAlertAction.Style.default, handler: nil))
-            
-            if let viewController = self.window?.rootViewController {
-                viewController.present(alert, animated: true, completion: nil)
-            }
-            print("fora da localização")
+        //        if LocationController.locationShared.inOrOut {
+        let items = Order.shared.orders.map { order in
+            return PKPaymentSummaryItem(label: order.cookie, amount: NSDecimalNumber(decimal: Decimal(order.price * Double(order.qnt))))
         }
+        let totalAmount = Order.shared.orders.reduce(0) { $0 + $1.price * Double($1.qnt) }
+        let total = PKPaymentSummaryItem(label: "Total", amount: NSDecimalNumber(decimal: Decimal(totalAmount)))
+        
+        payController.startPayment(items: items + [total]) { success, data in
+            if success {
+                print("Apple Pay Payment Successful: \(data ?? [:])")
+                CookieController.payConfirmed(from: self)
+            } else {
+                print("Apple Pay Payment Failed")
+            }
+        }
+
+        
+//        } else {
+//            let alert = UIAlertController(title: "Fora da Localização", message: "Para concluir sua compra é necessário estar próximo da área da Universidade Presbiteriana Mackenzie", preferredStyle: UIAlertController.Style.alert)
+//            
+//            alert.addAction(UIAlertAction(title: "Entendido", style: UIAlertAction.Style.default, handler: nil))
+//            
+//            if let viewController = self.window?.rootViewController {
+//                viewController.present(alert, animated: true, completion: nil)
+//            }
+//            print("fora da localização")
+//        }
     }
     
     

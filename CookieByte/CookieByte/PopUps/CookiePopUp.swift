@@ -103,6 +103,13 @@ class CookiePopUp: UIView {
         return desc
     }()
     
+    private let keepBuyButton: MainButtons = {
+        let cartButton = MainButtons()
+        cartButton.setButton(type: .buyMore)
+        cartButton.translatesAutoresizingMaskIntoConstraints = false
+        return cartButton
+    }()
+    
     private let buyButton: MainButtons = {
         let mainButton = MainButtons()
         mainButton.setButton(type: .buy)
@@ -110,15 +117,8 @@ class CookiePopUp: UIView {
         return mainButton
     }()
     
-    private let addCartButton: MainButtons = {
-        let cartButton = MainButtons()
-        cartButton.setButton(type: .addCart)
-        cartButton.translatesAutoresizingMaskIntoConstraints = false
-        return cartButton
-    }()
-    
     private lazy var buttonStack: UIStackView = {
-        let buttonStack = UIStackView(arrangedSubviews: [addCartButton, buyButton])
+        let buttonStack = UIStackView(arrangedSubviews: [keepBuyButton, buyButton])
         buttonStack.axis = .vertical
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         return buttonStack
@@ -135,8 +135,8 @@ class CookiePopUp: UIView {
         
         CookieController.animateIn(view: self, container: container)
         
-        addCartButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
-        buyButton.addTarget(self, action: #selector(payButton), for: .touchUpInside)
+        keepBuyButton.addTarget(self, action: #selector(CookiePopUp.removeFromSuperview), for: .touchUpInside)
+        buyButton.addTarget(self, action: #selector(addToCart), for: .touchUpInside)
         roundButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         
         delegate.uiView = self
@@ -237,8 +237,8 @@ class CookiePopUp: UIView {
             buttonStack.topAnchor.constraint(equalTo: descLabel.bottomAnchor),
             buttonStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             
-            addCartButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 50),
-            addCartButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -6),
+            keepBuyButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 50),
+            keepBuyButton.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -6),
             
             buyButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 90)
         ])
