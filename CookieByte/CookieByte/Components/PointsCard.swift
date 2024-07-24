@@ -13,6 +13,11 @@ class PointsCard: UIView {
     private let rectangle: UIView = {
         let rectangle = UIView()
         rectangle.layer.borderWidth = 6
+        rectangle.backgroundColor = UIColor(.white)
+        rectangle.layer.shadowOffset = CGSize(width: 9, height: 9)
+        rectangle.layer.shadowRadius = 0
+        rectangle.layer.shadowOpacity = 10
+        rectangle.layer.shadowColor = UIColor.black.cgColor
         rectangle.translatesAutoresizingMaskIntoConstraints = false
         return rectangle
     }()
@@ -69,7 +74,7 @@ class PointsCard: UIView {
             rectangle.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             rectangle.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             rectangle.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
-            rectangle.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.2),
+            rectangle.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.17),
             
             topStack.widthAnchor.constraint(equalTo: rectangle.widthAnchor, multiplier: 0.9),
             topStack.centerXAnchor.constraint(equalTo: rectangle.centerXAnchor),

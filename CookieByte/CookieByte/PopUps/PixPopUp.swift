@@ -8,12 +8,19 @@
 import UIKit
 
 class PixPopUp: UIView {
-
+    
     private lazy var VStack: UIStackView = {
-        let vStack = UIStackView(arrangedSubviews: [imageView, priceLabel, pixLabelBack, copyButton, buttonStack])
+        let vStack = UIStackView(arrangedSubviews: [HStack, imageView, priceLabel, pixLabelBack, copyButton, buttonStack])
         vStack.axis = .vertical
         vStack.translatesAutoresizingMaskIntoConstraints = false
         return vStack
+    }()
+    
+    private lazy var HStack: UIStackView = {
+        let hStack = UIStackView(arrangedSubviews: [backButton, roundButton])
+        hStack.axis = .horizontal
+        hStack.translatesAutoresizingMaskIntoConstraints = false
+        return hStack
     }()
     
     private let backContainer: UIView = {
@@ -35,7 +42,7 @@ class PixPopUp: UIView {
     private let roundButton: RoundButton = {
         let round = RoundButton()
         round.setButtonType(type: .close)
-        round.isUserInteractionEnabled = true
+        round.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         round.translatesAutoresizingMaskIntoConstraints = false
         return round
     }()
@@ -123,7 +130,7 @@ class PixPopUp: UIView {
         addUI()
         setPix()
     }
-
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -152,6 +159,7 @@ class PixPopUp: UIView {
             CookieController.animateIn(view: popup, container: popup)
         }
         print("botão voltar clicado")
+        popup.removeSuperView(from: self)
     }
     
     func setPix() {
@@ -187,9 +195,10 @@ class PixPopUp: UIView {
     func addUI() {
         self.addSubview(backContainer)
         self.addSubview(container)
+        container.addSubview(HStack)
         container.addSubview(VStack)
-        container.addSubview(roundButton)
-        container.addSubview(backButton)
+        HStack.addSubview(roundButton)
+        HStack.addSubview(backButton)
         container.addSubview(pixLabelBack)
         pixLabelBack.addSubview(pixLabel)
         
@@ -207,22 +216,24 @@ class PixPopUp: UIView {
             container.widthAnchor.constraint(equalTo: backContainer.widthAnchor, multiplier: 0.85),
             container.heightAnchor.constraint(equalToConstant: 700),
             
+            HStack.topAnchor.constraint(equalTo: container.topAnchor),
+            
             VStack.topAnchor.constraint(equalTo: container.topAnchor),
             VStack.leadingAnchor.constraint(equalTo: container.leadingAnchor),
             VStack.trailingAnchor.constraint(equalTo: container.trailingAnchor),
             VStack.bottomAnchor.constraint(equalTo: container.bottomAnchor),
             
-            roundButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
-            roundButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 265),
+            roundButton.topAnchor.constraint(equalTo: container.topAnchor),
+            roundButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 270),
             
             backButton.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
-            backButton.topAnchor.constraint(equalTo: container.topAnchor, constant: 40),
+            backButton.topAnchor.constraint(equalTo: container.topAnchor),
             
             imageView.heightAnchor.constraint(equalTo: VStack.heightAnchor, constant: -440),
             imageView.widthAnchor.constraint(equalTo: VStack.widthAnchor, constant: -80),
             imageView.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             imageView.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 80),
-
+            
             priceLabel.topAnchor.constraint(equalTo: VStack.topAnchor, constant: 260),
             priceLabel.centerXAnchor.constraint(equalTo: container.centerXAnchor),
             
