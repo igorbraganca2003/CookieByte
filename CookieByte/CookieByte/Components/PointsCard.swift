@@ -22,10 +22,17 @@ class PointsCard: UIView {
         return rectangle
     }()
     
+    private lazy var stack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [topStack, CircleStack])
+        stack.axis = .vertical
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        return stack
+    }()
+    
     private lazy var topStack: UIStackView = {
         let top = UIStackView(arrangedSubviews: [pointsLabel, plusButton])
+        top.axis = .horizontal
         top.spacing = 80
-//        top.layer.borderWidth = 1
         top.translatesAutoresizingMaskIntoConstraints = false
         return top
     }()
@@ -54,6 +61,36 @@ class PointsCard: UIView {
         return copy
     }()
     
+    private lazy var CircleStack: UIStackView = {
+        let circleStack = UIStackView(arrangedSubviews: createCircles())
+        circleStack.axis = .horizontal
+        circleStack.spacing = 30
+        circleStack.distribution = .fillEqually
+        circleStack.translatesAutoresizingMaskIntoConstraints = false
+        return circleStack
+    }()
+    
+    private func createCircles() -> [UIView] {
+        var circles = [UIView]()
+        for _ in 0..<5 {
+            let circle = UIView()
+            circle.backgroundColor = .green
+            circle.layer.cornerRadius = 16
+            circle.layer.borderWidth = 5
+            circle.heightAnchor.constraint(equalToConstant: 33).isActive = true
+            circles.append(circle)
+        }
+        return circles
+    }
+    
+    private let backBar: UIView = {
+        let bar = UIView()
+        bar.backgroundColor = .green
+        bar.layer.borderWidth = 3
+        bar.translatesAutoresizingMaskIntoConstraints = false
+        return bar
+    }()
+    
     
     //Body
     override init(frame: CGRect) {
@@ -66,21 +103,37 @@ class PointsCard: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setUI(){
+    func setUI() {
         self.addSubview(rectangle)
-        rectangle.addSubview(topStack)
+        rectangle.addSubview(stack)
+        stack.addSubview(backBar)
+        stack.addSubview(CircleStack)
         
         NSLayoutConstraint.activate([
+            
             rectangle.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             rectangle.centerYAnchor.constraint(equalTo: self.centerYAnchor),
             rectangle.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.8),
-            rectangle.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.17),
+            rectangle.heightAnchor.constraint(equalTo: self.heightAnchor, constant: 3),
             
-            topStack.widthAnchor.constraint(equalTo: rectangle.widthAnchor, multiplier: 0.9),
-            topStack.centerXAnchor.constraint(equalTo: rectangle.centerXAnchor),
-            topStack.topAnchor.constraint(equalTo: rectangle.topAnchor, constant: 15)
+            stack.widthAnchor.constraint(equalTo: rectangle.widthAnchor, multiplier: 0.9),
+            stack.heightAnchor.constraint(equalTo: rectangle.heightAnchor, multiplier: 0.7),
+            stack.centerXAnchor.constraint(equalTo: rectangle.centerXAnchor),
+            stack.centerYAnchor.constraint(equalTo: rectangle.centerYAnchor),
+            
+            topStack.heightAnchor.constraint(equalToConstant: 30),
+            topStack.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            topStack.bottomAnchor.constraint(equalTo: CircleStack.topAnchor, constant: -30),
+            
+            CircleStack.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            
+            backBar.centerXAnchor.constraint(equalTo: stack.centerXAnchor),
+            backBar.centerYAnchor.constraint(equalTo: CircleStack.centerYAnchor),
+            backBar.widthAnchor.constraint(equalTo: stack.widthAnchor),
+            backBar.heightAnchor.constraint(equalTo: stack.heightAnchor, multiplier: 0.08),
         ])
     }
+
     
 }
 

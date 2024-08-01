@@ -8,11 +8,10 @@
 import UIKit
 
 class HomeViewController: UIViewController, UIScrollViewDelegate {
-    
-    //Icone de carrinho
+
+    // Icone de carrinho
     private var cookieCollection: CookieCollection?
     var icon: CookiePopUp = CookiePopUp()
-    
     var cart: Int = Order.shared.orders.count
     
     private let scrollView: UIScrollView = {
@@ -20,12 +19,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         scroll.backgroundColor = .white
         scroll.showsVerticalScrollIndicator = false
         scroll.alwaysBounceVertical = true
+        scroll.translatesAutoresizingMaskIntoConstraints = false
         return scroll
     }()
     
     private let contentView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
+        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -47,29 +48,26 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         return favoriteLabel
     }()
     
+    private let pointsCard: PointsCard = {
+        let pointsCard = PointsCard()
+        pointsCard.translatesAutoresizingMaskIntoConstraints = false
+        return pointsCard
+    }()
     
     override func viewDidLoad() {
-        let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.black]
-        
         super.viewDidLoad()
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         self.title = "Bem-vindo"
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.prefersLargeTitles = true
-        
         navigationController?.navigationBar.largeTitleTextAttributes = textAttributes
         
-        //Chama o pedido de Localização
-//        LocationController.locationShared.requestLocalization()
-        
-        //Icone de carrinho
         self.navigationItem.rightBarButtonItems = [
-            
             UIBarButtonItem(image: UIImage(systemName: "cart.fill.badge.plus"), style: .plain, target: self, action: #selector(didTapButton)),
-            
             UIBarButtonItem(image: UIImage(systemName: "cart.fill"), style: .plain, target: self, action: #selector(didTapButton))
         ]
         
-        if cart >= 1{
+        if cart >= 1 {
             self.navigationItem.rightBarButtonItems?[1].isHidden = true
         } else {
             self.navigationItem.rightBarButtonItems?[0].isHidden = true
@@ -77,10 +75,10 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         
         cookieCollection?.viewController = self
         icon.viewController = self
-        self.setUI()
+        setUI()
     }
     
-    @objc func didTapButton(){
+    @objc func didTapButton() {
         let popup = CartPopUp()
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             window.addSubview(popup)
@@ -93,21 +91,16 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         self.scrollView.addSubview(contentView)
         self.scrollView.delegate = self
         
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
             scrollView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             scrollView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: self.scrollView.topAnchor),
-            contentView.leftAnchor.constraint(equalTo: self.scrollView.leftAnchor),
-            contentView.rightAnchor.constraint(equalTo: self.scrollView.rightAnchor),
-            contentView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leftAnchor.constraint(equalTo: scrollView.leftAnchor),
+            contentView.rightAnchor.constraint(equalTo: scrollView.rightAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
         
@@ -115,13 +108,25 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     }
     
     func setElements() {
+        
+        contentView.addSubview(pointsCard)
         contentView.addSubview(tittleLabel)
         contentView.addSubview(favoriteLabel)
         
+        setPointsCard()
         setTitleLabel()
         setCardsScroll()
         setFavoriteLabel()
         setFavorites()
+    }
+    
+    func setPointsCard() {
+        NSLayoutConstraint.activate([
+            pointsCard.topAnchor.constraint(equalTo: tittleLabel.bottomAnchor, constant: 10),
+            pointsCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            pointsCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            pointsCard.heightAnchor.constraint(equalToConstant: 100) // Ajuste a altura conforme necessário
+        ])
     }
     
     func setTitleLabel() {
@@ -136,15 +141,14 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         let cardsScroll = UIScrollView()
         cardsScroll.showsHorizontalScrollIndicator = false
         cardsScroll.alwaysBounceHorizontal = false
-        
         cardsScroll.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(cardsScroll)
         
         NSLayoutConstraint.activate([
-            cardsScroll.topAnchor.constraint(equalTo: tittleLabel.bottomAnchor, constant: 10),
+            cardsScroll.topAnchor.constraint(equalTo: pointsCard.bottomAnchor, constant: 10),
             cardsScroll.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            cardsScroll.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 265),
+            cardsScroll.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cardsScroll.heightAnchor.constraint(equalToConstant: 300)
         ])
         
