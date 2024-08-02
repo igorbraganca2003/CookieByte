@@ -249,7 +249,6 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
         self.addSubview(backContainer)
         self.addSubview(container)
         container.addSubview(VStack)
-        //        container.addSubview(roundButton)
         
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateOut))
         backContainer.addGestureRecognizer(tapGesture)
@@ -278,7 +277,6 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     }
     
     private func updateCartUI() {
-        // Remover todas as subviews antes de adicionar novas, exceto o roundButton
         container.subviews.forEach { subview in
             if subview != roundButton && subview != VStack {
                 subview.removeFromSuperview()

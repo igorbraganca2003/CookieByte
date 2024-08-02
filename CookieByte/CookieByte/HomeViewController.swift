@@ -30,10 +30,19 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         return view
     }()
     
+    let pointsLabel: UILabel = {
+        let tittleLabel = UILabel()
+        tittleLabel.text = "Seus Pontos"
+        tittleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
+        tittleLabel.textColor = .black
+        tittleLabel.translatesAutoresizingMaskIntoConstraints = false
+        return tittleLabel
+    }()
+    
     let tittleLabel: UILabel = {
         let tittleLabel = UILabel()
         tittleLabel.text = "Cookies"
-        tittleLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
+        tittleLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         tittleLabel.textColor = .black
         tittleLabel.translatesAutoresizingMaskIntoConstraints = false
         return tittleLabel
@@ -42,7 +51,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     let favoriteLabel: UILabel = {
         let favoriteLabel = UILabel()
         favoriteLabel.text = "Favoritos"
-        favoriteLabel.font = UIFont.systemFont(ofSize: 25, weight: .bold)
+        favoriteLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         favoriteLabel.textColor = .black
         favoriteLabel.translatesAutoresizingMaskIntoConstraints = false
         return favoriteLabel
@@ -56,7 +65,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font:  UIFont.systemFont(ofSize: 48, weight: .black)]
         self.title = "Bem-vindo"
         self.view.backgroundColor = .white
         self.navigationController?.navigationBar.prefersLargeTitles = true
@@ -109,10 +118,12 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     func setElements() {
         
+        contentView.addSubview(pointsLabel)
         contentView.addSubview(pointsCard)
         contentView.addSubview(tittleLabel)
         contentView.addSubview(favoriteLabel)
         
+        setPointsLabel()
         setPointsCard()
         setTitleLabel()
         setCardsScroll()
@@ -120,12 +131,19 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         setFavorites()
     }
     
+    func setPointsLabel() {
+        NSLayoutConstraint.activate([
+            pointsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            pointsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            pointsLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+        ])
+    }
+    
     func setPointsCard() {
         NSLayoutConstraint.activate([
-            pointsCard.topAnchor.constraint(equalTo: tittleLabel.bottomAnchor, constant: 10),
-            pointsCard.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            pointsCard.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            pointsCard.heightAnchor.constraint(equalToConstant: 100) // Ajuste a altura conforme necessário
+            pointsCard.topAnchor.constraint(equalTo: pointsLabel.bottomAnchor, constant: 20),
+            pointsCard.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: -3),
+            pointsCard.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.9)
         ])
     }
     
@@ -133,7 +151,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         NSLayoutConstraint.activate([
             tittleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             tittleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            tittleLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20)
+            tittleLabel.topAnchor.constraint(equalTo: pointsCard.bottomAnchor, constant: 40)
         ])
     }
     
@@ -146,7 +164,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         contentView.addSubview(cardsScroll)
         
         NSLayoutConstraint.activate([
-            cardsScroll.topAnchor.constraint(equalTo: pointsCard.bottomAnchor, constant: 10),
+            cardsScroll.topAnchor.constraint(equalTo: tittleLabel.bottomAnchor),
             cardsScroll.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardsScroll.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cardsScroll.heightAnchor.constraint(equalToConstant: 300)
