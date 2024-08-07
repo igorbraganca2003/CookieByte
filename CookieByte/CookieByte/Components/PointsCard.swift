@@ -5,15 +5,14 @@
 //  Created by Igor Bragança Toledo on 12/07/24.
 //
 
-import Foundation
 import UIKit
 
 class PointsCard: UIView {
-    
+
     private let rectangle: UIView = {
         let rectangle = UIView()
         rectangle.layer.borderWidth = 6
-        rectangle.backgroundColor = UIColor(.white)
+        rectangle.backgroundColor = UIColor.white
         rectangle.layer.shadowOffset = CGSize(width: 9, height: 9)
         rectangle.layer.shadowRadius = 0
         rectangle.layer.shadowOpacity = 10
@@ -38,9 +37,7 @@ class PointsCard: UIView {
     }()
     
     private let pointsLabel: UILabel = {
-        var points = PointsController()
         let label = UILabel()
-        label.text = "\(points.userPts) pontos"
         label.textColor = .black
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -71,37 +68,27 @@ class PointsCard: UIView {
         return circleStack
     }()
     
-    
     private func createCircles() -> [UIView] {
         var circlesWithLabels = [UIView]()
         
-        let points = PointsController()
-        
+        let points = PointsController.shared
+        let userPoints = points.userPts
         let numbers = points.numbers
-        let status = points.status
         
-        for (index, number) in numbers.enumerated() {
+        for number in numbers {
             let circle = UIView()
             
-            if status {
-                circle.backgroundColor = .greenCookie
-            } else {
-                circle.backgroundColor = .yellowCookie
-            }
+            // Define a cor do círculo
+            circle.backgroundColor = userPoints >= number ? .greenCookie : .yellowCookie
             
             circle.layer.cornerRadius = 16.5
             circle.layer.borderWidth = 5
             circle.heightAnchor.constraint(equalToConstant: 33).isActive = true
             circle.widthAnchor.constraint(equalToConstant: 33).isActive = true
             
-            
             let imageView = UIImageView()
-            
-            if status {
-                imageView.image = UIImage(named: "check")
-            } else {
-                imageView.image = UIImage(named: "lock")
-            }
+            // Define o ícone de acordo com os pontos do usuário
+            imageView.image = userPoints >= number ? UIImage(named: "check") : UIImage(named: "lock")
             imageView.contentMode = .scaleAspectFit
             imageView.translatesAutoresizingMaskIntoConstraints = false
             circle.addSubview(imageView)
@@ -130,19 +117,75 @@ class PointsCard: UIView {
         return circlesWithLabels
     }
     
+    private func updateCircles() {
+        // Remove todas as views atuais do CircleStack
+        CircleStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        // Adiciona as novas views de círculo
+        let circles = createCircles()
+        circles.forEach { CircleStack.addArrangedSubview($0) }
+    }
+
+
     private let backBar: UIView = {
         let bar = UIView()
-        bar.backgroundColor = .greenCookie
         bar.layer.borderWidth = 3
+        bar.layer.borderColor = UIColor.black.cgColor // Temporário para visibilidade
         bar.translatesAutoresizingMaskIntoConstraints = false
         return bar
     }()
-    
+
+    private let gradientLayer = CAGradientLayer()
+
+    private func setupBackBar() {
+        backBar.layer.addSublayer(gradientLayer)
+        gradientLayer.frame = backBar.bounds
+        gradientLayer.colors = [UIColor.lightGray.cgColor, UIColor.lightGray.cgColor, UIColor.lightGray.cgColor, UIColor.lightGray.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
+        gradientLayer.locations = [0, 0.25, 0.5, 0.75, 1] // Posiciona os gradientes
+    }
+
+    private func updateBackBar() {
+        let points = PointsController.shared.userPts
+        let thresholds = PointsController.shared.numbers
+        let numParts = 4 // Número de partes na barra
+        let thresholdCount = min(thresholds.count, numParts)
+
+        var colors: [CGColor] = []
+
+        for i in 0..<numParts {
+            if i < thresholdCount {
+                if points >= thresholds[i] {
+                    colors.append(UIColor.greenCookie.cgColor)
+                } else if i == thresholdCount - 1 || points < thresholds[i] {
+                    colors.append(UIColor.yellowCookie.cgColor)
+                } else {
+                    colors.append(UIColor.lightGray.cgColor)
+                }
+            } else {
+                colors.append(UIColor.lightGray.cgColor)
+            }
+        }
+
+        // Atualiza as partes restantes para cinza
+        while colors.count < numParts {
+            colors.append(UIColor.lightGray.cgColor)
+        }
+
+        gradientLayer.colors = colors
+        gradientLayer.frame = backBar.bounds // Atualiza o frame do gradient layer
+        gradientLayer.setNeedsDisplay() // Solicita uma atualização do gradient layer
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
-        
+        updatePointsLabel()
+        setupBackBar() // Configura o Gradient Layer ao inicializar
+        updateBackBar() // Atualiza a barra ao inicializar
         plusButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
+        NotificationCenter.default.addObserver(self, selector: #selector(pointsDidChange), name: .pointsDidChange, object: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -187,8 +230,20 @@ class PointsCard: UIView {
             backBar.heightAnchor.constraint(equalTo: stack.heightAnchor, multiplier: 0.08),
         ])
     }
-}
-
-#Preview {
-    return PointsCard()
+    
+    @objc func pointsDidChange() {
+        updatePointsLabel()
+        updateCircles() // Atualiza os círculos quando os pontos mudam
+        updateBackBar() // Atualiza a barra quando os pontos mudam
+        layoutIfNeeded() // Força a atualização do layout
+    }
+    
+    func updatePointsLabel() {
+        let points = PointsController.shared.userPts
+        pointsLabel.text = "\(points) pontos"
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 }

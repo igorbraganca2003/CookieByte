@@ -8,7 +8,6 @@
 import UIKit
 
 class CookieController: UIViewController {
-    
     var cookiePop: CookiePopUp = CookiePopUp()
     
     // Icone de carrinho
@@ -17,9 +16,7 @@ class CookieController: UIViewController {
     
     var currentCookie: CookiesModel?
     
-    
-    //MARK: - Funções de animações
-    
+    // Funções de animações
     static func animateIn(view: UIView, container: UIView) {
         container.transform = CGAffineTransform(translationX: 0, y: -view.frame.height)
         view.alpha = 0
@@ -41,12 +38,10 @@ class CookieController: UIViewController {
         }
     }
     
-    
-    //MARK: - PixPopUp
-    
     // Atualiza o preço total dentro do carrinho
     static func updateTotalPrice(label: UILabel) {
         let totalPrice = Order.shared.orders.reduce(0) { $0 + ($1.price * Double($1.qnt)) }
+        print("Updating total price...")
         print("Total price: \(totalPrice)")
         if totalPrice > 0 {
             label.text = String(format: "R$ %.2f", totalPrice)
@@ -55,9 +50,8 @@ class CookieController: UIViewController {
         }
     }
     
-    //Confirma o pagamento
+    // Confirma o pagamento
     static func payConfirmed(from view: UIView) {
-        // Adiciona o popup de confirmação (DonePopUp)
         let popup = DonePopUp()
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             window.addSubview(popup)
@@ -65,17 +59,15 @@ class CookieController: UIViewController {
         }
         
         // Remove as ordens completadas
+        let completedOrders = Order.shared.orders.filter { $0.status }
+        PointsController.shared.addPoints() // Adiciona pontos a partir dos pedidos completos
         Order.shared.removeCompletedOrders()
         
         // Remove a instância atual do view (PixPopUp ou outro)
         view.removeFromSuperview()
     }
-
-
     
-    
-    //MARK: - Função carrinho
-    
+    // Função carrinho
     @objc static func payButtonTapped(from cookiePop: CookiePopUp) {
         let popup = PixPopUp()
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
@@ -109,9 +101,7 @@ class CookieController: UIViewController {
         CartPopUp().cartCollectionView.reloadData()
     }
     
-    
-    //MARK: - Funções do CookiePopUp
-    
+    // Funções do CookiePopUp
     func configure(with cookie: CookiesModel) {
         cookiePop.currentCookie = cookie
         
@@ -187,7 +177,6 @@ class CookieController: UIViewController {
         
         cookiePop.removeFromSuperview()
     }
-
 }
 
 

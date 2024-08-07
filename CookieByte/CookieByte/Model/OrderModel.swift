@@ -19,8 +19,6 @@ struct OrderModel {
 }
 
 class Order {
-    var cart = CartCard()
-    
     static var shared = Order()
     
     var orders: [OrderModel] = [
@@ -35,6 +33,7 @@ class Order {
         } else {
             orders.append(newOrder)
         }
+        print("Current orders after adding: \(orders)") // Adicione este print
         NotificationCenter.default.post(name: NSNotification.Name("OrderUpdated"), object: nil)
     }
     
