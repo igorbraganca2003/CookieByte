@@ -50,7 +50,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     let favoriteLabel: UILabel = {
         let favoriteLabel = UILabel()
-        favoriteLabel.text = "Favoritos"
+        favoriteLabel.text = "Nutella"
         favoriteLabel.font = UIFont.systemFont(ofSize: 32, weight: .bold)
         favoriteLabel.textColor = .black
         favoriteLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -62,6 +62,15 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         pointsCard.translatesAutoresizingMaskIntoConstraints = false
         return pointsCard
     }()
+    
+    private let lastLabel: UILabel = {
+        let last = UILabel()
+        last.text = "Para feedbacks, comentários e mais informações clique aqui."
+        last.textColor = UIColor.black
+        last.font = UIFont.systemFont(ofSize: 10, weight: .light)
+        return last
+    }()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,6 +131,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
         contentView.addSubview(pointsCard)
         contentView.addSubview(tittleLabel)
         contentView.addSubview(favoriteLabel)
+        contentView.addSubview(lastLabel)
         
         setPointsLabel()
         setPointsCard()
@@ -167,7 +177,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             cardsScroll.topAnchor.constraint(equalTo: tittleLabel.bottomAnchor),
             cardsScroll.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             cardsScroll.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            cardsScroll.heightAnchor.constraint(equalToConstant: 300)
+            cardsScroll.heightAnchor.constraint(equalToConstant: 320),
         ])
         
         setCards(in: cardsScroll)
@@ -185,7 +195,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
             cookieCollection.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             cookieCollection.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             cookieCollection.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
-            cookieCollection.widthAnchor.constraint(equalToConstant: 1000)
+            cookieCollection.widthAnchor.constraint(equalTo: scrollView.widthAnchor, constant: 820)
         ])
         
         self.cookieCollection = cookieCollection

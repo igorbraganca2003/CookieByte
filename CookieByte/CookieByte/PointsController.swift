@@ -33,8 +33,8 @@ class PointsController {
     }
     
     let status: Bool = true
-    let numbers = [10, 25, 40, 60, 80]
-    let pointsDesc = ["50% de desconto em 1 (um) cookie Tradicional", "1 (um) Cookie Tradicional", "50% desconto na sua próxima compra", "1 (um) Cookie recheado de Nutella", "1 (um) Cookie de Nutella e Morango + 1 (um) Brownie"]
+    let numbers = [10, 20, 35, 50, 70]
+    let pointsDesc = ["50% de desconto em 1 (um) cookie Tradicional", "1 (um) Cookie Tradicional", "1 (um) Cookie de Nutella", "1 (um) Cookie de Nutella e Morango", "1 (um) Cookie de Nutella e Morango + 1 (um) Cookie de Nutella"]
     let pointsPerReal: Int = 1
     
     func addPoints() {

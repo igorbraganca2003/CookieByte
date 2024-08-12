@@ -61,23 +61,23 @@ class PointsPopUp: UIView {
     private func createCircles() -> [UIView] {
         var circlesWithLabels = [UIView]()
         
-        let points = PointsController()
-        
+        let points = PointsController.shared
+        let userPoints = points.userPts
         let numbers = points.numbers
         let pointsDesc = points.pointsDesc
-        let status = points.status
         
         for (index, number) in numbers.enumerated() {
             let circle = UIView()
+            let isUnlocked = userPoints >= number
             
-            circle.backgroundColor = status ? .greenCookie : .yellowCookie
+            circle.backgroundColor = isUnlocked ? .greenCookie : .yellowCookie
             circle.layer.cornerRadius = 25
             circle.layer.borderWidth = 5
             circle.heightAnchor.constraint(equalToConstant: 50).isActive = true
             circle.widthAnchor.constraint(equalToConstant: 50).isActive = true
             
             let imageView = UIImageView()
-            imageView.image = status ? UIImage(named: "check") : UIImage(named: "lock")
+            imageView.image = isUnlocked ? UIImage(named: "check") : UIImage(named: "lock")
             imageView.contentMode = .scaleAspectFit
             imageView.translatesAutoresizingMaskIntoConstraints = false
             circle.addSubview(imageView)
@@ -91,12 +91,13 @@ class PointsPopUp: UIView {
             let label = UILabel()
             label.text = "\(number) pts"
             label.font = UIFont.systemFont(ofSize: 28, weight: .bold)
-            label.textColor = status ? .greenCookie : .yellowCookie
+            label.textColor = isUnlocked ? .greenCookie : .yellowCookie
             label.textAlignment = .center
             label.translatesAutoresizingMaskIntoConstraints = false
             
             let description = UILabel()
             description.text = pointsDesc[index]
+            description.textColor = UIColor.black
             description.lineBreakMode = .byWordWrapping
             description.numberOfLines = 3
             description.font = UIFont.systemFont(ofSize: 15, weight: .medium)
@@ -123,16 +124,23 @@ class PointsPopUp: UIView {
         
         return circlesWithLabels
     }
-
     
+    private func updateCircles() {
+        // Remove todas as views atuais do CircleStack
+        CircleStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
+        // Adiciona as novas views de círculo
+        let circles = createCircles()
+        circles.forEach { CircleStack.addArrangedSubview($0) }
+    }
+
     private let backBar: UIView = {
         let bar = UIView()
-        bar.backgroundColor = .greenCookie
+        bar.backgroundColor = .black
         bar.layer.borderWidth = 3
         bar.translatesAutoresizingMaskIntoConstraints = false
         return bar
     }()
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -144,6 +152,9 @@ class PointsPopUp: UIView {
         roundButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         
         CookieController.animateIn(view: self, container: container)
+        
+        // Atualize os círculos quando a view for carregada
+        updateCircles()
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -162,7 +173,6 @@ class PointsPopUp: UIView {
         container.addSubview(backBar)
         container.addSubview(CircleStack)
 
-        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateOut))
         backContainer.addGestureRecognizer(tapGesture)
         
@@ -193,7 +203,7 @@ class PointsPopUp: UIView {
             
             backBar.centerXAnchor.constraint(equalTo: CircleStack.centerXAnchor, constant: -112.5),
             backBar.centerYAnchor.constraint(equalTo: CircleStack.centerYAnchor, constant: -10),
-            backBar.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.03),
+            backBar.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.02),
             backBar.heightAnchor.constraint(equalTo: CircleStack.heightAnchor, multiplier: 0.9),
         ])
     }
@@ -202,4 +212,3 @@ class PointsPopUp: UIView {
 #Preview {
     PointsPopUp()
 }
-
