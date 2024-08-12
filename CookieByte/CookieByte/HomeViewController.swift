@@ -175,6 +175,7 @@ class HomeViewController: UIViewController, UIScrollViewDelegate {
     
     func setCards(in scrollView: UIScrollView) {
         let cookieCollection = CookieCollection()
+        //print("Aqui está o:\(cookieCollection) !!!!!!!!!!")
         scrollView.addSubview(cookieCollection)
         
         cookieCollection.translatesAutoresizingMaskIntoConstraints = false

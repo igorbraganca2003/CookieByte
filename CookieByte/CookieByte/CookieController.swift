@@ -126,7 +126,7 @@ class CookieController: UIViewController {
         cookiePop.label.text = cookie.cookieName
         cookiePop.priceLabel.text = String(format: "R$ %.2f", cookie.price)
         cookiePop.descLabel.text = cookie.description
-        cookiePop.imageCookie.backgroundColor = cookie.color
+        //cookiePop.imageCookie.backgroundColor = cookie.color
         
         updateHeartButton()
     }

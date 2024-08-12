@@ -66,10 +66,10 @@ class FavoriteCollection: UIView, UICollectionViewDelegate, UICollectionViewData
 
         // Container view para aplicar a sombra
         let containerView = UIView(frame: cell.contentView.bounds)
-        containerView.backgroundColor = cookie.color
+        //containerView.backgroundColor = cookie.color
 
         cell.layer.shadowColor = UIColor.black.cgColor
-        cell.backgroundColor = cookie.color
+        //cell.backgroundColor = cookie.color
         cell.layer.borderWidth = 5
 
         containerView.layer.shadowOffset = CGSize(width: 10, height: 10)

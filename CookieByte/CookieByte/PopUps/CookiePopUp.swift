@@ -200,7 +200,7 @@ class CookiePopUp: UIView {
         label.text = cookie.cookieName
         priceLabel.text = String(format: "R$ %.2f", cookie.price)
         descLabel.text = cookie.description
-        imageCookie.backgroundColor = cookie.color
+        //imageCookie.backgroundColor = cookie.color
     }
 
     func addUI() {
