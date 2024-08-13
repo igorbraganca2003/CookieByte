@@ -83,7 +83,7 @@ class CookieController: UIViewController {
             return
         }
         
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, isPrize: false, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
         
@@ -165,7 +165,7 @@ class CookieController: UIViewController {
             return
         }
         
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, isPrize: false, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
         

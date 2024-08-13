@@ -16,6 +16,7 @@ class MainButtons: UIView {
         case pix
         case buyMore
         case pay
+        case rescuePoints
         
         var label: String {
             switch self {
@@ -31,6 +32,8 @@ class MainButtons: UIView {
                 return "Continar Comprando"
             case .pay:
                 return "Pagar"
+            case .rescuePoints:
+                return "Pegar Recompensas"
             }
         }
         
@@ -40,7 +43,7 @@ class MainButtons: UIView {
                 return UIColor(named: "AccentColor") ?? .orange
             case .confirmPay, .pix:
                 return UIColor(named: "GreenCookie") ?? .green
-            case .addCart, .buyMore:
+            case .addCart, .buyMore, .rescuePoints:
                 return UIColor(.white)
             }
         }
@@ -51,11 +54,13 @@ class MainButtons: UIView {
                 return UIColor(.white)
             case .addCart, .buyMore:
                 return UIColor(named: "AccentColor") ?? .orange
+            case .rescuePoints:
+                return UIColor.black
             }
         }
     }
     
-    private let button: UIButton = {
+    let button: UIButton = {
         let button = UIButton()
         button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
         button.layer.borderWidth = 5

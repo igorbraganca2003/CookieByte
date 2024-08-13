@@ -34,7 +34,7 @@ class PointsController {
     
     let status: Bool = true
     let numbers = [10, 20, 35, 50, 70]
-    let pointsDesc = ["50% de desconto em 1 (um) cookie Tradicional", "1 (um) Cookie Tradicional", "1 (um) Cookie de Nutella", "1 (um) Cookie de Nutella e Morango", "1 (um) Cookie de Nutella e Morango + 1 (um) Cookie de Nutella"]
+    let pointsDesc = ["50% de desconto em 1 (um) cookie Tradicional", "1 (um) Cookie Tradicional", "1 (um) Cookie de Nutella", "1 (um) Cookie de Nutella e Morango", "2 (dois) Cookie de Nutella e Morango"]
     let pointsPerReal: Int = 1
     
     func addPoints() {
@@ -67,6 +67,27 @@ class PointsController {
     private func resetPoints() {
         userPts = 0
         print("Os pontos foram zerados.")
+    }
+    
+    func rescuePrize() {
+        // Encontre o índice do prêmio mais alto que o usuário pode resgatar
+        guard let prizeIndex = numbers.lastIndex(where: { userPts >= $0 }) else {
+            print("Nenhum prêmio disponível para a pontuação atual.")
+            return
+        }
+        
+        // Verifique se o índice encontrado está dentro do intervalo dos prêmios disponíveis
+        if prizeIndex < Order.shared.prize.count {
+            var prizeOrder = Order.shared.prize[prizeIndex]
+            let pointsSpent = numbers[prizeIndex]
+            
+            prizeOrder.qnt = 1 // Certifique-se de que a quantidade seja 1
+            Order.shared.addOrder(prizeOrder)
+            userPts -= pointsSpent
+            print("Resgatado: \(prizeOrder.cookie). Pontos gastos: \(pointsSpent). Pontos restantes: \(userPts)")
+        } else {
+            print("Prêmio não encontrado.")
+        }
     }
 }
 

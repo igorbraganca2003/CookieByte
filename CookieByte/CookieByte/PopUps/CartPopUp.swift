@@ -67,7 +67,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     private lazy var priceStack: UIStackView = {
         let priceStack = UIStackView(arrangedSubviews: [totalLabel, priceLabel])
         priceStack.axis = .horizontal
-        priceStack.spacing = 100
+        priceStack.spacing = 110
         priceStack.translatesAutoresizingMaskIntoConstraints = false
         return priceStack
     }()
@@ -111,7 +111,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     
     
     private lazy var buttonStack: UIStackView = {
-        let buttonStack = UIStackView(arrangedSubviews: [payButton, applePayButton])
+        let buttonStack = UIStackView(arrangedSubviews: [applePayButton])
         buttonStack.axis = .vertical
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         return buttonStack
@@ -231,7 +231,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CartCardCell", for: indexPath) as! CartCardCollection
-        cell.cartCard.config(with: Order.shared.orders[indexPath.item], at: indexPath.item)
+        cell.cartCard.config(with: Order.shared.orders[indexPath.item], index: indexPath.item)
         return cell
     }
     
@@ -312,7 +312,7 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
                 cartCollectionView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -20),
                 cartCollectionView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -230),
                 
-                priceStack.topAnchor.constraint(equalTo: cartCollectionView.bottomAnchor, constant: 20),
+                priceStack.topAnchor.constraint(equalTo: cartCollectionView.bottomAnchor, constant: 100),
                 priceStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
                 
                 buttonStack.topAnchor.constraint(equalTo: container.topAnchor, constant: 510),
@@ -322,10 +322,10 @@ class CartPopUp: UIView, UICollectionViewDataSource, UICollectionViewDelegateFlo
                 
                 buttonStack.centerXAnchor.constraint(equalTo: container.centerXAnchor),
                 
-                payButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 20),
-                payButton.centerYAnchor.constraint(equalTo: buttonStack.centerYAnchor),
-                payButton.heightAnchor.constraint(equalTo: buttonStack.heightAnchor, multiplier: 0.37),
-                payButton.widthAnchor.constraint(equalTo: buttonStack.widthAnchor),
+//                payButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 20),
+//                payButton.centerYAnchor.constraint(equalTo: buttonStack.centerYAnchor),
+//                payButton.heightAnchor.constraint(equalTo: buttonStack.heightAnchor, multiplier: 0.37),
+//                payButton.widthAnchor.constraint(equalTo: buttonStack.widthAnchor),
                 
                 applePayButton.topAnchor.constraint(equalTo: buttonStack.topAnchor, constant: 100),
                 applePayButton.centerYAnchor.constraint(equalTo: applePayButton.centerYAnchor)

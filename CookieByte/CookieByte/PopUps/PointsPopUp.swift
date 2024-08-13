@@ -1,8 +1,7 @@
+// PointsPopUp.swift
+// CookieByte
 //
-//  PointsPopUp.swift
-//  CookieByte
-//
-//  Created by Igor Bragança Toledo on 01/08/24.
+// Created by Igor Bragança Toledo on 01/08/24.
 //
 
 import Foundation
@@ -49,10 +48,28 @@ class PointsPopUp: UIView {
         return label
     }()
     
+    private let confirmButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("   Resgatar recompensa   ", for: .normal)
+        button.setTitleColor(.black, for: .normal)
+        button.backgroundColor = .white
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 24, weight: .heavy)
+        button.layer.borderWidth = 5
+        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 8, height: 8)
+        button.layer.shadowRadius = 0
+        button.layer.shadowOpacity = 10
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+
+    
     private lazy var CircleStack: UIStackView = {
         let circleStack = UIStackView(arrangedSubviews: createCircles())
         circleStack.axis = .vertical
-        circleStack.spacing = 50
+        circleStack.spacing = 25
         circleStack.distribution = .fillEqually
         circleStack.translatesAutoresizingMaskIntoConstraints = false
         return circleStack
@@ -106,7 +123,7 @@ class PointsPopUp: UIView {
             let labelStack = UIStackView(arrangedSubviews: [label, description])
             labelStack.axis = .vertical
             labelStack.alignment = .leading
-            labelStack.spacing = 0
+            labelStack.spacing = 5
             labelStack.translatesAutoresizingMaskIntoConstraints = false
             
             let verticalStack = UIStackView(arrangedSubviews: [circle, labelStack])
@@ -125,14 +142,13 @@ class PointsPopUp: UIView {
         return circlesWithLabels
     }
     
-    private func updateCircles() {
-        // Remove todas as views atuais do CircleStack
+    @objc private func updateCircles() {
         CircleStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        // Adiciona as novas views de círculo
+
         let circles = createCircles()
         circles.forEach { CircleStack.addArrangedSubview($0) }
     }
+
 
     private let backBar: UIView = {
         let bar = UIView()
@@ -144,18 +160,45 @@ class PointsPopUp: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        let pointsController = PointsController.shared
+
         self.frame = UIScreen.main.bounds
-        
+
         addUI()
-        
+
         roundButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
-        
+        confirmButton.addTarget(self, action: #selector(rescuePrize), for: .touchUpInside)
+        confirmButton.addTarget(self, action: #selector(animateButton), for: .touchUpInside)
+
         CookieController.animateIn(view: self, container: container)
-        
-        // Atualize os círculos quando a view for carregada
+
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCircles), name: .pointsDidChange, object: nil)
+
         updateCircles()
     }
+
+    @objc fileprivate func rescuePrize() {
+        PointsController.shared.rescuePrize()
+    }
+
+
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .pointsDidChange, object: nil)
+    }
+
+
+    @objc private func animateButton() {
+        UIView.animate(withDuration: 0.1, animations: {
+            self.confirmButton.transform = CGAffineTransform(translationX: 8, y: 8)
+            self.confirmButton.layer.shadowOffset = CGSize(width: 0, height: 0)
+        }) { _ in
+            UIView.animate(withDuration: 0.2, animations: {
+                self.confirmButton.transform = .identity
+                self.confirmButton.layer.shadowOffset = CGSize(width: 8, height: 8)
+            })
+        }
+    }
+
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -172,6 +215,9 @@ class PointsPopUp: UIView {
         container.addSubview(titleLabel)
         container.addSubview(backBar)
         container.addSubview(CircleStack)
+        container.addSubview(confirmButton)
+        
+        print("Confirm button added to view")
 
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(animateOut))
         backContainer.addGestureRecognizer(tapGesture)
@@ -198,15 +244,36 @@ class PointsPopUp: UIView {
             titleLabel.topAnchor.constraint(equalTo: container.topAnchor, constant: 20),
             titleLabel.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 20),
             
-            CircleStack.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 80),
+            CircleStack.topAnchor.constraint(equalTo: titleLabel.topAnchor, constant: 60),
             CircleStack.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 30),
             
             backBar.centerXAnchor.constraint(equalTo: CircleStack.centerXAnchor, constant: -112.5),
             backBar.centerYAnchor.constraint(equalTo: CircleStack.centerYAnchor, constant: -10),
             backBar.widthAnchor.constraint(equalTo: container.widthAnchor, multiplier: 0.02),
-            backBar.heightAnchor.constraint(equalTo: CircleStack.heightAnchor, multiplier: 0.9),
+            backBar.heightAnchor.constraint(equalTo: CircleStack.heightAnchor, multiplier: 0.8),
+            
+            confirmButton.centerXAnchor.constraint(equalTo: container.centerXAnchor, constant: -3),
+            confirmButton.topAnchor.constraint(equalTo: CircleStack.bottomAnchor, constant: 55),
+            confirmButton.heightAnchor.constraint(equalTo: container.heightAnchor, multiplier: 0.09)
         ])
     }
+    
+//    @objc private func buttonTapped() {
+//        animateButton()
+//    }
+    
+//    private func animateButton() {
+//        UIView.animate(withDuration: 0.1, animations: {
+//            self.button.transform = CGAffineTransform(translationX: 8, y: 8)
+//            self.button.layer.shadowOffset = CGSize(width: 0, height: 0)
+//        }) { _ in
+//            UIView.animate(withDuration: 0.2, animations: {
+//                self.button.transform = .identity
+//                self.button.layer.shadowOffset = CGSize(width: 8, height: 8)
+//            })
+//        }
+//    }
+    
 }
 
 #Preview {
