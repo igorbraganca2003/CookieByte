@@ -83,7 +83,7 @@ class CookieController: UIViewController {
             return
         }
         
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, isPrize: false, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
         
@@ -126,7 +126,7 @@ class CookieController: UIViewController {
         cookiePop.label.text = cookie.cookieName
         cookiePop.priceLabel.text = String(format: "R$ %.2f", cookie.price)
         cookiePop.descLabel.text = cookie.description
-        //cookiePop.imageCookie.backgroundColor = cookie.color
+        cookiePop.imageCookie.backgroundColor = cookie.color
         
         updateHeartButton()
     }
@@ -165,7 +165,7 @@ class CookieController: UIViewController {
             return
         }
         
-        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, color: cookieBack)
+        let newOrder = OrderModel(user: nil, cookie: cookieName, date: Date(), price: price, qnt: 1, pic: cookieImage, status: true, isPrize: false, color: cookieBack)
         Order.shared.addOrder(newOrder)
         print("Pedido adicionado: \(newOrder)")
         

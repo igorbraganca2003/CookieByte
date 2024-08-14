@@ -7,9 +7,11 @@
 
 import UIKit
 
+import UIKit
+
 class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     
-    // Icone de carrinho
+    //Icone de carrinho
     var viewController: HomeViewController?
     var icon: IconCartDelegate = IconCartDelegate()
     
@@ -54,21 +56,15 @@ class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         cookieCard.delegate = self
         cookieCard.dataSource = self
         cookieCard.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        
-        // Carregar cookies e atualizar a coleção
-        Cookies.cookieShared.loadCookies { [weak self] in
-            DispatchQueue.main.async {
-                self?.cookieCard.reloadData()
-            }
-        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return Cookies.cookieShared.cookie.count
+        return Cookies().cookie.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cookie = Cookies.cookieShared.cookie[indexPath.row]
+        
+        let cookie = Cookies().cookie[indexPath.row]
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         
@@ -77,8 +73,10 @@ class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         
         // Container view para aplicar a sombra
         let containerView = UIView(frame: cell.contentView.bounds)
+        containerView.backgroundColor = cookie.color
         
         cell.layer.shadowColor = UIColor.black.cgColor
+        cell.backgroundColor = cookie.color
         cell.layer.borderWidth = 5
         
         containerView.layer.shadowOffset = CGSize(width: 10, height: 10)
@@ -126,12 +124,12 @@ class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
         guard let cell = sender.view as? UICollectionViewCell else { return }
         guard let indexPath = cookieCard.indexPath(for: cell) else { return }
         
-        let cookie = Cookies.cookieShared.cookie[indexPath.row]
+        let cookie = Cookies().cookie[indexPath.row]
         
         let popup = CookiePopUp()
         popup.configure(with: cookie)
         
-        // Icone de carrinho
+        //Icone de carrinho
         popup.viewController = self.viewController
         icon.viewController = self.viewController
         
@@ -140,43 +138,5 @@ class CookieCollection: UIView, UICollectionViewDelegate, UICollectionViewDataSo
             CookieController.animateIn(view: popup, container: popup)
         }
     }
-}
-
-class Cookies {
-    static var cookieShared = Cookies()
-
-    var cookie: [CookiesModel] = []
-
-    func loadCookies(completion: @escaping () -> Void) {
-        let urlString = "https://raw.githubusercontent.com/igorbraganca2003/CookieByte/dev/cookies.json"
-        guard let url = URL(string: urlString) else {
-            print("URL inválida")
-            return
-        }
-
-        let task = URLSession.shared.dataTask(with: url) { data, response, error in
-            if let error = error {
-                print("Erro na requisição: \(error.localizedDescription)")
-                return
-            }
-
-            guard let data = data else {
-                print("Dados não disponíveis")
-                return
-            }
-
-            do {
-                let decoder = JSONDecoder()
-                let cookies = try decoder.decode([CookiesModel].self, from: data)
-                DispatchQueue.main.async {
-                    self.cookie = cookies
-                    completion()
-                }
-            } catch {
-                print("Erro ao fazer parse do JSON: \(error.localizedDescription)")
-            }
-        }
-
-        task.resume()
-    }
+    
 }

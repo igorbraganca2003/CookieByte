@@ -102,6 +102,7 @@ class PointsCard: UIView {
             let label = UILabel()
             label.text = "\(number) pts"
             label.font = UIFont.systemFont(ofSize: 13, weight: .bold)
+            label.textColor = UIColor.black
             label.textAlignment = .center
             label.translatesAutoresizingMaskIntoConstraints = false
             
@@ -126,72 +127,29 @@ class PointsCard: UIView {
         circles.forEach { CircleStack.addArrangedSubview($0) }
     }
 
-
     private let backBar: UIView = {
         let bar = UIView()
         bar.layer.borderWidth = 3
-        bar.layer.borderColor = UIColor.black.cgColor // Temporário para visibilidade
+        bar.backgroundColor = UIColor(.black)
+        bar.layer.borderColor = UIColor.black.cgColor
         bar.translatesAutoresizingMaskIntoConstraints = false
         return bar
     }()
 
-    private let gradientLayer = CAGradientLayer()
-
-    private func setupBackBar() {
-        backBar.layer.addSublayer(gradientLayer)
-        gradientLayer.frame = backBar.bounds
-        gradientLayer.colors = [UIColor.lightGray.cgColor, UIColor.lightGray.cgColor, UIColor.lightGray.cgColor, UIColor.lightGray.cgColor]
-        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
-        gradientLayer.endPoint = CGPoint(x: 1, y: 0)
-        gradientLayer.locations = [0, 0.25, 0.5, 0.75, 1] // Posiciona os gradientes
-    }
-
-    private func updateBackBar() {
-        let points = PointsController.shared.userPts
-        let thresholds = PointsController.shared.numbers
-        let numParts = 4 // Número de partes na barra
-        let thresholdCount = min(thresholds.count, numParts)
-
-        var colors: [CGColor] = []
-
-        for i in 0..<numParts {
-            if i < thresholdCount {
-                if points >= thresholds[i] {
-                    colors.append(UIColor.greenCookie.cgColor)
-                } else if i == thresholdCount - 1 || points < thresholds[i] {
-                    colors.append(UIColor.yellowCookie.cgColor)
-                } else {
-                    colors.append(UIColor.lightGray.cgColor)
-                }
-            } else {
-                colors.append(UIColor.lightGray.cgColor)
-            }
-        }
-
-        // Atualiza as partes restantes para cinza
-        while colors.count < numParts {
-            colors.append(UIColor.lightGray.cgColor)
-        }
-
-        gradientLayer.colors = colors
-        gradientLayer.frame = backBar.bounds // Atualiza o frame do gradient layer
-        gradientLayer.setNeedsDisplay() // Solicita uma atualização do gradient layer
-    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setUI()
         updatePointsLabel()
-        setupBackBar() // Configura o Gradient Layer ao inicializar
-        updateBackBar() // Atualiza a barra ao inicializar
         plusButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
         NotificationCenter.default.addObserver(self, selector: #selector(pointsDidChange), name: .pointsDidChange, object: nil)
     }
+
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     @objc func didTapButton() {
         let popup = PointsPopUp()
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
@@ -227,14 +185,13 @@ class PointsCard: UIView {
             backBar.centerXAnchor.constraint(equalTo: stack.centerXAnchor),
             backBar.centerYAnchor.constraint(equalTo: CircleStack.centerYAnchor, constant: -12),
             backBar.widthAnchor.constraint(equalTo: stack.widthAnchor, constant: -20),
-            backBar.heightAnchor.constraint(equalTo: stack.heightAnchor, multiplier: 0.08),
+            backBar.heightAnchor.constraint(equalTo: stack.heightAnchor, multiplier: 0.05),
         ])
     }
     
     @objc func pointsDidChange() {
         updatePointsLabel()
         updateCircles() // Atualiza os círculos quando os pontos mudam
-        updateBackBar() // Atualiza a barra quando os pontos mudam
         layoutIfNeeded() // Força a atualização do layout
     }
     
